@@ -1,6 +1,4 @@
 "use client";
-
-import { ContentLayout } from "@/components/admin-panel/content-layout";
 import ProductCard from "@/components/product-card";
 import useProductStore from "@/store/productsStore";
 import React, { useCallback, useEffect } from "react";

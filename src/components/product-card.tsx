@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { EditIcon, Heart, ShoppingCart, X } from "lucide-react";
+import { Heart, ShoppingCart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
