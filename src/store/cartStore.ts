@@ -21,8 +21,8 @@ interface CartStore {
 
   // Actions
   getCartItems: () => Promise<void>;
-  updateQuantity: (productId: number, quantity: string) => Promise<void>;
-  removeItem: (productId: number) => Promise<void>;
+  updateQuantity: (productId: string, quantity: string) => Promise<void>;
+  removeItem: (productId: string) => Promise<void>;
 }
 
 const useCartStore = create<CartStore>((set, get) => ({
@@ -64,7 +64,7 @@ const useCartStore = create<CartStore>((set, get) => ({
     }
   },
 
-  updateQuantity: async (productId: number, quantity: string) => {
+  updateQuantity: async (productId: string, quantity: string) => {
     set({ isLoading: true, error: null });
     try {
       const response = await fetch(
@@ -95,7 +95,7 @@ const useCartStore = create<CartStore>((set, get) => ({
     }
   },
 
-  removeItem: async (productId: number) => {
+  removeItem: async (productId: string) => {
     set({ isLoading: true, error: null });
     try {
       const response = await fetch(
