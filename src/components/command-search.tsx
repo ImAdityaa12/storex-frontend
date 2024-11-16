@@ -1,81 +1,25 @@
 "use client";
 
 import * as React from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Search,
-  Settings,
-  Smile,
-  User,
-} from "lucide-react";
-
-import {
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from "@/components/ui/command";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Title } from "@radix-ui/react-dialog";
-const commands = [
-  {
-    category: "Suggestions",
-    items: [
-      {
-        icon: Calendar,
-        name: "Calendar",
-        shortcut: "⌘C",
-        action: () => console.log("Calendar opened"),
-      },
-      {
-        icon: Smile,
-        name: "Search Emoji",
-        shortcut: "⌘E",
-        action: () => console.log("Emoji search opened"),
-      },
-      {
-        icon: Calculator,
-        name: "Calculator",
-        shortcut: "⌘K",
-        action: () => console.log("Calculator opened"),
-      },
-    ],
-  },
-  {
-    category: "Settings",
-    items: [
-      {
-        icon: User,
-        name: "Profile",
-        shortcut: "⌘P",
-        action: () => console.log("Profile opened"),
-      },
-      {
-        icon: CreditCard,
-        name: "Billing",
-        shortcut: "⌘B",
-        action: () => console.log("Billing opened"),
-      },
-      {
-        icon: Settings,
-        name: "Settings",
-        shortcut: "⌘S",
-        action: () => console.log("Settings opened"),
-      },
-    ],
-  },
-];
+import { toast } from "sonner";
+import { product } from "@/product";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function CommandSearch() {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
-
+  const [query, setQuery] = React.useState("");
+  const [searchData, setSearchData] = React.useState<product[]>([]);
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -87,7 +31,25 @@ export default function CommandSearch() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
-
+  async function searchProducts(value: string) {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/search?q=${value}`
+      );
+      const data: product[] = await response.json();
+      setSearchData(data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error searching products");
+    }
+  }
+  React.useEffect(() => {
+    searchProducts(query);
+  }, [query]);
+  React.useEffect(() => {
+    searchProducts("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="w-full ml-auto">
       <Button
@@ -99,66 +61,51 @@ export default function CommandSearch() {
           <Search className="text-white ml-auto group-hover:text-blue-400" />
         </span>
       </Button>
-      {/* <CommandDialog open={open} onOpenChange={setOpen}>
-        <VisuallyHidden.Root>x</VisuallyHidden.Root>
-        <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          {commands.map((group) => (
-            <React.Fragment key={group.category}>
-              <CommandGroup heading={group.category}>
-                {group.items.map((item) => (
-                  <CommandItem
-                    key={item.name}
-                    onSelect={() => {
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]">
+          <DialogHeader>
+            <DialogTitle>Search Products</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Input
+              placeholder="Search products..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <div className="max-h-[400px] overflow-y-auto">
+              {searchData.map((product) => (
+                <div
+                  key={product._id}
+                  className="flex items-center space-x-4 py-2 border-b px-4"
+                >
+                  <Image
+                    src={product.image}
+                    alt={product.title}
+                    width={50}
+                    height={50}
+                    className="rounded-md object-cover"
+                  />
+                  <div className="flex-grow">
+                    <h3 className="font-semibold">{product.title}</h3>
+                    <p className="text-sm text-gray-500">
+                      ${product.price.toFixed(2)}
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      router.push(`/product/${product._id}`);
+                      console.log(`Redirecting to product: ${product._id}`);
                       setOpen(false);
-                      item.action();
                     }}
                   >
-                    <item.icon className="mr-2 h-4 w-4" />
-                    <span>{item.name}</span>
-                    {item.shortcut && (
-                      <CommandShortcut>{item.shortcut}</CommandShortcut>
-                    )}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-              <CommandSeparator />
-            </React.Fragment>
-          ))}
-        </CommandList>
-      </CommandDialog> */}
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <Title className="hidden">hello</Title>
-        <Command className="rounded-lg border shadow-md md:min-w-[450px] duration-500">
-          <CommandInput placeholder="Type a command or search..." />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            {commands.map((group) => (
-              <React.Fragment key={group.category}>
-                <CommandGroup heading={group.category}>
-                  {group.items.map((item) => (
-                    <CommandItem
-                      key={item.name}
-                      onSelect={() => {
-                        setOpen(false);
-                        item.action();
-                      }}
-                    >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      <span>{item.name}</span>
-                      {item.shortcut && (
-                        <CommandShortcut>{item.shortcut}</CommandShortcut>
-                      )}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                <CommandSeparator />
-              </React.Fragment>
-            ))}
-          </CommandList>
-        </Command>
-      </CommandDialog>
+                    View
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

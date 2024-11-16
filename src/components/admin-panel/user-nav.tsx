@@ -30,12 +30,15 @@ export function UserNav() {
   const { userDetails, setUserDetails } = useStore(userDetailsStore);
   const getUserDetails = async () => {
     const token = getCookie("token");
-    const response = await fetch("http://localhost:7000/users/details", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}users/details`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const data = await response.json();
     if (response.status === 200) {
       setUserDetails(data);
@@ -45,7 +48,6 @@ export function UserNav() {
   };
   useEffect(() => {
     getUserDetails();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

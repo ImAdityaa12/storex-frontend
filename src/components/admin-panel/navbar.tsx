@@ -2,6 +2,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { UserNav } from "@/components/admin-panel/user-nav";
 import { SheetMenu } from "@/components/admin-panel/sheet-menu";
 import CommandSearch from "../command-search";
+import Cart from "../shopping-cart";
 
 interface NavbarProps {
   title: string;
@@ -18,6 +19,7 @@ export function Navbar({ title }: NavbarProps) {
         <div className="flex flex-1 items-center justify-end gap-4">
           <CommandSearch />
           <ModeToggle />
+          <Cart />
           <UserNav />
         </div>
       </div>

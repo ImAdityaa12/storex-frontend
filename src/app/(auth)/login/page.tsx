@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Eye, EyeOff, Github, Loader, LogIn } from "lucide-react";
 import { toast } from "sonner";
+import { setCookie } from "@/lib/cookieFunction";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -32,19 +33,24 @@ export default function LoginPage() {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    const response = await fetch("http://localhost:7000/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}users/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+        credentials: "include",
+      }
+    );
     const data = await response.json();
     if (response.status === 200) {
+      console.log(data?.token);
+      setCookie("token", data?.token);
       toast.success(data?.message);
       setIsLoading(false);
       router.push("/dashboard");

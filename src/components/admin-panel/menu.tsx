@@ -16,6 +16,7 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { deleteCookie } from "@/lib/cookieFunction";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -27,10 +28,16 @@ export function Menu({ isOpen }: MenuProps) {
   const menuList = getMenuList(pathname);
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:7000/users/logout", {
-        method: "GET",
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}users/logout`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (res.ok) {
+        deleteCookie("token");
+      }
       toast.success("Logged out");
       router.push("/login");
     } catch (error) {
