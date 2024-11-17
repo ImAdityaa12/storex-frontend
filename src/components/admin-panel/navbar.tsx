@@ -16,7 +16,7 @@ export function Navbar({ title }: NavbarProps) {
           <SheetMenu />
           <h1 className="font-bold leading-tight">{title}</h1>
         </div>
-        <div className="w-full h-full flex items-center gap-2">
+        <div className="w-fit h-full flex items-center gap-2 ml-auto">
           <CommandSearch />
           <ModeToggle />
           <Cart />
