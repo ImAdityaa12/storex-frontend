@@ -87,7 +87,7 @@ export default function ProductCard({
   };
 
   return (
-    <Card className="flex flex-col max-w-[350px] max-h-[570px] overflow-hidden">
+    <Card className="flex flex-col max-w-[350px] max-sm:w-full  max-h-[570px] overflow-hidden">
       <CardHeader className="p-0">
         <div className="relative aspect-square">
           <Image
@@ -154,7 +154,6 @@ export default function ProductCard({
               </Tooltip>
             </TooltipProvider>
           </div>
-          {/* <Badge variant="secondary">{product.category}</Badge> */}
         </div>
         <div className="text-sm text-gray-600 mb-2">Brand: {product.brand}</div>
         <div className="text-sm text-gray-600">
