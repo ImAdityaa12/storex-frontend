@@ -16,6 +16,12 @@ import useProductStore from "@/store/productsStore";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import ProductEditModal from "./product-edit-modal";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 export default function ProductCard({
   product,
@@ -128,11 +134,25 @@ export default function ProductCard({
             )}
           </div>
           <div className="flex gap-2">
-            {categories.map((category, index) => (
-              <Badge key={index} variant="secondary">
-                {category}
-              </Badge>
-            ))}
+            <TooltipProvider disableHoverableContent>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger asChild>
+                  <Button
+                    className="rounded-full bg-background text-xs"
+                    variant="outline"
+                  >
+                    Categories
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="w-64 flex gap-2">
+                  {categories.map((category, index) => (
+                    <Badge key={index} variant="secondary">
+                      {category}
+                    </Badge>
+                  ))}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           {/* <Badge variant="secondary">{product.category}</Badge> */}
         </div>

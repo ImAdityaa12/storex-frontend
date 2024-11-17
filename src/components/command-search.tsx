@@ -51,15 +51,24 @@ export default function CommandSearch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="w-full ml-auto">
+    <div className="md:w-full">
       <Button
         onClick={() => setOpen(true)}
-        className="relative max-w-[20rem] lg:min-w-[20rem] justify-start text-sm text-muted-foreground flex items-center text-white ml-auto dark:bg-gray-900 border-2 hover:bg-transparent hover:text-blue-400 border-blue-400 dark:border-gray-900 dark:hover:bg-gray-800 dark:focus:bg-gray-800 group"
+        className="relative lg:min-w-[20rem] max-lg:hidden justify-start text-sm text-muted-foreground flex items-center text-white ml-auto dark:bg-gray-900 border-2 hover:bg-transparent hover:text-blue-400 border-blue-400 dark:border-gray-900 dark:hover:bg-gray-800 dark:focus:bg-gray-800 group"
       >
         Search
         <span className="w-full">
           <Search className="text-white ml-auto group-hover:text-blue-400" />
         </span>
+      </Button>
+      <Button
+        onClick={() => setOpen(true)}
+        className="relative hidden max-lg:flex justify-center text-sm text-muted-foreground items-center text-white ml-auto dark:bg-gray-900 border-2 hover:bg-transparent hover:text-blue-400 border-blue-400 dark:border-gray-900 dark:hover:bg-gray-800 dark:focus:bg-gray-800 group rounded-full w-10 h-10"
+      >
+        <Search
+          className="text-white ml-auto group-hover:text-blue-400"
+          size={10}
+        />
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]">

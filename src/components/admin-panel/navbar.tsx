@@ -16,12 +16,15 @@ export function Navbar({ title }: NavbarProps) {
           <SheetMenu />
           <h1 className="font-bold">{title}</h1>
         </div>
-        <div className="flex flex-1 items-center justify-end gap-4">
+        <div className="w-full h-full flex items-center gap-2">
           <CommandSearch />
           <ModeToggle />
           <Cart />
           <UserNav />
         </div>
+        {/* <CommandSearch />
+        <div className="flex flex-1 items-center justify-end">
+        </div> */}
       </div>
     </header>
   );
