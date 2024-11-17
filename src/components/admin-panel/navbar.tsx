@@ -14,7 +14,7 @@ export function Navbar({ title }: NavbarProps) {
       <div className="mx-4 sm:mx-8 flex h-14 items-center gap-5">
         <div className="flex items-center space-x-4 lg:space-x-0">
           <SheetMenu />
-          <h1 className="font-bold">{title}</h1>
+          <h1 className="font-bold leading-tight">{title}</h1>
         </div>
         <div className="w-full h-full flex items-center gap-2">
           <CommandSearch />
@@ -22,9 +22,6 @@ export function Navbar({ title }: NavbarProps) {
           <Cart />
           <UserNav />
         </div>
-        {/* <CommandSearch />
-        <div className="flex flex-1 items-center justify-end">
-        </div> */}
       </div>
     </header>
   );

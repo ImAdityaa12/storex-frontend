@@ -1,5 +1,6 @@
 "use client";
 import ProductCard from "@/components/product-card";
+import { getCookie } from "@/lib/utils";
 import useProductStore from "@/store/productsStore";
 import React, { useCallback, useEffect } from "react";
 import { toast } from "sonner";
@@ -9,7 +10,14 @@ const ManageProduct = () => {
   const getProducts = useCallback(async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop`
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
