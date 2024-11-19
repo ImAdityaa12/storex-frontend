@@ -5,14 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -23,8 +17,12 @@ import { product } from "@/product";
 import { EditIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import MultipleSelector, { Option } from "./ui/multiple-selector";
+import { getCookie } from "@/lib/utils";
+import useProductStore from "@/store/productsStore";
 
 export default function ProductEditModal({ product }: { product: product }) {
+  const { getProducts } = useProductStore();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [image, setImage] = useState<string | null>(product.image);
   const [formData, setFormData] = useState<{
@@ -33,20 +31,26 @@ export default function ProductEditModal({ product }: { product: product }) {
     description: string;
     price: string;
     brand: string;
-    category: string;
     salePrice: string;
+    category: Option[];
     totalStock: string;
   }>({
     image: image || "",
-    brand: "",
-    category: "",
-    description: "",
-    price: "",
-    salePrice: "",
-    totalStock: "",
-    title: "",
+    brand: product.brand,
+    category: product.category.split(",").map((category) => ({
+      label: category,
+      value: category,
+    })),
+    description: product.description,
+    price: product.price.toString(),
+    salePrice: product.salePrice.toString(),
+    totalStock: product.totalStock.toString(),
+    title: product.title,
   });
-
+  const OPTIONS: Option[] = [
+    { label: "Shoes", value: "Shoes" },
+    { label: "Clothing", value: "cloths" },
+  ];
   const handleInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -54,18 +58,45 @@ export default function ProductEditModal({ product }: { product: product }) {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log(formData);
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the formData to your backend
-    console.log("Submitting form data:", formData);
-    // Close the modal or show a success message
+    try {
+      const categories: string = formData.category
+        .map((category) => category.value)
+        .join(", ");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/updateProduct/${product._id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+          body: JSON.stringify({
+            title: formData.title,
+            description: formData.description,
+            price: formData.price,
+            brand: formData.brand,
+            category: categories,
+            salePrice: formData.salePrice,
+            totalStock: formData.totalStock,
+            image,
+          }),
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product deleted successfully");
+        getProducts();
+      } else {
+        toast.error("Error deleting product");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error deleting product");
+    }
   };
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -201,27 +232,27 @@ export default function ProductEditModal({ product }: { product: product }) {
               className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="category" className="text-right">
-              Category
-            </Label>
-            <Select
-              name="category"
-              value={product.category}
-              onValueChange={(value) => handleSelectChange("category", value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="electronics">Electronics</SelectItem>
-                <SelectItem value="Cloths">Cloths</SelectItem>
-                <SelectItem value="books">Books</SelectItem>
-                <SelectItem value="home">Home & Garden</SelectItem>
-                <SelectItem value="Shoes">Shoes</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="w-full flex items-center gap-4">
+            <Label className=" ml-5">Category</Label>
+            <MultipleSelector
+              selectFirstItem={false}
+              defaultOptions={OPTIONS}
+              value={formData.category}
+              onChange={(values) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  category: values,
+                }));
+              }}
+              placeholder="Select frameworks you like..."
+              emptyIndicator={
+                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                  no results found.
+                </p>
+              }
+            />
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="salePrice" className="text-right">
               Sale Price
@@ -248,9 +279,12 @@ export default function ProductEditModal({ product }: { product: product }) {
               className="col-span-3"
             />
           </div>
-          <Button type="submit" className="mt-4">
+          <DialogClose
+            type="submit"
+            className="mt-4 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 "
+          >
             Save changes
-          </Button>
+          </DialogClose>
         </form>
       </DialogContent>
     </Dialog>
