@@ -85,7 +85,30 @@ export default function ProductCard({
       toast.error("Error adding item to cart");
     }
   };
-
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/deleteProduct/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product deleted successfully");
+        router.refresh();
+      } else {
+        toast.error("Error deleting product");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error deleting product");
+    }
+  };
   return (
     <Card className="flex flex-col max-w-[350px] max-sm:w-full  max-h-[570px] overflow-hidden">
       <CardHeader className="p-0">
@@ -99,7 +122,10 @@ export default function ProductCard({
             onClick={() => router.push(`/product/${product._id}`)}
           />
           {isEdit ? (
-            <X />
+            <X
+              className="absolute top-2 right-2 w-6 h-6 cursor-pointer text-red-500 bg-black rounded-full p-1 hover:bg-gray-600"
+              onClick={() => handleDelete(product._id)}
+            />
           ) : (
             <button
               className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
