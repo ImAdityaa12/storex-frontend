@@ -47,10 +47,15 @@ export default function ProductEditModal({ product }: { product: product }) {
     title: "",
   });
 
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [name]: value }));
-  // };
+  const handleInputChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log(formData);
+  };
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -155,7 +160,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               id="title"
               name="title"
               value={formData.title}
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               className="col-span-3"
             />
           </div>
@@ -167,7 +172,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               id="description"
               name="description"
               value={formData.description}
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               className="col-span-3"
             />
           </div>
@@ -180,7 +185,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               name="price"
               type="number"
               value={formData.price}
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               className="col-span-3"
             />
           </div>
@@ -192,7 +197,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               id="brand"
               name="brand"
               value={formData.brand}
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               className="col-span-3"
             />
           </div>
@@ -202,7 +207,7 @@ export default function ProductEditModal({ product }: { product: product }) {
             </Label>
             <Select
               name="category"
-              value={formData.category}
+              value={product.category}
               onValueChange={(value) => handleSelectChange("category", value)}
             >
               <SelectTrigger className="col-span-3">
@@ -210,10 +215,10 @@ export default function ProductEditModal({ product }: { product: product }) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="electronics">Electronics</SelectItem>
-                <SelectItem value="clothing">Clothing</SelectItem>
+                <SelectItem value="Cloths">Cloths</SelectItem>
                 <SelectItem value="books">Books</SelectItem>
                 <SelectItem value="home">Home & Garden</SelectItem>
-                <SelectItem value="toys">Toys</SelectItem>
+                <SelectItem value="Shoes">Shoes</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -226,7 +231,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               name="salePrice"
               type="number"
               value={formData.salePrice}
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               className="col-span-3"
             />
           </div>
@@ -239,7 +244,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               name="totalStock"
               type="number"
               value={formData.totalStock}
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               className="col-span-3"
             />
           </div>

@@ -33,7 +33,7 @@ export default function ProductCard({
   isEdit?: boolean;
 }) {
   const categories = product.category.split(",");
-  const { toggleLike } = useProductStore();
+  const { toggleLike, getProducts } = useProductStore();
   const { getCartItems } = useCartStore();
   const router = useRouter();
   const addFavoriteItem = async (id: string) => {
@@ -100,7 +100,7 @@ export default function ProductCard({
       );
       if (response.status === 200) {
         toast.success("Product deleted successfully");
-        router.refresh();
+        getProducts();
       } else {
         toast.error("Error deleting product");
       }
