@@ -10,6 +10,8 @@ type UserDetails = {
   role: string;
   phoneNumber: string;
   userName: string;
+  credit: number;
+  approved: boolean;
 };
 
 type UserStore = {
@@ -31,6 +33,8 @@ const userDetailsStore = create<UserStore>((set) => ({
     role: "",
     phoneNumber: "",
     userName: "",
+    credit: 0,
+    approved: false,
   },
   addresses: [],
   setAddresses: (addresses) => set({ addresses }),
