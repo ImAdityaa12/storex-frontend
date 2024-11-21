@@ -26,7 +26,7 @@ export default function NumberInputModal({
   quantity: number;
 }) {
   const [open, setOpen] = useState(false);
-  const [number, setNumber] = useState(quantity.toString());
+  const [number, setNumber] = useState("");
   const { getCartItems } = useCartStore();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
