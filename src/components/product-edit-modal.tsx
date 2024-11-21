@@ -48,7 +48,7 @@ export default function ProductEditModal({ product }: { product: product }) {
     title: product.title,
   });
   const OPTIONS: Option[] = [
-    { label: "Shoes", value: "Shoes" },
+    { label: "Shoes", value: "shoes" },
     { label: "Clothing", value: "cloths" },
   ];
   const handleInputChange = (

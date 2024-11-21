@@ -8,20 +8,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { toast } from "sonner";
+import MultipleSelector, { Option } from "./ui/multiple-selector";
 
 export default function AddProductMain() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    productName: "",
+  const [formData, setFormData] = useState<{
+    image: string;
+    productName: string;
+    description: string;
+    price: string;
+    brand: string;
+    salePrice: string;
+    category: Option[];
+    totalStock: string;
+  }>({
+    image: "",
+    brand: "",
+    category: [],
     description: "",
     price: "",
-    brand: "",
-    category: "",
     salePrice: "",
     totalStock: "",
+    productName: "",
   });
   const [image, setImage] = useState<string | null>(null);
-  async function onSubmit() {
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
     if (!image) {
       toast.error("Please upload an image");
       return;
@@ -39,7 +51,9 @@ export default function AddProductMain() {
           description: formData.description,
           price: formData.price,
           brand: formData.brand,
-          category: formData.category,
+          category: formData.category
+            .map((category) => category.value)
+            .join(", "),
           salePrice: formData.salePrice,
           totalStock: formData.totalStock,
         }),
@@ -102,6 +116,10 @@ export default function AddProductMain() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  const OPTIONS: Option[] = [
+    { label: "Shoes", value: "shoes" },
+    { label: "Clothing", value: "cloths" },
+  ];
   return (
     <Card className="w-full mx-auto">
       <CardHeader>
@@ -176,12 +194,22 @@ export default function AddProductMain() {
 
           <div>
             <Label htmlFor="category">Category</Label>
-            <Input
-              id="category"
-              name="category"
+            <MultipleSelector
+              selectFirstItem={false}
+              defaultOptions={OPTIONS}
               value={formData.category}
-              onChange={handleInputChange}
-              required
+              onChange={(values) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  category: values,
+                }));
+              }}
+              placeholder="Select frameworks you like..."
+              emptyIndicator={
+                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                  no results found.
+                </p>
+              }
             />
           </div>
 
