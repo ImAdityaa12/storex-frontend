@@ -1,7 +1,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -14,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { OrderItem } from "./profile-page";
+import Image from "next/image";
 
 interface ItemsModalProps {
   isOpen: boolean;
@@ -57,7 +57,7 @@ export function ItemsModal({
             {items.map((item) => (
               <TableRow key={item.productId}>
                 <TableCell>
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.title}
                     className="w-16 h-16 object-cover"

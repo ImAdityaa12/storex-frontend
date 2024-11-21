@@ -18,13 +18,7 @@ import { toast } from "sonner";
 import { Edit } from "lucide-react";
 import useCartStore from "@/store/cartStore";
 
-export default function NumberInputModal({
-  productId,
-  quantity,
-}: {
-  productId: string;
-  quantity: number;
-}) {
+export default function NumberInputModal({ productId }: { productId: string }) {
   const [open, setOpen] = useState(false);
   const [number, setNumber] = useState("");
   const { getCartItems } = useCartStore();

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ShoppingCart, Plus, Minus, X, Edit } from "lucide-react";
+import { useEffect } from "react";
+import { ShoppingCart, Plus, Minus, X } from "lucide-react";
 import Image from "next/image";
 import {
   Sheet,
@@ -24,7 +24,6 @@ export default function Cart() {
     getCartItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const addCustomQuantity = async (productId: string, quantity: number) => {};
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -70,10 +69,7 @@ export default function Cart() {
                 </Button>
                 <div className="flex items-center">
                   <span className="w-8 text-center">{item.quantity}</span>
-                  <NumberInputModal
-                    productId={item.productId}
-                    quantity={item.quantity}
-                  />
+                  <NumberInputModal productId={item.productId} />
                 </div>
                 <Button
                   variant="outline"

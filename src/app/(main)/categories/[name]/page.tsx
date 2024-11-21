@@ -40,6 +40,7 @@ export default function CategoryProduct() {
   };
   useEffect(() => {
     getCategoryProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <ContentLayout title={Array.isArray(name) ? name[0] : name || ""}>
