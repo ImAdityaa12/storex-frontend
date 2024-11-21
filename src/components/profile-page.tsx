@@ -1,22 +1,12 @@
 "use client";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { getCookie } from "@/lib/utils";
-import userDetailsStore from "@/store/userDetail";
-import { X } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { useStore } from "zustand";
-import AddAddressModal from "./add-address-modal";
+export interface OrderItem {
+  productId: string;
+  title: string;
+  price: string;
+  image: string;
+  salePrice: number;
+  quantity: number;
+}
 export interface Address {
   address: string;
   city: string;
@@ -25,23 +15,95 @@ export interface Address {
   notes: string;
   _id: string;
 }
+export interface Order {
+  _id: string;
+  items: OrderItem[];
+  total: number;
+  status: string;
+  date: string;
+  address: {
+    addressId: string;
+    address: string;
+    city: string;
+    notes: string;
+    phone: string;
+    pincode: string;
+  };
+  paymentMethod: string;
+  paymentStatus: string;
+}
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getCookie } from "@/lib/utils";
+import userDetailsStore from "@/store/userDetail";
+import { X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useStore } from "zustand";
+import AddAddressModal from "./add-address-modal";
+import { OrderTable } from "./order-table";
 
 export default function ProfilePage() {
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false);
   const { userDetails, addresses, getUserAddress } = useStore(userDetailsStore);
-  const user = {
-    name: "John Doe",
-    username: "johndoe123",
-    email: "john.doe@example.com",
-    phoneNumber: "+1 (555) 123-4567",
-    profileImage: "/placeholder.svg?height=128&width=128",
+  const [orders, setOrders] = useState<Order[]>([]);
+  const getUserOrders = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}user/order/getUserOrder`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      if (response.status === 200) {
+        const data = await response.json();
+        setOrders(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const orders = [
-    { id: 1, date: "2023-05-01", total: "$120.00", status: "Delivered" },
-    { id: 2, date: "2023-05-15", total: "$85.50", status: "Processing" },
-    { id: 3, date: "2023-06-02", total: "$200.00", status: "Shipped" },
-  ];
-
+  useEffect(() => {
+    // Fetch orders from your API here
+    // For demonstration, we'll use a mock order
+    // const mockOrder: Order = {
+    //   _id: "12345",
+    //   items: [
+    //     {
+    //       productId: "prod1",
+    //       title: "Sample Product",
+    //       price: "19.99",
+    //       image: "/placeholder.svg?height=100&width=100",
+    //       salePrice: 15.99,
+    //       quantity: 2,
+    //     },
+    //   ],
+    //   total: 31.98,
+    //   status: "Processing",
+    //   date: "2023-05-01",
+    //   address: {
+    //     addressId: "12345",
+    //     address: "123 Main St",
+    //     city: "Anytown",
+    //     notes: "Special instructions",
+    //     phone: "555-1234",
+    //     pincode: "12345",
+    //   },
+    //   paymentMethod: "Credit Card",
+    //   paymentStatus: "Paid",
+    // };
+    // setOrders([mockOrder]);
+    getUserOrders();
+  }, []);
   useEffect(() => {
     getUserAddress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,7 +112,7 @@ export default function ProfilePage() {
     <Card>
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="w-24 h-24">
-          <AvatarImage src={userDetails.image} alt={user.name} />
+          <AvatarImage src={userDetails.image} alt={userDetails.name} />
           <AvatarFallback>
             {userDetails.name
               .split(" ")
@@ -99,30 +161,7 @@ export default function ProfilePage() {
             />
           </div>
         </div>
-
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Orders</h3>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.date}</TableCell>
-                  <TableCell>{order.total}</TableCell>
-                  <TableCell>{order.status}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <OrderTable orders={orders} />
       </CardContent>
     </Card>
   );

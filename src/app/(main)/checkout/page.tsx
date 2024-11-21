@@ -76,6 +76,12 @@ export default function CheckoutPage() {
   );
   const createOrder = async () => {
     try {
+      const address = addresses.find(
+        (address) => address._id === selectedAddress
+      );
+      if (!address) {
+        throw new Error("Selected address not found");
+      }
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}user/order/addOrder`,
         {
@@ -87,9 +93,10 @@ export default function CheckoutPage() {
           },
           body: JSON.stringify({
             cartId,
-            address: addresses.find(
-              (address) => address._id === selectedAddress
-            ),
+            address: {
+              ...address,
+              addressId: address._id,
+            },
             orderStatus: "In Process",
             paymentMethod,
             paymentStatus: "In Process",
