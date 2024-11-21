@@ -60,7 +60,9 @@ export function ItemsModal({
                   <Image
                     src={item.image}
                     alt={item.title}
-                    className="w-16 h-16 object-cover"
+                    width={200}
+                    height={200}
+                    className="w-16 h-16 object-cover rounded-md"
                   />
                 </TableCell>
                 <TableCell>{item.title}</TableCell>
