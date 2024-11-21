@@ -74,7 +74,7 @@ export default function RegisterForm() {
     if (response.status === 201) {
       setCookie("token", responsejson?.token);
       toast.success(responsejson?.message);
-      router.push("/dashboard");
+      router.push("/shop");
     } else {
       toast.error(responsejson?.message);
     }

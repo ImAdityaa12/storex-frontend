@@ -119,6 +119,7 @@ export default function UserDataTable() {
 
   useEffect(() => {
     getAllUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="container mx-auto py-10">

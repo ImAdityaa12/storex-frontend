@@ -53,7 +53,7 @@ export default function LoginPage() {
       setCookie("token", data?.token);
       toast.success(data?.message);
       setIsLoading(false);
-      router.push("/dashboard");
+      router.push("/shop");
     } else {
       setIsLoading(false);
       toast.error(data?.message);
