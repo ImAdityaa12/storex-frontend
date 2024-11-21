@@ -7,27 +7,32 @@ export default function CategoriesPageMain() {
     {
       name: "Electronics",
       description: "Latest gadgets and tech innovations",
-      image: "/placeholder.svg?height=400&width=400",
+      image:
+        "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1732178820/s11hokegdckyzz9iz47k.jpg",
     },
     {
       name: "Shoes",
       description: "Footwear for every occasion",
-      image: "/placeholder.svg?height=400&width=400",
+      image:
+        "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651172/j6w5r08vgkxfaww2rjbj.webp",
     },
     {
       name: "Cloths",
       description: "Trendy and comfortable apparel",
-      image: "/placeholder.svg?height=400&width=400",
+      image:
+        "https://res.cloudinary.com/dx1kkvs4z/image/upload/v1729756880/lkysbxkqwcyijb1ijubu.webp",
     },
     {
       name: "Accessories",
       description: "Stylish add-ons to complete your look",
-      image: "/placeholder.svg?height=400&width=400",
+      image:
+        "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1732178881/uxv4wg29dqnedb0ci90u.webp",
     },
     {
       name: "Home Decor",
       description: "Elevate your living spaces",
-      image: "/placeholder.svg?height=400&width=400",
+      image:
+        "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651304/adjq96vtquydv1zpicvi.png",
     },
   ];
 
@@ -43,7 +48,7 @@ export default function CategoriesPageMain() {
                 alt={category.name}
                 width={400}
                 height={400}
-                className="w-full h-48 object-cover"
+                className="w-full h-72 object-cover"
               />
             </CardContent>
             <CardFooter className="flex flex-col items-start p-4">
