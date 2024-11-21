@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { ShoppingCart, Plus, Minus, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ShoppingCart, Plus, Minus, X, Edit } from "lucide-react";
 import Image from "next/image";
 import {
   Sheet,
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import useCartStore from "@/store/cartStore";
 import { useRouter } from "next/navigation";
+import NumberInputModal from "./add-custom-item-quantity";
 
 export default function Cart() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Cart() {
     getCartItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const addCustomQuantity = async (productId: string, quantity: number) => {};
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -66,7 +68,13 @@ export default function Cart() {
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
-                <span className="w-8 text-center">{item.quantity}</span>
+                <div className="flex items-center">
+                  <span className="w-8 text-center">{item.quantity}</span>
+                  <NumberInputModal
+                    productId={item.productId}
+                    quantity={item.quantity}
+                  />
+                </div>
                 <Button
                   variant="outline"
                   size="icon"
