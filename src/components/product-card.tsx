@@ -22,6 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import userDetailsStore from "@/store/userDetail";
 
 export default function ProductCard({
   product,
@@ -35,6 +36,7 @@ export default function ProductCard({
   const categories = product.category.split(",");
   const { toggleLike, getProducts } = useProductStore();
   const { getCartItems } = useCartStore();
+  const { userDetails } = userDetailsStore();
   const router = useRouter();
   const addFavoriteItem = async (id: string) => {
     const token = getCookie("token");
@@ -150,47 +152,61 @@ export default function ProductCard({
         >
           {product.title}
         </h2>
-        <div className="flex justify-between items-center mb-2">
+        {userDetails.approved ? (
+          <>
+            <div className="flex justify-between items-center mb-2">
+              <div>
+                <span className="text-lg font-bold">${product.salePrice}</span>
+                {product.salePrice < product.price && (
+                  <span className="text-sm text-gray-500 line-through ml-2">
+                    ${product.price}
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <TooltipProvider disableHoverableContent>
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="rounded-full bg-background text-xs"
+                        variant="outline"
+                      >
+                        Categories
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="w-64 flex gap-2">
+                      {categories.map((category, index) => (
+                        <Badge key={index} variant="secondary">
+                          {category}
+                        </Badge>
+                      ))}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </div>
+            <div className="text-sm text-gray-600 mb-2">
+              Brand: {product.brand}
+            </div>
+            <div className="text-sm text-gray-600">
+              In Stock: {product.totalStock}
+            </div>
+          </>
+        ) : (
           <div>
-            <span className="text-lg font-bold">${product.salePrice}</span>
-            {product.salePrice < product.price && (
-              <span className="text-sm text-gray-500 line-through ml-2">
-                ${product.price}
-              </span>
-            )}
+            <span className="text-lg font-bold">NA</span>
           </div>
-          <div className="flex gap-2">
-            <TooltipProvider disableHoverableContent>
-              <Tooltip delayDuration={100}>
-                <TooltipTrigger asChild>
-                  <Button
-                    className="rounded-full bg-background text-xs"
-                    variant="outline"
-                  >
-                    Categories
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="w-64 flex gap-2">
-                  {categories.map((category, index) => (
-                    <Badge key={index} variant="secondary">
-                      {category}
-                    </Badge>
-                  ))}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div>
-        <div className="text-sm text-gray-600 mb-2">Brand: {product.brand}</div>
-        <div className="text-sm text-gray-600">
-          In Stock: {product.totalStock}
-        </div>
+        )}
       </CardContent>
       <CardFooter className="p-4 pt-0">
         {isEdit ? (
           <ProductEditModal product={product} />
         ) : (
-          <Button className="w-full" onClick={() => addToCart(product)}>
+          <Button
+            className="w-full"
+            onClick={() => addToCart(product)}
+            disabled={product.totalStock === 0 || !userDetails.approved}
+          >
             <ShoppingCart className="w-4 h-4 mr-2" />
             Add to Cart
           </Button>
