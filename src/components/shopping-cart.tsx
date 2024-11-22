@@ -89,7 +89,7 @@ export default function Cart() {
             </div>
           ))}
         </ScrollArea>
-        <div className="mt-4 space-y-4 max-sm:mt-0 max-sm:space-y-0">
+        <div className="mt-4 space-y-4 max-sm:mt-0 max-sm:mb-4 max-sm:space-y-0">
           <div className="flex justify-between text-lg font-semibold">
             <span>Total:</span>
             <span>
