@@ -1,6 +1,6 @@
+import userDetailsStore from "@/store/userDetail";
 import {
   Tag,
-  Users,
   Settings,
   Bookmark,
   LayoutGrid,
@@ -30,70 +30,100 @@ type Group = {
 //@eslint-disable-next-line
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getMenuList(pathname: string): Group[] {
-  return [
-    {
-      groupLabel: "",
-      menus: [
+  const { userDetails } = userDetailsStore();
+  return userDetails.role === "admin"
+    ? [
         {
-          href: "/shop",
-          label: "Shop",
-          icon: LayoutGrid,
-          submenus: [],
-        },
-      ],
-    },
-    {
-      groupLabel: "Contents",
-      menus: [
-        {
-          href: "",
-          label: "Admin",
-          icon: Crown,
-          submenus: [
+          groupLabel: "",
+          menus: [
             {
-              href: "/add-product",
-              label: "Add Product",
-            },
-            {
-              href: "/manage-product",
-              label: "Manage Product",
-            },
-            {
-              href: "/orders",
-              label: "Orders",
-            },
-            {
-              href: "/users",
-              label: "Users",
+              href: "/shop",
+              label: "Shop",
+              icon: LayoutGrid,
+              submenus: [],
             },
           ],
         },
         {
-          href: "/categories",
-          label: "Categories",
-          icon: Bookmark,
+          groupLabel: "Contents",
+          menus: [
+            {
+              href: "",
+              label: "Admin",
+              icon: Crown,
+              submenus: [
+                {
+                  href: "/add-product",
+                  label: "Add Product",
+                },
+                {
+                  href: "/manage-product",
+                  label: "Manage Product",
+                },
+                {
+                  href: "/orders",
+                  label: "Orders",
+                },
+                {
+                  href: "/users",
+                  label: "Users",
+                },
+              ],
+            },
+            {
+              href: "/categories",
+              label: "Categories",
+              icon: Bookmark,
+            },
+            {
+              href: "/favorites",
+              label: "Saved",
+              icon: Tag,
+            },
+          ],
         },
         {
-          href: "/favorites",
-          label: "Saved",
-          icon: Tag,
+          groupLabel: "Settings",
+          menus: [
+            {
+              href: "/account",
+              label: "Account",
+              icon: Settings,
+            },
+          ],
         },
-      ],
-    },
-    {
-      groupLabel: "Settings",
-      menus: [
+      ]
+    : [
         {
-          href: "/users",
-          label: "Users",
-          icon: Users,
+          groupLabel: "",
+          menus: [
+            {
+              href: "/shop",
+              label: "Shop",
+              icon: LayoutGrid,
+              submenus: [],
+            },
+            {
+              href: "/categories",
+              label: "Categories",
+              icon: Bookmark,
+            },
+            {
+              href: "/favorites",
+              label: "Saved",
+              icon: Tag,
+            },
+          ],
         },
         {
-          href: "/account",
-          label: "Account",
-          icon: Settings,
+          groupLabel: "Settings",
+          menus: [
+            {
+              href: "/account",
+              label: "Account",
+              icon: Settings,
+            },
+          ],
         },
-      ],
-    },
-  ];
+      ];
 }
