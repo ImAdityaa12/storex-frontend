@@ -112,7 +112,7 @@ export default function ProductCard({
     }
   };
   return (
-    <Card className="flex flex-col max-w-[350px] max-sm:w-full  max-h-[570px] overflow-hidden">
+    <Card className="flex flex-col max-w-[350px] max-sm:w-full max-h-[570px] max-sm:min-h-[335px] overflow-hidden">
       <CardHeader className="p-0">
         <div className="relative aspect-square">
           <Image
@@ -147,23 +147,25 @@ export default function ProductCard({
       </CardHeader>
       <CardContent className="flex-grow p-4">
         <h2
-          className="text-xl font-semibold mb-2 cursor-pointer"
+          className="text-xl font-semibold mb-2 cursor-pointer max-sm:text-sm max-sm:mb-0"
           onClick={() => router.push(`/product/${product._id}`)}
         >
           {product.title}
         </h2>
         {userDetails.approved ? (
           <>
-            <div className="flex justify-between items-center mb-2">
+            <div className="flex justify-between items-center mb-2 max-sm:mb-0 max-sm:justify-normal">
               <div>
-                <span className="text-lg font-bold">${product.salePrice}</span>
+                <span className="text-lg font-bold max-sm:text-xs">
+                  ${product.salePrice}
+                </span>
                 {product.salePrice < product.price && (
-                  <span className="text-sm text-gray-500 line-through ml-2">
+                  <span className="text-sm text-gray-500 line-through ml-2 max-sm:text-xs">
                     ${product.price}
                   </span>
                 )}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 max-sm:hidden">
                 <TooltipProvider disableHoverableContent>
                   <Tooltip delayDuration={100}>
                     <TooltipTrigger asChild>
@@ -185,10 +187,10 @@ export default function ProductCard({
                 </TooltipProvider>
               </div>
             </div>
-            <div className="text-sm text-gray-600 mb-2">
+            <div className="text-sm text-gray-600 mb-2 max-sm:mb-0">
               Brand: {product.brand}
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 max-sm:hidden">
               In Stock: {product.totalStock}
             </div>
           </>
@@ -207,7 +209,7 @@ export default function ProductCard({
             onClick={() => addToCart(product)}
             disabled={product.totalStock === 0 || !userDetails.approved}
           >
-            <ShoppingCart className="w-4 h-4 mr-2" />
+            <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
             Add to Cart
           </Button>
         )}
