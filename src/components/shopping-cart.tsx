@@ -36,7 +36,7 @@ export default function Cart() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg">
+      <SheetContent className="w-full sm:max-w-lg min-h-screen">
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
@@ -89,7 +89,7 @@ export default function Cart() {
             </div>
           ))}
         </ScrollArea>
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 space-y-4 max-sm:mt-0 max-sm:space-y-0">
           <div className="flex justify-between text-lg font-semibold">
             <span>Total:</span>
             <span>
