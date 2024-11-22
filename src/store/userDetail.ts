@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { create } from "zustand";
 
 type UserDetails = {
+  _id: string;
   name: string;
   email: string;
   image?: string;
@@ -28,6 +29,7 @@ type UserStore = {
 
 const userDetailsStore = create<UserStore>((set) => ({
   userDetails: {
+    _id: "",
     name: "",
     email: "",
     role: "",

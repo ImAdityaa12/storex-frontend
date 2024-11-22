@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search } from "lucide-react";
 import { getCookie } from "@/lib/utils";
+import { toast } from "sonner";
 
 type UserDetails = {
   _id: string;
@@ -34,44 +35,9 @@ type UserDetails = {
   approved: boolean;
 };
 
-// const initialUsers: UserDetails[] = [
-//   {
-//     id: "1",
-//     name: "John Doe",
-//     email: "john@example.com",
-//     image: "/placeholder.svg?height=40&width=40",
-//     role: "user",
-//     phoneNumber: "123-456-7890",
-//     userName: "johnd",
-//     credit: 0,
-//     approved: false,
-//   },
-//   {
-//     id: "2",
-//     name: "Jane Smith",
-//     email: "jane@example.com",
-//     role: "admin",
-//     phoneNumber: "098-765-4321",
-//     userName: "janes",
-//     credit: 100,
-//     approved: true,
-//   },
-//   {
-//     id: "3",
-//     name: "Alice Johnson",
-//     email: "alice@example.com",
-//     role: "user",
-//     phoneNumber: "555-123-4567",
-//     userName: "alicej",
-//     credit: 50,
-//     approved: true,
-//   },
-// ];
-
 export default function UserDataTable() {
   const [users, setUsers] = useState<UserDetails[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-
   const filteredUsers = useMemo(() => {
     return users.filter(
       (user) =>
@@ -87,8 +53,30 @@ export default function UserDataTable() {
     );
   };
 
-  const handleRoleChange = (id: string, role: "admin" | "user") => {
-    setUsers(users.map((user) => (user._id === id ? { ...user, role } : user)));
+  const handleRoleChange = async (id: string, role: "admin" | "user") => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/updateRole/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+          body: JSON.stringify({ role }),
+        }
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        toast.success(data.message);
+      }
+      setUsers(
+        users.map((user) => (user._id === id ? { ...user, role } : user))
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleCreditChange = (id: string, credit: number) => {
@@ -109,7 +97,6 @@ export default function UserDataTable() {
           },
         }
       );
-      console.log(users);
       const data = await response.json();
       setUsers(data.users);
     } catch (error) {
