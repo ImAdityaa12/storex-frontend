@@ -12,13 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -35,6 +28,14 @@ import {
 } from "@/components/ui/table";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import { getCookie } from "@/lib/utils";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalFooter,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "@/components/ui/responsive-dialog";
+import { toast } from "sonner";
 
 // Define the types based on the provided data structure
 type Address = {
@@ -69,103 +70,103 @@ type Order = {
 };
 
 // Sample data
-const sampleOrders: Order[] = [
-  {
-    address: {
-      address: "Delhi2",
-      city: "Delhi2",
-      pincode: "274001",
-      phone: "9517111597",
-      notes: "Real",
-    },
-    _id: "673379657df4507279333786",
-    userId: "6727a38632657c5e7651d8ab",
-    cartItems: [
-      {
-        productId: "6719db8a8f55aad7bcc065a9",
-        title: "SADdsfasd",
-        price: "400",
-        image: "asdfadsf",
-        salePrice: 200,
-        quantity: 2,
-        _id: "673379657df4507279333787",
-      },
-    ],
-    orderStatus: "In Process",
-    paymentMethod: "upi",
-    paymentStatus: "In Process",
-    totalAmount: 500,
-    orderDate: "2024-11-12T15:51:01.691Z",
-    cartId: "6732437d90df61d621d537a9",
-  },
-  {
-    _id: "67337bc17df45072793337a1",
-    userId: "6727a38632657c5e7651d8ab",
-    cartItems: [
-      {
-        productId: "6727a4bd32657c5e7651d8c4",
-        title: "Urban Blaze: Latte",
-        price: "35",
-        image:
-          "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651304/adjq96vtquydv1zpicvi.png",
-        salePrice: 43124312,
-        quantity: 4,
-        _id: "67337bc17df45072793337a2",
-      },
-      {
-        productId: "6719dd088f55aad7bcc065ac",
-        title: "Inside Out: Boredom",
-        price: "799",
-        image:
-          "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1729748008/l4maljoebrc477lap76t.webp",
-        salePrice: 1000,
-        quantity: 1,
-        _id: "67337bc17df45072793337a3",
-      },
-    ],
-    orderStatus: "In Process",
-    paymentMethod: "upi",
-    paymentStatus: "In Process",
-    totalAmount: 172498248,
-    orderDate: "2024-11-12T16:01:05.288Z",
-    cartId: "6732437d90df61d621d537a9",
-  },
-  {
-    _id: "67337bfc7df45072793337a5",
-    userId: "6727a38632657c5e7651d8ab",
-    cartItems: [
-      {
-        productId: "6727a4bd32657c5e7651d8c4",
-        title: "Urban Blaze: Latte",
-        price: "35",
-        image:
-          "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651304/adjq96vtquydv1zpicvi.png",
-        salePrice: 43124312,
-        quantity: 4,
-        _id: "67337bfc7df45072793337a6",
-      },
-      {
-        productId: "6719dd088f55aad7bcc065ac",
-        title: "Inside Out: Boredom",
-        price: "799",
-        image:
-          "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1729748008/l4maljoebrc477lap76t.webp",
-        salePrice: 1000,
-        quantity: 1,
-        _id: "67337bfc7df45072793337a7",
-      },
-    ],
-    orderStatus: "In Process",
-    paymentMethod: "bank",
-    paymentStatus: "In Process",
-    totalAmount: 172498248,
-    orderDate: "2024-11-12T16:02:04.726Z",
-    cartId: "6732437d90df61d621d537a9",
-  },
-];
+// const sampleOrders: Order[] = [
+//   {
+//     address: {
+//       address: "Delhi2",
+//       city: "Delhi2",
+//       pincode: "274001",
+//       phone: "9517111597",
+//       notes: "Real",
+//     },
+//     _id: "673379657df4507279333786",
+//     userId: "6727a38632657c5e7651d8ab",
+//     cartItems: [
+//       {
+//         productId: "6719db8a8f55aad7bcc065a9",
+//         title: "SADdsfasd",
+//         price: "400",
+//         image: "asdfadsf",
+//         salePrice: 200,
+//         quantity: 2,
+//         _id: "673379657df4507279333787",
+//       },
+//     ],
+//     orderStatus: "In Process",
+//     paymentMethod: "upi",
+//     paymentStatus: "In Process",
+//     totalAmount: 500,
+//     orderDate: "2024-11-12T15:51:01.691Z",
+//     cartId: "6732437d90df61d621d537a9",
+//   },
+//   {
+//     _id: "67337bc17df45072793337a1",
+//     userId: "6727a38632657c5e7651d8ab",
+//     cartItems: [
+//       {
+//         productId: "6727a4bd32657c5e7651d8c4",
+//         title: "Urban Blaze: Latte",
+//         price: "35",
+//         image:
+//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651304/adjq96vtquydv1zpicvi.png",
+//         salePrice: 43124312,
+//         quantity: 4,
+//         _id: "67337bc17df45072793337a2",
+//       },
+//       {
+//         productId: "6719dd088f55aad7bcc065ac",
+//         title: "Inside Out: Boredom",
+//         price: "799",
+//         image:
+//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1729748008/l4maljoebrc477lap76t.webp",
+//         salePrice: 1000,
+//         quantity: 1,
+//         _id: "67337bc17df45072793337a3",
+//       },
+//     ],
+//     orderStatus: "In Process",
+//     paymentMethod: "upi",
+//     paymentStatus: "In Process",
+//     totalAmount: 172498248,
+//     orderDate: "2024-11-12T16:01:05.288Z",
+//     cartId: "6732437d90df61d621d537a9",
+//   },
+//   {
+//     _id: "67337bfc7df45072793337a5",
+//     userId: "6727a38632657c5e7651d8ab",
+//     cartItems: [
+//       {
+//         productId: "6727a4bd32657c5e7651d8c4",
+//         title: "Urban Blaze: Latte",
+//         price: "35",
+//         image:
+//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651304/adjq96vtquydv1zpicvi.png",
+//         salePrice: 43124312,
+//         quantity: 4,
+//         _id: "67337bfc7df45072793337a6",
+//       },
+//       {
+//         productId: "6719dd088f55aad7bcc065ac",
+//         title: "Inside Out: Boredom",
+//         price: "799",
+//         image:
+//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1729748008/l4maljoebrc477lap76t.webp",
+//         salePrice: 1000,
+//         quantity: 1,
+//         _id: "67337bfc7df45072793337a7",
+//       },
+//     ],
+//     orderStatus: "In Process",
+//     paymentMethod: "bank",
+//     paymentStatus: "In Process",
+//     totalAmount: 172498248,
+//     orderDate: "2024-11-12T16:02:04.726Z",
+//     cartId: "6732437d90df61d621d537a9",
+//   },
+// ];
 
 export default function Component() {
-  const [orders, setOrders] = useState<Order[]>(sampleOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editedOrder, setEditedOrder] = useState<Order | null>(null);
@@ -189,11 +190,32 @@ export default function Component() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (editedOrder) {
       const updatedOrders = orders.map((order) =>
         order._id === editedOrder._id ? editedOrder : order
       );
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}user/order/updateOrderStatus/${editedOrder._id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+          body: JSON.stringify({
+            paymentStatus: editedOrder.paymentStatus,
+            orderStatus: editedOrder.orderStatus,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to update order status");
+      } else {
+        toast.success(data.message);
+      }
       setOrders(updatedOrders);
       setIsModalOpen(false);
       setIsSubmitEnabled(false);
@@ -253,11 +275,11 @@ export default function Component() {
           ))}
         </div>
 
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="max-w-3xl">
-            <DialogHeader>
-              <DialogTitle>Order Details</DialogTitle>
-            </DialogHeader>
+        <ResponsiveModal open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <ResponsiveModalContent className="max-w-3xl">
+            <ResponsiveModalHeader>
+              <ResponsiveModalTitle>Order Details</ResponsiveModalTitle>
+            </ResponsiveModalHeader>
             {selectedOrder && (
               <>
                 <div className="grid gap-4">
@@ -341,7 +363,7 @@ export default function Component() {
                     </div>
                   )}
                 </div>
-                <DialogFooter>
+                <ResponsiveModalFooter>
                   <Button
                     variant="outline"
                     onClick={() => setIsModalOpen(false)}
@@ -351,11 +373,11 @@ export default function Component() {
                   <Button onClick={handleSubmit} disabled={!isSubmitEnabled}>
                     <Edit className="mr-2 h-4 w-4" /> Update Order
                   </Button>
-                </DialogFooter>
+                </ResponsiveModalFooter>
               </>
             )}
-          </DialogContent>
-        </Dialog>
+          </ResponsiveModalContent>
+        </ResponsiveModal>
       </div>
     </ContentLayout>
   );
