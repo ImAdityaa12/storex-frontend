@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search } from "lucide-react";
 import { getCookie } from "@/lib/utils";
 import { toast } from "sonner";
+import { ContentLayout } from "./admin-panel/content-layout";
 
 type UserDetails = {
   _id: string;
@@ -155,90 +156,92 @@ export default function UserDataTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="container mx-auto py-10">
-      <div className="mb-4 relative max-w-md ml-auto mr-4">
-        <Input
-          type="text"
-          placeholder="Search users..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
-        />
-        <Search
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-          size={20}
-        />
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Phone Number</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Credit</TableHead>
-            <TableHead>Approved</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredUsers.map((user) => (
-            <TableRow key={user._id}>
-              <TableCell className="font-medium">
-                <div className="flex items-center space-x-2">
-                  <Avatar>
-                    <AvatarImage src={user.image} alt={user.name} />
-                    <AvatarFallback>
-                      {user.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{user.name}</span>
-                </div>
-              </TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>
-                <Select
-                  value={user.role}
-                  onValueChange={(value: "admin" | "user") =>
-                    handleRoleChange(user._id, value)
-                  }
-                >
-                  <SelectTrigger className="w-[100px]">
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="user">User</SelectItem>
-                  </SelectContent>
-                </Select>
-              </TableCell>
-              <TableCell>{user.phoneNumber}</TableCell>
-              <TableCell>{user.userName}</TableCell>
-              <TableCell>
-                <Input
-                  type="number"
-                  value={user.credit}
-                  onChange={(e) =>
-                    handleCreditChange(user._id, Number(e.target.value))
-                  }
-                  className="w-[100px]"
-                />
-              </TableCell>
-              <TableCell>
-                <Switch
-                  checked={user.approved}
-                  onCheckedChange={(checked) =>
-                    handleApprovedChange(user._id, checked)
-                  }
-                />
-              </TableCell>
+    <ContentLayout title="Users">
+      <div className="container mx-auto">
+        <div className="mb-4 relative max-w-md ml-auto mr-4">
+          <Input
+            type="text"
+            placeholder="Search users..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={20}
+          />
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Phone Number</TableHead>
+              <TableHead>Username</TableHead>
+              <TableHead>Credit</TableHead>
+              <TableHead>Approved</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {filteredUsers.map((user) => (
+              <TableRow key={user._id}>
+                <TableCell className="font-medium">
+                  <div className="flex items-center space-x-2">
+                    <Avatar>
+                      <AvatarImage src={user.image} alt={user.name} />
+                      <AvatarFallback>
+                        {user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{user.name}</span>
+                  </div>
+                </TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <Select
+                    value={user.role}
+                    onValueChange={(value: "admin" | "user") =>
+                      handleRoleChange(user._id, value)
+                    }
+                  >
+                    <SelectTrigger className="w-[100px]">
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="user">User</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+                <TableCell>{user.phoneNumber}</TableCell>
+                <TableCell>{user.userName}</TableCell>
+                <TableCell>
+                  <Input
+                    type="number"
+                    value={user.credit}
+                    onChange={(e) =>
+                      handleCreditChange(user._id, Number(e.target.value))
+                    }
+                    className="w-[100px]"
+                  />
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    checked={user.approved}
+                    onCheckedChange={(checked) =>
+                      handleApprovedChange(user._id, checked)
+                    }
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </ContentLayout>
   );
 }
