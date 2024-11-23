@@ -47,7 +47,30 @@ export default function UserDataTable() {
     );
   }, [users, searchTerm]);
 
-  const handleApprovedChange = (id: string, approved: boolean) => {
+  const handleApprovedChange = async (id: string, approved: boolean) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/updateApproval/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+          body: JSON.stringify({ approved }),
+        }
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating approval");
+    }
     setUsers(
       users.map((user) => (user._id === id ? { ...user, approved } : user))
     );
@@ -79,10 +102,33 @@ export default function UserDataTable() {
     }
   };
 
-  const handleCreditChange = (id: string, credit: number) => {
-    setUsers(
-      users.map((user) => (user._id === id ? { ...user, credit } : user))
-    );
+  const handleCreditChange = async (id: string, credit: number) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/updateCredit/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+          body: JSON.stringify({ credit }),
+        }
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        toast.success(data.message);
+        setUsers(
+          users.map((user) => (user._id === id ? { ...user, credit } : user))
+        );
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating credit");
+    }
   };
   const getAllUsers = async () => {
     try {
