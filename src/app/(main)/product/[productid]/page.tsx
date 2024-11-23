@@ -65,6 +65,9 @@ export default function ProductDetail() {
   const [products, setProducts] = useState<
     { isLiked: boolean; product: product }[]
   >([]);
+  const [latestProducts, setLatestProducts] = useState<
+    { isLiked: boolean; product: product }[]
+  >([]);
   const { productid: id } = useParams();
   const [currentProductDetail, setCurrentProductDetail] = useState<product>({
     _id: "",
@@ -147,9 +150,33 @@ export default function ProductDetail() {
       toast.error("Someting went wrong");
     }
   };
+  const getLatestProducts = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/latestProducts/get`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        setLatestProducts(data.products);
+      } else {
+        toast.error("Someting went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Someting went wrong");
+    }
+  };
   useEffect(() => {
     getItems();
     getSimilarProducts();
+    getLatestProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -227,7 +254,7 @@ export default function ProductDetail() {
           <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
           <Carousel className="w-full mx-auto">
             <CarouselContent>
-              {products.map((product) => (
+              {latestProducts.map((product) => (
                 <CarouselItem key={product.product._id} className="">
                   <ProductCard product={product.product} />
                 </CarouselItem>
