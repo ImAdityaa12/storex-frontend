@@ -148,6 +148,12 @@ export default function ProfilePage() {
                 </dt>
                 <dd className="text-sm">{userDetails.phoneNumber}</dd>
               </div>
+              <div>
+                <dt className="text-sm font-medium text-muted-foreground">
+                  Credits
+                </dt>
+                <dd className="text-sm">{userDetails.credit}</dd>
+              </div>
             </dl>
           </div>
           <div>

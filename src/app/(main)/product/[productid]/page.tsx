@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import { ShoppingCart, Heart } from "lucide-react";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getCookie } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -270,6 +270,7 @@ export default function ProductDetail() {
 }
 
 function ProductCard({ product }: { product: product }) {
+  const router = useRouter();
   return (
     <Card>
       <CardContent className="p-4 border max-sm:w-[200px] max-sm:h-[250px] max-sm:p-0">
@@ -279,6 +280,7 @@ function ProductCard({ product }: { product: product }) {
           width={200}
           height={200}
           className="rounded-lg object-cover w-full h-48 mb-4 max-sm:h-2/3 max-sm:rounded-b-none max-sm:object-contain"
+          onClick={() => router.push(`/product/${product._id}`)}
         />
         <div className="max-sm:p-2">
           <h3 className="font-semibold mb-2 max-sm:text-sm max-sm:truncate">
