@@ -8,8 +8,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  // CarouselNext,
+  // CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ShoppingCart, Heart } from "lucide-react";
 import { ContentLayout } from "@/components/admin-panel/content-layout";
@@ -21,59 +21,50 @@ import { product } from "@/product";
 import useCartStore from "@/store/cartStore";
 
 // Mock data for similar and latest products
-const mockProducts = [
-  {
-    id: 1,
-    title: "Similar Product 1",
-    price: 79.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 2,
-    title: "Similar Product 2",
-    price: 89.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 3,
-    title: "Similar Product 3",
-    price: 99.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 4,
-    title: "Latest Product 1",
-    price: 109.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 5,
-    title: "Latest Product 2",
-    price: 119.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 6,
-    title: "Latest Product 3",
-    price: 129.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-];
+// const mockProducts = [
+//   {
+//     id: 1,
+//     title: "Similar Product 1",
+//     price: 79.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 2,
+//     title: "Similar Product 2",
+//     price: 89.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 3,
+//     title: "Similar Product 3",
+//     price: 99.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 4,
+//     title: "Latest Product 1",
+//     price: 109.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 5,
+//     title: "Latest Product 2",
+//     price: 119.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 6,
+//     title: "Latest Product 3",
+//     price: 129.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+// ];
 
 export default function ProductDetail() {
   const { getCartItems } = useCartStore();
-  const product = {
-    image:
-      "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1729747569/u0rtaiwgf…",
-    title: "Popcorn Stripes: Blue Horizon",
-    description:
-      "Style your wardrobe with this classic relaxed-fit shirt. Wear it to a …",
-    price: 909090,
-    brand: "fgfgdsdfg",
-    category: "shoes,cloths",
-    salePrice: 9898,
-    totalStock: 9384294,
-  };
+  const [products, setProducts] = useState<
+    { isLiked: boolean; product: product }[]
+  >([]);
   const { productid: id } = useParams();
   const [currentProductDetail, setCurrentProductDetail] = useState<product>({
     _id: "",
@@ -133,8 +124,32 @@ export default function ProductDetail() {
       toast.error("Error adding item to cart");
     }
   };
+  const getSimilarProducts = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/getSimilarProducts/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        setProducts(data.products);
+      } else {
+        toast.error("Someting went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Someting went wrong");
+    }
+  };
   useEffect(() => {
     getItems();
+    getSimilarProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -165,7 +180,7 @@ export default function ProductDetail() {
               )}
 
               <span className="text-lg text-gray-500 line-through">
-                ${(product.price / 100).toFixed(2)}
+                ${(currentProductDetail.price / 100).toFixed(2)}
               </span>
             </div>
             <div>
@@ -177,7 +192,7 @@ export default function ProductDetail() {
               ))}
             </div>
             <p className="text-sm text-gray-600">
-              In stock: {product.totalStock}
+              In stock: {currentProductDetail.totalStock}
             </p>
             <div className="flex space-x-4">
               <Button
@@ -197,35 +212,29 @@ export default function ProductDetail() {
           <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
           <Carousel className="w-full mx-auto">
             <CarouselContent>
-              {mockProducts.slice(0, 3).map((product) => (
-                <CarouselItem
-                  key={product.id}
-                  className="md:basis-1/2 lg:basis-1/3"
-                >
-                  <ProductCard product={product} />
+              {products.map((product) => (
+                <CarouselItem key={product.product._id} className="w-fit">
+                  <ProductCard product={product.product} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            {/* <CarouselPrevious />
+              <CarouselNext /> */}
           </Carousel>
         </section>
 
-        <section>
+        <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
           <Carousel className="w-full mx-auto">
             <CarouselContent>
-              {mockProducts.slice(3).map((product) => (
-                <CarouselItem
-                  key={product.id}
-                  className="md:basis-1/2 lg:basis-1/3"
-                >
-                  <ProductCard product={product} />
+              {products.map((product) => (
+                <CarouselItem key={product.product._id} className="">
+                  <ProductCard product={product.product} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            {/* <CarouselPrevious />
+            <CarouselNext /> */}
           </Carousel>
         </section>
       </div>
@@ -233,19 +242,25 @@ export default function ProductDetail() {
   );
 }
 
-function ProductCard({ product }: { product: (typeof mockProducts)[0] }) {
+function ProductCard({ product }: { product: product }) {
   return (
     <Card>
-      <CardContent className="p-4">
+      <CardContent className="p-4 border max-sm:w-[200px] max-sm:h-[250px] max-sm:p-0">
         <Image
           src={product.image}
           alt={product.title}
           width={200}
           height={200}
-          className="rounded-lg object-cover w-full h-48 mb-4"
+          className="rounded-lg object-cover w-full h-48 mb-4 max-sm:h-2/3 max-sm:rounded-b-none max-sm:object-contain"
         />
-        <h3 className="font-semibold mb-2">{product.title}</h3>
-        <p className="text-lg font-bold">${product.price.toFixed(2)}</p>
+        <div className="max-sm:p-2">
+          <h3 className="font-semibold mb-2 max-sm:text-sm max-sm:truncate">
+            {product.title}
+          </h3>
+          <p className="text-lg font-bold max-sm:text-sm">
+            ${product.price.toFixed(2)}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
