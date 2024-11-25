@@ -103,9 +103,10 @@ const ProductTagsPage = () => {
         ))}
       </div>
       <ResponsiveModal open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <ResponsiveModalContent className="min-w-3xl min-h-[20rem]">
+        <ResponsiveModalContent className="min-w-3xl">
           <ResponsiveModalHeader>
             <ResponsiveModalTitle>
+              Create{" "}
               {selectedCategory
                 ? selectedCategory.charAt(0).toUpperCase() +
                   selectedCategory.slice(1)
