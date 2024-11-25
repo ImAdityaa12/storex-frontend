@@ -192,7 +192,15 @@ const ProductTagsPage = () => {
           </div>
         ))}
       </div>
-      <ResponsiveModal open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <ResponsiveModal
+        open={isModalOpen}
+        onOpenChange={(value) => {
+          setIsModalOpen(value);
+          setImage(null);
+          setValue("");
+          setImagePreview(null);
+        }}
+      >
         <ResponsiveModalContent className="min-w-3xl">
           <ResponsiveModalHeader>
             <ResponsiveModalTitle>
@@ -205,7 +213,7 @@ const ProductTagsPage = () => {
           </ResponsiveModalHeader>
           {selectedCategory === "models" ||
           selectedCategory === "categories" ? (
-            <div>
+            <div className="flex flex-col gap-5">
               <Label htmlFor="image">Product Image</Label>
               <Input
                 id="image"
