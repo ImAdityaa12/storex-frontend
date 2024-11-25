@@ -141,6 +141,10 @@ const ProductTagsPage = () => {
         if (res.status === 201) {
           toast.success("Category added successfully");
           setIsModalOpen(false);
+          setImage(null);
+          setValue("");
+          setImagePreview(null);
+          getTags();
         } else {
           toast.error(data.message);
         }
@@ -242,7 +246,11 @@ const ProductTagsPage = () => {
             />
           )}
           <ResponsiveModalFooter className="mt-4">
-            <Button className="btn btn-primary" onClick={handleSendRequest}>
+            <Button
+              className="btn btn-primary"
+              onClick={handleSendRequest}
+              disabled={!image}
+            >
               Save
             </Button>
           </ResponsiveModalFooter>
