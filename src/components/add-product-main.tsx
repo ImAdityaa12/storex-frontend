@@ -62,6 +62,19 @@ export default function AddProductMain() {
     const data = await response.json();
     if (response.status === 200) {
       toast.success(data?.message);
+      setFormData({
+        image: "",
+        brand: "",
+        category: [],
+        description: "",
+        price: "",
+        salePrice: "",
+        totalStock: "",
+        productName: "",
+      });
+      setImage(null);
+      setImagePreview(null);
+      return;
     } else {
       toast.error(data?.message);
     }
