@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/responsive-dialog";
 import { getCookie } from "@/lib/utils";
 import { Plus, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const ProductTagsPage = () => {
@@ -21,11 +21,41 @@ const ProductTagsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<
     "brands" | "models" | "categories" | null
   >(null);
-  const data = {
-    brands: ["havells"],
-    categories: ["shoes", "shoes1", "shoes2", "shoes3", "shoes4", "shoes5"],
-    models: ["coral", "coral1"],
+  const [data, setData] = useState<{
+    brands: string[];
+    categories: string[];
+    models: string[];
+  }>({
+    brands: [],
+    categories: [],
+    models: [],
+  });
+  // const data = {
+  //   brands: ["havells"],
+  //   categories: ["shoes", "shoes1", "shoes2", "shoes3", "shoes4", "shoes5"],
+  //   models: ["coral", "coral1"],
+  // };
+  const getTags = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/productTags`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      const data = await res.json();
+      setData(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  useEffect(() => {
+    getTags();
+  }, []);
   const [value, setValue] = useState<Option[]>([]);
   const handleSendRequest = async () => {
     try {
@@ -88,6 +118,7 @@ const ProductTagsPage = () => {
         }
       }
       setValue([]);
+      getTags();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -98,7 +129,13 @@ const ProductTagsPage = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(data).map(([key, value]) => (
           <div key={key}>
-            {renderCards(key, value, setIsModalOpen, setSelectedCategory)}
+            {renderCards(
+              key,
+              value,
+              setIsModalOpen,
+              setSelectedCategory,
+              getTags
+            )}
           </div>
         ))}
       </div>
@@ -145,31 +182,58 @@ const renderCards = (
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
   setSelectedCategory: React.Dispatch<
     React.SetStateAction<"brands" | "models" | "categories" | null>
-  >
-) => (
-  <Card className="w-full max-w-md mb-6 h-full">
-    <CardHeader>
-      <CardTitle className="text-2xl font-bold capitalize">{title}</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="list-disc flex gap-2 flex-wrap">
-        {items.map((item, index) => (
-          <Badge key={index} className="text-sm">
-            {item}
-            <X
-              className="ml-2 text-red-400 hover:bg-white rounded-full cursor-pointer"
-              size={16}
-            />
-          </Badge>
-        ))}
-        <Plus
-          className="text-green-400 hover:bg-white rounded-full cursor-pointer p-1"
-          onClick={() => {
-            setIsModalOpen(true);
-            setSelectedCategory(title as "brands" | "models" | "categories");
-          }}
-        />
-      </div>
-    </CardContent>
-  </Card>
-);
+  >,
+  getTags: () => void
+) => {
+  const deleteTags = async (index: number) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/deleteTag/${items[index]}?tag=${title}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      if (res.status === 200) {
+        toast.success("Tags deleted successfully");
+        getTags();
+      } else {
+        toast.error("Error deleting tags");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+  return (
+    <Card className="w-full max-w-md mb-6 h-full">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold capitalize">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="list-disc flex gap-2 flex-wrap">
+          {items.map((item, index) => (
+            <Badge key={index} className="text-sm">
+              {item}
+              <X
+                className="ml-2 text-red-400 hover:bg-white rounded-full cursor-pointer"
+                size={16}
+                onClick={() => deleteTags(index)}
+              />
+            </Badge>
+          ))}
+          <Plus
+            className="text-green-400 hover:bg-white rounded-full cursor-pointer p-1"
+            onClick={() => {
+              setIsModalOpen(true);
+              setSelectedCategory(title as "brands" | "models" | "categories");
+            }}
+          />
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
