@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search } from "lucide-react";
+import { Minus, Plus, Search } from "lucide-react";
 import { getCookie } from "@/lib/utils";
 import { toast } from "sonner";
 import { ContentLayout } from "./admin-panel/content-layout";
@@ -179,7 +179,7 @@ export default function UserDataTable() {
               <TableHead>Role</TableHead>
               <TableHead>Phone Number</TableHead>
               <TableHead>Username</TableHead>
-              <TableHead>Credit</TableHead>
+              <TableHead className="pl-9">Credit</TableHead>
               <TableHead>Approved</TableHead>
             </TableRow>
           </TableHeader>
@@ -219,15 +219,17 @@ export default function UserDataTable() {
                 </TableCell>
                 <TableCell>{user.phoneNumber}</TableCell>
                 <TableCell>{user.userName}</TableCell>
-                <TableCell>
+                <TableCell className="flex items-center gap-2">
+                  <Minus size={14} />
                   <Input
                     type="number"
                     value={user.credit}
                     onChange={(e) =>
                       handleCreditChange(user._id, Number(e.target.value))
                     }
-                    className="w-[100px]"
+                    className="w-[50px] px-0 pl-2"
                   />
+                  <Plus size={14} />
                 </TableCell>
                 <TableCell>
                   <Switch
