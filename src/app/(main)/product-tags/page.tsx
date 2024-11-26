@@ -257,7 +257,7 @@ const ProductTagsPage = () => {
             <Button
               className="btn btn-primary"
               onClick={handleSendRequest}
-              disabled={!image}
+              disabled={!image && selectedCategory !== "brands"}
             >
               Save
             </Button>
