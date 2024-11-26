@@ -19,10 +19,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Minus, Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { getCookie } from "@/lib/utils";
 import { toast } from "sonner";
 import { ContentLayout } from "./admin-panel/content-layout";
+import CreditChangeModal from "./user-credit-handler/addOrDecreaseCreditModal";
 
 type UserDetails = {
   _id: string;
@@ -103,10 +104,16 @@ export default function UserDataTable() {
     }
   };
 
-  const handleCreditChange = async (id: string, credit: number) => {
+  const handleCreditChange = async (
+    id: string,
+    credit: number,
+    action?: "add" | "minus"
+  ) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/updateCredit/${id}`,
+        `${
+          process.env.NEXT_PUBLIC_BACKEND_BASE_URL
+        }admin/products/updateCredit/${id}${action ? `?action=${action}` : ""}`,
         {
           method: "PUT",
           credentials: "include",
@@ -120,9 +127,7 @@ export default function UserDataTable() {
       const data = await response.json();
       if (response.status === 200) {
         toast.success(data.message);
-        setUsers(
-          users.map((user) => (user._id === id ? { ...user, credit } : user))
-        );
+        getAllUsers();
       } else {
         toast.error(data.message);
       }
@@ -179,7 +184,7 @@ export default function UserDataTable() {
               <TableHead>Role</TableHead>
               <TableHead>Phone Number</TableHead>
               <TableHead>Username</TableHead>
-              <TableHead className="pl-9">Credit</TableHead>
+              <TableHead className="pl-14">Credit</TableHead>
               <TableHead>Approved</TableHead>
             </TableRow>
           </TableHeader>
@@ -220,7 +225,11 @@ export default function UserDataTable() {
                 <TableCell>{user.phoneNumber}</TableCell>
                 <TableCell>{user.userName}</TableCell>
                 <TableCell className="flex items-center gap-2">
-                  <Minus size={14} />
+                  <CreditChangeModal
+                    id={user._id}
+                    action="minus"
+                    handleCreditChange={handleCreditChange}
+                  />
                   <Input
                     type="number"
                     value={user.credit}
@@ -229,7 +238,11 @@ export default function UserDataTable() {
                     }
                     className="w-[50px] px-0 pl-2"
                   />
-                  <Plus size={14} />
+                  <CreditChangeModal
+                    id={user._id}
+                    action="add"
+                    handleCreditChange={handleCreditChange}
+                  />
                 </TableCell>
                 <TableCell>
                   <Switch
