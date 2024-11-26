@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,9 +9,21 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { toast } from "sonner";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
+import { getCookie } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export default function AddProductMain() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [modelOption, setModelOption] = useState<Option[]>([]);
+  const [categoryOption, setCategoryOption] = useState<Option[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
   const [formData, setFormData] = useState<{
     image: string;
     productName: string;
@@ -20,18 +32,50 @@ export default function AddProductMain() {
     brand: string;
     salePrice: string;
     category: Option[];
+    model: Option[];
     totalStock: string;
   }>({
     image: "",
     brand: "",
     category: [],
+    model: [],
     description: "",
     price: "",
     salePrice: "",
     totalStock: "",
     productName: "",
   });
-  const [image, setImage] = useState<string | null>(null);
+  const getTags = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/productTags`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      const data = await res.json();
+      setCategoryOption(
+        data.categories.map((category: string) => ({
+          label: category,
+          value: category,
+        }))
+      );
+      setModelOption(
+        data.models.map((model: string) => ({
+          label: model,
+          value: model,
+        }))
+      );
+      setBrands(data.brands);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!image) {
@@ -54,6 +98,7 @@ export default function AddProductMain() {
           category: formData.category
             .map((category) => category.value)
             .join(", "),
+          model: formData.model.map((model) => model.value).join(", "),
           salePrice: formData.salePrice,
           totalStock: formData.totalStock,
         }),
@@ -71,6 +116,7 @@ export default function AddProductMain() {
         salePrice: "",
         totalStock: "",
         productName: "",
+        model: [],
       });
       setImage(null);
       setImagePreview(null);
@@ -129,12 +175,11 @@ export default function AddProductMain() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  const OPTIONS: Option[] = [
-    { label: "Shoes", value: "shoes" },
-    { label: "Clothing", value: "cloths" },
-  ];
+  useEffect(() => {
+    getTags();
+  }, []);
   return (
-    <Card className="w-full mx-auto">
+    <Card className="w-full mx-auto bg-transparent border-0">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Add New Product</CardTitle>
       </CardHeader>
@@ -196,25 +241,54 @@ export default function AddProductMain() {
 
           <div>
             <Label htmlFor="brand">Brand</Label>
-            <Input
-              id="brand"
-              name="brand"
-              value={formData.brand}
-              onChange={handleInputChange}
-              required
-            />
+            <Select
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, brand: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a brand" />
+              </SelectTrigger>
+              <SelectContent>
+                {brands.map((brand) => (
+                  <SelectItem key={brand} value={brand} className="capitalize">
+                    {brand}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
             <Label htmlFor="category">Category</Label>
             <MultipleSelector
               selectFirstItem={false}
-              defaultOptions={OPTIONS}
+              options={categoryOption}
               value={formData.category}
               onChange={(values) => {
                 setFormData((prev) => ({
                   ...prev,
                   category: values,
+                }));
+              }}
+              placeholder="Select frameworks you like..."
+              emptyIndicator={
+                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                  no results found.
+                </p>
+              }
+            />
+          </div>
+          <div>
+            <Label htmlFor="model">Model</Label>
+            <MultipleSelector
+              selectFirstItem={false}
+              options={modelOption}
+              value={formData.model}
+              onChange={(values) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  model: values,
                 }));
               }}
               placeholder="Select frameworks you like..."
@@ -250,7 +324,22 @@ export default function AddProductMain() {
             />
           </div>
 
-          <Button type="submit" onClick={onSubmit} className="w-full">
+          <Button
+            type="submit"
+            onClick={onSubmit}
+            disabled={
+              formData.category.length === 0 ||
+              formData.model.length === 0 ||
+              !image ||
+              !formData.productName ||
+              !formData.description ||
+              !formData.price ||
+              !formData.brand ||
+              !formData.salePrice ||
+              !formData.totalStock
+            }
+            className="w-full"
+          >
             Submit
           </Button>
         </form>
