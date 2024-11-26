@@ -14,7 +14,9 @@ export function Navbar({ title }: NavbarProps) {
       <div className="mx-4 sm:mx-8 flex h-14 items-center gap-5">
         <div className="flex items-center space-x-4 lg:space-x-0">
           <SheetMenu />
-          <h1 className="font-bold leading-tight">{title}</h1>
+          <h1 className="font-bold leading-tight md:whitespace-nowrap">
+            {title}
+          </h1>
         </div>
         <div className="w-full max-sm:w-fit h-full flex items-center gap-2 ml-auto">
           <CommandSearch />
