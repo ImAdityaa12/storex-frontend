@@ -243,8 +243,11 @@ export default function ProductDetail() {
                 </span>
               )}
 
-              <span className="text-lg text-gray-500 line-through">
+              <span className="text-lg text-gray-500 line-through ml-4">
                 ${(currentProductDetail.product.price / 100).toFixed(2)}
+              </span>
+              <span className="text-lg text-green-500 font-bold ml-4">
+                {currentProductDetail.discount.toFixed(2)}% off
               </span>
             </div>
             <div>
