@@ -28,10 +28,12 @@ export default function ProductCard({
   product,
   isLiked,
   isEdit,
+  discount,
 }: {
   product: product;
   isLiked: boolean;
   isEdit?: boolean;
+  discount?: number;
 }) {
   const categories = product.category.split(",");
   const { toggleLike, getProducts } = useProductStore();
@@ -160,8 +162,8 @@ export default function ProductCard({
                   ${product.salePrice}
                 </span>
                 {product.salePrice < product.price && (
-                  <span className="text-sm text-gray-500 line-through ml-2 max-sm:text-xs">
-                    ${product.price}
+                  <span className="text-sm ml-2 max-sm:text-xs font-bold text-green-500">
+                    {discount?.toFixed(2)}% off
                   </span>
                 )}
               </div>
