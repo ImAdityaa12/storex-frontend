@@ -87,8 +87,9 @@ export default function ProductEditModal({ product }: { product: product }) {
           body: JSON.stringify({
             title: formData.title,
             description: formData.description,
-            price: formData.price,
+            price: +formData.price,
             brand: formData.brand,
+            salePrice: +formData.salePrice,
             category: formData.category
               .map((category) => category.value)
               .join(", "),
