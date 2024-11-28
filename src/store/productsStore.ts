@@ -1,3 +1,4 @@
+import { Option } from "@/components/ui/multiple-selector";
 import { getCookie } from "@/lib/utils";
 import { product } from "@/product";
 import { toast } from "sonner";
@@ -11,10 +12,53 @@ interface ProductState {
   setProducts: (products: { product: product; isLiked: boolean }[]) => void;
   toggleLike: (productId: string) => void;
   getProducts: () => void;
+  getTags: () => void;
+  modelOptions: Option[];
+  setModelOptions: (options: Option[]) => void;
+  categoryOption: Option[];
+  setCategoryOption: (options: Option[]) => void;
+  brands: string[];
+  setBrands: (options: string[]) => void;
 }
 
 const useProductStore = create<ProductState>((set) => ({
   products: [],
+  modelOptions: [],
+  categoryOption: [],
+  brands: [],
+  setModelOptions: (options) => set({ modelOptions: options }),
+  setCategoryOption: (options) => set({ categoryOption: options }),
+  setBrands: (options) => set({ brands: options }),
+  getTags: async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/productTags`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      const data = await res.json();
+      set(() => ({
+        categoryOption: data.categories.map((category: string) => ({
+          label: category,
+          value: category,
+        })),
+      }));
+      set(() => ({
+        modelOptions: data.models.map((model: string) => ({
+          label: model,
+          value: model,
+        })),
+      }));
+      set({ brands: data.brands });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   setProducts: (products) => set({ products }),
   toggleLike: (productId) =>
     set((state) => ({

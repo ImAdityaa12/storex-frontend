@@ -20,9 +20,17 @@ import Image from "next/image";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
 import { getCookie } from "@/lib/utils";
 import useProductStore from "@/store/productsStore";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export default function ProductEditModal({ product }: { product: product }) {
-  const { getProducts } = useProductStore();
+  const { getProducts, modelOptions, brands, categoryOption } =
+    useProductStore();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [image, setImage] = useState<string | null>(product.image);
   const [formData, setFormData] = useState<{
@@ -33,10 +41,14 @@ export default function ProductEditModal({ product }: { product: product }) {
     brand: string;
     salePrice: string;
     category: Option[];
+    model: Option[];
     totalStock: string;
   }>({
     image: image || "",
     brand: product.brand,
+    model: product.model
+      .split(",")
+      .map((model) => ({ label: model, value: model })),
     category: product.category.split(",").map((category) => ({
       label: category,
       value: category,
@@ -47,10 +59,10 @@ export default function ProductEditModal({ product }: { product: product }) {
     totalStock: product.totalStock.toString(),
     title: product.title,
   });
-  const OPTIONS: Option[] = [
-    { label: "Shoes", value: "shoes" },
-    { label: "Clothing", value: "cloths" },
-  ];
+  // const OPTIONS: Option[] = [
+  //   { label: "Shoes", value: "shoes" },
+  //   { label: "Clothing", value: "cloths" },
+  // ];
   const handleInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -220,23 +232,34 @@ export default function ProductEditModal({ product }: { product: product }) {
               className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="brand" className="text-right">
+          <div className="flex items-center justify-between gap-4">
+            <Label htmlFor="brand" className="ml-auto">
               Brand
             </Label>
-            <Input
-              id="brand"
-              name="brand"
-              value={formData.brand}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
+            <Select
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, brand: value }))
+              }
+            >
+              <SelectTrigger className="w-[74%]">
+                <SelectValue placeholder="Select a brand" />
+              </SelectTrigger>
+              <SelectContent>
+                {brands.map((brand) => (
+                  <SelectItem key={brand} value={brand} className="capitalize">
+                    {brand}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <div className="w-full flex items-center gap-4">
-            <Label className=" ml-5">Category</Label>
+          <div className="flex items-center gap-4">
+            <Label htmlFor="category" className="ml-5">
+              Category
+            </Label>
             <MultipleSelector
               selectFirstItem={false}
-              defaultOptions={OPTIONS}
+              options={categoryOption}
               value={formData.category}
               onChange={(values) => {
                 setFormData((prev) => ({
@@ -244,7 +267,31 @@ export default function ProductEditModal({ product }: { product: product }) {
                   category: values,
                 }));
               }}
+              className="w-[100%] ml-auto"
               placeholder="Select frameworks you like..."
+              emptyIndicator={
+                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                  no results found.
+                </p>
+              }
+            />
+          </div>
+          <div className="flex items-center justify-center gap-4 pl-10">
+            <Label htmlFor="model" className="">
+              Modal
+            </Label>
+            <MultipleSelector
+              selectFirstItem={false}
+              options={modelOptions}
+              value={formData.model}
+              onChange={(values) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  model: values,
+                }));
+              }}
+              className=""
+              placeholder=""
               emptyIndicator={
                 <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
                   no results found.

@@ -4,10 +4,10 @@ import useProductStore from "@/store/productsStore";
 import React, { useEffect } from "react";
 
 const ManageProduct = () => {
-  const { products, getProducts } = useProductStore();
-
+  const { products, getProducts, getTags } = useProductStore();
   useEffect(() => {
     getProducts();
+    getTags();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
