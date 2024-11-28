@@ -18,35 +18,21 @@ import userDetailsStore from "@/store/userDetail";
 import AddAddressModal from "@/components/add-address-modal";
 import useCartStore from "@/store/cartStore";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 export default function CheckoutPage() {
   const [products, setProducts] = useState<CartProduct[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const { addresses, getUserAddress } = userDetailsStore();
+  const [paymentMethod, setPaymentMethod] = useState<
+    "credit" | "upi" | "bank" | "qr"
+  >("qr");
+  const { userDetails, setUserDetails, addresses, getUserAddress } =
+    userDetailsStore();
   const { cartId } = useCartStore();
+  const router = useRouter();
   const handleAddressSelect = (addressId: string) => {
     setSelectedAddress(addressId);
   };
-
-  // const addresses: Address[] = [
-  //   {
-  //     id: "1",
-  //     address: "123 Main St",
-  //     city: "Anytown",
-  //     pincode: "12345",
-  //     phone: "555-1234",
-  //     notes: "Leave at the door",
-  //   },
-  //   {
-  //     id: "2",
-  //     address: "456 Elm St",
-  //     city: "Othertown",
-  //     pincode: "67890",
-  //     phone: "555-5678",
-  //     notes: "Ring the doorbell",
-  //   },
-  // ];
   const getProducts = async () => {
     try {
       const response = await fetch(
@@ -105,9 +91,17 @@ export default function CheckoutPage() {
           }),
         }
       );
+      const data = await response.json();
       if (response.status === 200) {
         toast.success("Order Placed Successfully");
+        if (paymentMethod === "credit") {
+          setUserDetails({
+            ...userDetails,
+            credit: data.credit,
+          });
+        }
       }
+      router.push("/shop");
     } catch (error) {
       console.log(error);
     }
@@ -202,10 +196,10 @@ export default function CheckoutPage() {
               defaultValue="qr"
               className="w-full"
               onValueChange={(value) => {
-                setPaymentMethod(value);
+                setPaymentMethod(value as "credit" | "upi" | "bank" | "qr");
               }}
             >
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger
                   value="qr"
                   className="flex items-center justify-center"
@@ -226,6 +220,13 @@ export default function CheckoutPage() {
                 >
                   <Smartphone className="h-4 w-4 mr-2" />
                   UPI
+                </TabsTrigger>
+                <TabsTrigger
+                  value="credit"
+                  className="flex items-center justify-center"
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Credit
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="qr" className="mt-4">
@@ -257,6 +258,14 @@ export default function CheckoutPage() {
                 <div>
                   <Label htmlFor="upiId">UPI ID</Label>
                   <Input id="upiId" placeholder="Enter your UPI ID" />
+                </div>
+              </TabsContent>
+              <TabsContent value="credit" className="mt-4">
+                <div>
+                  <Label htmlFor="credit">Use Credits</Label>
+                  <h1 className="text-lg font-semibold" id="credit">
+                    Your balance: {userDetails.credit}
+                  </h1>
                 </div>
               </TabsContent>
             </Tabs>
