@@ -16,6 +16,7 @@ export default function CategoryProduct() {
     {
       product: product;
       isLiked: boolean;
+      discount: number;
     }[]
   >([]);
   const [page, setPage] = useState(0);
@@ -93,6 +94,8 @@ export default function CategoryProduct() {
             key={product.product._id}
             product={product.product}
             isLiked={product.isLiked}
+            discount={product.discount}
+            setProducts={setProducts}
           />
         ))}
       </div>
