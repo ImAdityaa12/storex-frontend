@@ -7,7 +7,13 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const SavedProduct = () => {
-  const [products, setProducts] = useState<product[]>([]);
+  const [products, setProducts] = useState<
+    {
+      product: product;
+      isLiked: boolean;
+      discount: number;
+    }[]
+  >([]);
   const getSavedProduct = async () => {
     const token = getCookie("token");
     try {
@@ -26,6 +32,7 @@ const SavedProduct = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+
       setProducts(data);
     } catch (error) {
       if (error instanceof Error) {
@@ -40,9 +47,16 @@ const SavedProduct = () => {
   }, []);
   return (
     <ContentLayout title="Products">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 max-sm:grid-cols-2">
         {products.map((product) => (
-          <ProductCard key={product._id} product={product} isLiked={true} />
+          <ProductCard
+            key={product.product._id}
+            product={product.product}
+            isLiked={product.isLiked}
+            setProducts={setProducts}
+            discount={product.discount}
+            isSaved
+          />
         ))}
       </div>
     </ContentLayout>

@@ -31,11 +31,13 @@ export default function ProductCard({
   isEdit,
   discount,
   setProducts,
+  isSaved,
 }: {
   product: product;
   isLiked: boolean;
   isEdit?: boolean;
   discount?: number;
+  isSaved?: boolean;
   setProducts: Dispatch<
     SetStateAction<
       {
@@ -65,6 +67,9 @@ export default function ProductCard({
       );
       if (response.status === 200) {
         toast.success("Item added to favorites");
+        if (isSaved) {
+          setProducts((prev) => prev.filter((item) => item.product._id !== id));
+        }
         setProducts((prev) =>
           prev.map((item) =>
             item.product._id === id ? { ...item, isLiked: !item.isLiked } : item
