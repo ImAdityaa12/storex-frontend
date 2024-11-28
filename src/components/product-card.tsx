@@ -23,18 +23,33 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import userDetailsStore from "@/store/userDetail";
+import { Dispatch, SetStateAction } from "react";
 
 export default function ProductCard({
   product,
   isLiked,
   isEdit,
+  discount,
+  setProducts,
+  isSaved,
 }: {
   product: product;
   isLiked: boolean;
   isEdit?: boolean;
+  discount?: number;
+  isSaved?: boolean;
+  setProducts: Dispatch<
+    SetStateAction<
+      {
+        product: product;
+        isLiked: boolean;
+        discount: number;
+      }[]
+    >
+  >;
 }) {
   const categories = product.category.split(",");
-  const { toggleLike, getProducts } = useProductStore();
+  const { getProducts } = useProductStore();
   const { getCartItems } = useCartStore();
   const { userDetails } = userDetailsStore();
   const router = useRouter();
@@ -52,7 +67,14 @@ export default function ProductCard({
       );
       if (response.status === 200) {
         toast.success("Item added to favorites");
-        toggleLike(id);
+        if (isSaved) {
+          setProducts((prev) => prev.filter((item) => item.product._id !== id));
+        }
+        setProducts((prev) =>
+          prev.map((item) =>
+            item.product._id === id ? { ...item, isLiked: !item.isLiked } : item
+          )
+        );
       } else {
         toast.error("Error adding item to favorites");
       }
@@ -160,8 +182,8 @@ export default function ProductCard({
                   ${product.salePrice}
                 </span>
                 {product.salePrice < product.price && (
-                  <span className="text-sm text-gray-500 line-through ml-2 max-sm:text-xs">
-                    ${product.price}
+                  <span className="text-sm ml-2 max-sm:text-xs font-bold text-green-500">
+                    {discount?.toFixed(2)}% off
                   </span>
                 )}
               </div>

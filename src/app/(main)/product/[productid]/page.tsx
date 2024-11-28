@@ -69,18 +69,27 @@ export default function ProductDetail() {
     { isLiked: boolean; product: product }[]
   >([]);
   const { productid: id } = useParams();
-  const [currentProductDetail, setCurrentProductDetail] = useState<product>({
-    _id: "",
-    image: "",
-    title: "",
-    description: "",
-    price: 0,
-    brand: "",
-    category: "",
-    salePrice: 0,
-    totalStock: 0,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+  const [currentProductDetail, setCurrentProductDetail] = useState<{
+    product: product;
+    discount: number;
+    isLiked: boolean;
+  }>({
+    product: {
+      _id: "",
+      image: "",
+      title: "",
+      description: "",
+      price: 0,
+      brand: "",
+      category: "",
+      salePrice: 0,
+      totalStock: 0,
+      model: "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    discount: 0,
+    isLiked: false,
   });
   const getItems = async () => {
     const token = getCookie("token");
@@ -95,7 +104,7 @@ export default function ProductDetail() {
         }
       );
       const data = await response.json();
-      setCurrentProductDetail(data.product);
+      setCurrentProductDetail(data);
     } catch (error) {
       console.log(error);
       toast.error("Error adding item to favorites");
@@ -173,6 +182,32 @@ export default function ProductDetail() {
       toast.error("Someting went wrong");
     }
   };
+  const toggleLike = async (productId: string) => {
+    const token = getCookie("token");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/save/${productId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Item added to favorites");
+        setCurrentProductDetail((prev) => ({
+          ...prev,
+          isLiked: !prev.isLiked,
+        }));
+      } else {
+        toast.error("Error adding item to favorites");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error adding item to favorites");
+    }
+  };
   useEffect(() => {
     getItems();
     getSimilarProducts();
@@ -183,11 +218,11 @@ export default function ProductDetail() {
     <ContentLayout title="Products">
       <div className="mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-8 mb-10">
-          {currentProductDetail.image && (
+          {currentProductDetail.product.image && (
             <div className="w-full">
               <Image
-                src={currentProductDetail.image}
-                alt={currentProductDetail.title}
+                src={currentProductDetail.product.image}
+                alt={currentProductDetail.product.title}
                 width={500}
                 height={500}
                 className="rounded-lg object-cover w-full h-full object-center"
@@ -196,41 +231,57 @@ export default function ProductDetail() {
           )}
           <div className="space-y-4">
             <h1 className="text-3xl font-bold">
-              {currentProductDetail?.title}
+              {currentProductDetail?.product.title}
             </h1>
-            <p className="text-gray-600">{currentProductDetail?.description}</p>
+            <p className="text-gray-600">
+              {currentProductDetail?.product.description}
+            </p>
             <div className="flex items-center space -x-2">
-              {currentProductDetail?.salePrice && (
+              {currentProductDetail?.product.salePrice && (
                 <span className="text-2xl font-bold">
-                  ${(currentProductDetail?.salePrice / 100).toFixed(2)}
+                  ${(currentProductDetail?.product.salePrice / 100).toFixed(2)}
                 </span>
               )}
 
-              <span className="text-lg text-gray-500 line-through">
-                ${(currentProductDetail.price / 100).toFixed(2)}
+              <span className="text-lg text-gray-500 line-through ml-4">
+                ${(currentProductDetail.product.price / 100).toFixed(2)}
+              </span>
+              <span className="text-lg text-green-500 font-bold ml-4">
+                {currentProductDetail.discount.toFixed(2)}% off
               </span>
             </div>
             <div>
-              <Badge>{currentProductDetail?.brand}</Badge>
-              {currentProductDetail?.category.split(",").map((cat, index) => (
-                <Badge key={index} variant="secondary" className="ml-2">
-                  {cat.trim()}
-                </Badge>
-              ))}
+              <Badge>{currentProductDetail?.product.brand}</Badge>
+              {currentProductDetail?.product.category
+                .split(",")
+                .map((cat, index) => (
+                  <Badge key={index} variant="secondary" className="ml-2">
+                    {cat.trim()}
+                  </Badge>
+                ))}
             </div>
             <p className="text-sm text-gray-600">
-              In stock: {currentProductDetail.totalStock}
+              In stock: {currentProductDetail.product.totalStock}
             </p>
             <div className="flex space-x-4">
               <Button
                 className="flex-1"
-                onClick={() => addToCart(currentProductDetail)}
+                onClick={() => addToCart(currentProductDetail.product)}
               >
                 <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
               </Button>
-              <Button variant="outline">
-                <Heart className="mr-2 h-4 w-4" /> Wishlist
-              </Button>
+              <div onClick={() => toggleLike(currentProductDetail.product._id)}>
+                {currentProductDetail.isLiked ? (
+                  <Button variant="outline">
+                    <Heart className="mr-2 h-4 w-4 text-red-500" fill="red" />{" "}
+                    Saved
+                  </Button>
+                ) : (
+                  <Button variant="outline">
+                    <Heart className="mr-2 h-4 w-4" /> Add to Wishlist
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
