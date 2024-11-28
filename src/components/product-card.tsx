@@ -23,20 +23,31 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import userDetailsStore from "@/store/userDetail";
+import { Dispatch, SetStateAction } from "react";
 
 export default function ProductCard({
   product,
   isLiked,
   isEdit,
   discount,
+  setProducts,
 }: {
   product: product;
   isLiked: boolean;
   isEdit?: boolean;
   discount?: number;
+  setProducts: Dispatch<
+    SetStateAction<
+      {
+        product: product;
+        isLiked: boolean;
+        discount: number;
+      }[]
+    >
+  >;
 }) {
   const categories = product.category.split(",");
-  const { toggleLike, getProducts } = useProductStore();
+  const { getProducts } = useProductStore();
   const { getCartItems } = useCartStore();
   const { userDetails } = userDetailsStore();
   const router = useRouter();
@@ -54,7 +65,11 @@ export default function ProductCard({
       );
       if (response.status === 200) {
         toast.success("Item added to favorites");
-        toggleLike(id);
+        setProducts((prev) =>
+          prev.map((item) =>
+            item.product._id === id ? { ...item, isLiked: !item.isLiked } : item
+          )
+        );
       } else {
         toast.error("Error adding item to favorites");
       }

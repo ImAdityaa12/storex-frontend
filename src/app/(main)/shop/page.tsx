@@ -8,7 +8,6 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 export default function DashboardPage() {
-  // const { products, setProducts, getProducts } = useProductStore();
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -62,6 +61,7 @@ export default function DashboardPage() {
             product={product.product}
             isLiked={product.isLiked}
             discount={product.discount}
+            setProducts={setProducts}
           />
         ))}
       </div>
