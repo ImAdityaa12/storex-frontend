@@ -12,7 +12,6 @@ import {
 import { product } from "@/product";
 import { cn, getCookie } from "@/lib/utils";
 import { toast } from "sonner";
-import useProductStore from "@/store/productsStore";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import ProductEditModal from "./product-edit-modal";
@@ -49,7 +48,6 @@ export default function ProductCard({
   >;
 }) {
   const categories = product.category.split(",");
-  const { getProducts } = useProductStore();
   const { getCartItems } = useCartStore();
   const { userDetails } = userDetailsStore();
   const router = useRouter();
@@ -124,7 +122,7 @@ export default function ProductCard({
       );
       if (response.status === 200) {
         toast.success("Product deleted successfully");
-        getProducts();
+        setProducts((prev) => prev.filter((item) => item.product._id !== id));
       } else {
         toast.error("Error deleting product");
       }
