@@ -19,7 +19,7 @@ const ManageProduct = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [products, setProducts] = useState<
-    { product: product; isLiked: boolean }[]
+    { product: product; isLiked: boolean; discount: number }[]
   >([]);
   const next = async () => {
     setLoading(true);
@@ -67,6 +67,8 @@ const ManageProduct = () => {
           product={product.product}
           isLiked={product.isLiked}
           isEdit={true}
+          setProducts={setProducts}
+          discount={product.discount}
         />
       ))}
       <InfiniteScroll
