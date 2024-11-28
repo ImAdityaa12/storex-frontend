@@ -75,9 +75,6 @@ export default function ProductEditModal({ product }: { product: product }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const categories: string = formData.category
-        .map((category) => category.value)
-        .join(", ");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/updateProduct/${product._id}`,
         {
@@ -92,8 +89,10 @@ export default function ProductEditModal({ product }: { product: product }) {
             description: formData.description,
             price: formData.price,
             brand: formData.brand,
-            category: categories,
-            salePrice: formData.salePrice,
+            category: formData.category
+              .map((category) => category.value)
+              .join(", "),
+            model: formData.model.map((model) => model.value).join(", "),
             totalStock: formData.totalStock,
             image,
           }),
