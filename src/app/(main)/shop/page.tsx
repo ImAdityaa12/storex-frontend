@@ -13,7 +13,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [products, setProducts] = useState<
-    { product: product; isLiked: boolean }[]
+    { product: product; isLiked: boolean; discount: number }[]
   >([]);
   const next = async () => {
     setLoading(true);
@@ -61,6 +61,7 @@ export default function DashboardPage() {
             key={product.product._id}
             product={product.product}
             isLiked={product.isLiked}
+            discount={product.discount}
           />
         ))}
       </div>
