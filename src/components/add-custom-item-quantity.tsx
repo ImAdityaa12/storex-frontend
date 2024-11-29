@@ -2,21 +2,21 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getCookie } from "@/lib/utils";
 import { toast } from "sonner";
 import { Edit } from "lucide-react";
 import useCartStore from "@/store/cartStore";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalFooter,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+  ResponsiveModalTrigger,
+} from "./ui/responsive-dialog";
 
 export default function NumberInputModal({ productId }: { productId: string }) {
   const [open, setOpen] = useState(false);
@@ -53,19 +53,19 @@ export default function NumberInputModal({ productId }: { productId: string }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <ResponsiveModal open={open} onOpenChange={setOpen}>
+      <ResponsiveModalTrigger asChild>
         <Button variant="outline">
           <Edit />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Enter a Number</DialogTitle>
-          <DialogDescription>
+      </ResponsiveModalTrigger>
+      <ResponsiveModalContent className="sm:max-w-[425px] pb-10">
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>Enter a Number</ResponsiveModalTitle>
+          <ResponsiveModalDescription>
             Please input a number in the field below and click submit.
-          </DialogDescription>
-        </DialogHeader>
+          </ResponsiveModalDescription>
+        </ResponsiveModalHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -81,11 +81,11 @@ export default function NumberInputModal({ productId }: { productId: string }) {
               />
             </div>
           </div>
-          <DialogFooter>
+          <ResponsiveModalFooter>
             <Button type="submit">Submit</Button>
-          </DialogFooter>
+          </ResponsiveModalFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 }
