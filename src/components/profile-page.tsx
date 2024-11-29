@@ -111,7 +111,7 @@ export default function ProfilePage() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center gap-4">
-        <Avatar className="w-24 h-24">
+        <Avatar className="w-24 h-24 rounded-lg">
           <AvatarImage src={userDetails.image} alt={userDetails.name} />
           <AvatarFallback>
             {userDetails.name
@@ -152,7 +152,9 @@ export default function ProfilePage() {
                 <dt className="text-sm font-medium text-muted-foreground">
                   Credits
                 </dt>
-                <dd className="text-sm">{userDetails.credit}</dd>
+                <dd className="text-sm font-bold text-green-500">
+                  {userDetails.credit}
+                </dd>
               </div>
             </dl>
           </div>

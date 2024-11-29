@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -37,9 +37,13 @@ type UserDetails = {
   approved: boolean;
 };
 
+type CreditAction = "add" | "minus" | undefined;
+
 export default function UserDataTable() {
   const [users, setUsers] = useState<UserDetails[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [, setDebouncedCreditChanges] = useState<{ [key: string]: number }>({});
+
   const filteredUsers = useMemo(() => {
     return users.filter(
       (user) =>
@@ -104,38 +108,64 @@ export default function UserDataTable() {
     }
   };
 
-  const handleCreditChange = async (
-    id: string,
-    credit: number,
-    action?: "add" | "minus"
-  ) => {
-    try {
-      const response = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_BACKEND_BASE_URL
-        }admin/products/updateCredit/${id}${action ? `?action=${action}` : ""}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getCookie("token")}`,
-          },
-          body: JSON.stringify({ credit }),
+  const handleCreditChange = useCallback(
+    async (id: string, credit: number, action?: CreditAction) => {
+      try {
+        const response = await fetch(
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_BASE_URL
+          }admin/products/updateCredit/${id}${
+            action ? `?action=${action}` : ""
+          }`,
+          {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getCookie("token")}`,
+            },
+            body: JSON.stringify({ credit }),
+          }
+        );
+        const data = await response.json();
+        if (response.status === 200) {
+          toast.success(data.message);
+          getAllUsers();
+        } else {
+          toast.error(data.message);
         }
-      );
-      const data = await response.json();
-      if (response.status === 200) {
-        toast.success(data.message);
-        getAllUsers();
-      } else {
-        toast.error(data.message);
+        setDebouncedCreditChanges((prev) => {
+          const newChanges = { ...prev };
+          delete newChanges[id];
+          return newChanges;
+        });
+      } catch (error) {
+        console.log(error);
+        toast.error("Error updating credit");
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error updating credit");
-    }
-  };
+    },
+    []
+  );
+
+  const debouncedUpdateCredit = useMemo(() => {
+    const debounce = (
+      func: (
+        id: string,
+        credit: number,
+        action?: CreditAction
+      ) => Promise<void>,
+      delay: number
+    ) => {
+      let timeoutId: NodeJS.Timeout;
+      return (id: string, credit: number, action?: CreditAction) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func(id, credit, action), delay);
+      };
+    };
+
+    return debounce(handleCreditChange, 1000);
+  }, [handleCreditChange]);
+
   const getAllUsers = async () => {
     try {
       const response = await fetch(
@@ -160,6 +190,28 @@ export default function UserDataTable() {
     getAllUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleCreditInput = useCallback(
+    (id: string, value: number) => {
+      // Update the users state immediately for UI responsiveness
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === id ? { ...user, credit: value } : user
+        )
+      );
+
+      // Store the debounced credit change
+      setDebouncedCreditChanges((prev) => ({
+        ...prev,
+        [id]: value,
+      }));
+
+      // Trigger debounced update
+      debouncedUpdateCredit(id, value, undefined);
+    },
+    [debouncedUpdateCredit]
+  );
+
   return (
     <ContentLayout title="Users">
       <div className="container mx-auto">
@@ -234,7 +286,7 @@ export default function UserDataTable() {
                     type="number"
                     value={user.credit}
                     onChange={(e) =>
-                      handleCreditChange(user._id, Number(e.target.value))
+                      handleCreditInput(user._id, Number(e.target.value))
                     }
                     className="w-[50px] px-0 pl-2"
                   />

@@ -22,10 +22,10 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [formData, setFormData] = useState<{
-    email: string;
+    phoneOremail: string;
     password: string;
   }>({
-    email: "",
+    phoneOremail: "",
     password: "",
   });
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function LoginPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: formData.email,
+          phoneOrEmail: formData.phoneOremail,
           password: formData.password,
         }),
         credentials: "include",
@@ -72,17 +72,16 @@ export default function LoginPage() {
         <CardContent className="grid gap-4">
           <form onSubmit={onSubmit}>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Phone / Email</Label>
               <Input
                 id="email"
-                type="email"
-                placeholder="m@example.com"
+                // type="email"
+                placeholder="m@example.com or 9517234567"
                 autoCapitalize="none"
-                autoComplete="email"
                 autoCorrect="off"
                 disabled={isLoading}
                 onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
+                  setFormData({ ...formData, phoneOremail: e.target.value })
                 }
               />
             </div>
