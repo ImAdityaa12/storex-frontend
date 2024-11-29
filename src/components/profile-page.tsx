@@ -111,7 +111,7 @@ export default function ProfilePage() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center gap-4">
-        <Avatar className="w-24 h-24">
+        <Avatar className="w-24 h-24 rounded-lg">
           <AvatarImage src={userDetails.image} alt={userDetails.name} />
           <AvatarFallback>
             {userDetails.name
