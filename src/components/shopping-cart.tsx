@@ -36,11 +36,11 @@ export default function Cart() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg min-h-[100dvh]">
+      <SheetContent className="w-full sm:max-w-lg min-h-[100dvh] overflow-y-scroll">
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
-        <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
+        <ScrollArea className="h-[calc(100dvh-10rem)] pr-4">
           {cartItems.map((item) => (
             <div
               key={item.productId}
