@@ -4,14 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { product } from "@/product";
 import { EditIcon, X } from "lucide-react";
@@ -27,6 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import {
+  ResponsiveModal,
+  ResponsiveModalClose,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+  ResponsiveModalTrigger,
+} from "./ui/responsive-dialog";
 
 export default function ProductEditModal({ product }: { product: product }) {
   const { getProducts, modelOptions, brands, categoryOption } =
@@ -59,10 +59,6 @@ export default function ProductEditModal({ product }: { product: product }) {
     totalStock: product.totalStock.toString(),
     title: product.title,
   });
-  // const OPTIONS: Option[] = [
-  //   { label: "Shoes", value: "shoes" },
-  //   { label: "Clothing", value: "cloths" },
-  // ];
   const handleInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -154,18 +150,18 @@ export default function ProductEditModal({ product }: { product: product }) {
     }
   };
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <ResponsiveModal>
+      <ResponsiveModalTrigger asChild>
         <Button className="w-full">
           Edit <EditIcon className="w-5 h-5 text-black" />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit Product</DialogTitle>
-        </DialogHeader>
+      </ResponsiveModalTrigger>
+      <ResponsiveModalContent className="sm:max-w-[425px] max-sm:px-2">
+        <ResponsiveModalHeader>
+          <ResponsiveModalTitle>Edit Product</ResponsiveModalTitle>
+        </ResponsiveModalHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="w-full grid grid-cols-4 items-center gap-4">
             <Label htmlFor="image" className="text-right">
               Image
             </Label>
@@ -190,7 +186,7 @@ export default function ProductEditModal({ product }: { product: product }) {
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="col-span-3"
+                className="min-w-52 col-span-3"
               />
             )}
           </div>
@@ -204,7 +200,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className="col-span-3"
+              className="min-w-52 col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -216,7 +212,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="col-span-3"
+              className="min-w-52 col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -229,10 +225,10 @@ export default function ProductEditModal({ product }: { product: product }) {
               type="number"
               value={formData.price}
               onChange={handleInputChange}
-              className="col-span-3"
+              className="min-w-52 col-span-3"
             />
           </div>
-          <div className="flex items-center justify-between gap-4">
+          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="brand" className="ml-auto">
               Brand
             </Label>
@@ -241,7 +237,7 @@ export default function ProductEditModal({ product }: { product: product }) {
                 setFormData((prev) => ({ ...prev, brand: value }))
               }
             >
-              <SelectTrigger className="w-[74%]">
+              <SelectTrigger className="min-w-52 col-span-3">
                 <SelectValue placeholder="Select a brand" />
               </SelectTrigger>
               <SelectContent>
@@ -253,51 +249,53 @@ export default function ProductEditModal({ product }: { product: product }) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center gap-4">
-            <Label htmlFor="category" className="ml-5">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="category" className="ml-auto">
               Category
             </Label>
-            <MultipleSelector
-              selectFirstItem={false}
-              options={categoryOption}
-              value={formData.category}
-              onChange={(values) => {
-                setFormData((prev) => ({
-                  ...prev,
-                  category: values,
-                }));
-              }}
-              className="w-[100%] ml-auto"
-              placeholder="Select frameworks you like..."
-              emptyIndicator={
-                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                  no results found.
-                </p>
-              }
-            />
+            <div className="min-w-52 col-span-3">
+              <MultipleSelector
+                selectFirstItem={false}
+                options={categoryOption}
+                value={formData.category}
+                onChange={(values) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    category: values,
+                  }));
+                }}
+                placeholder="Select Categories...."
+                emptyIndicator={
+                  <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                    no results found.
+                  </p>
+                }
+              />
+            </div>
           </div>
-          <div className="flex items-center justify-center gap-4 pl-10">
-            <Label htmlFor="model" className="">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="model" className="ml-auto">
               Modal
             </Label>
-            <MultipleSelector
-              selectFirstItem={false}
-              options={modelOptions}
-              value={formData.model}
-              onChange={(values) => {
-                setFormData((prev) => ({
-                  ...prev,
-                  model: values,
-                }));
-              }}
-              className=""
-              placeholder=""
-              emptyIndicator={
-                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                  no results found.
-                </p>
-              }
-            />
+            <div className="min-w-52 col-span-3">
+              <MultipleSelector
+                selectFirstItem={false}
+                options={modelOptions}
+                value={formData.model}
+                onChange={(values) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    model: values,
+                  }));
+                }}
+                placeholder="Select Modals...."
+                emptyIndicator={
+                  <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                    no results found.
+                  </p>
+                }
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
@@ -310,7 +308,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               type="number"
               value={formData.salePrice}
               onChange={handleInputChange}
-              className="col-span-3"
+              className="min-w-52 col-span-3"
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -323,17 +321,17 @@ export default function ProductEditModal({ product }: { product: product }) {
               type="number"
               value={formData.totalStock}
               onChange={handleInputChange}
-              className="col-span-3"
+              className="min-w-52 col-span-3"
             />
           </div>
-          <DialogClose
+          <ResponsiveModalClose
             type="submit"
             className="mt-4 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 py-2 "
           >
             Save changes
-          </DialogClose>
+          </ResponsiveModalClose>
         </form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModalContent>
+    </ResponsiveModal>
   );
 }
