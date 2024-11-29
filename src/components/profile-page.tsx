@@ -152,7 +152,9 @@ export default function ProfilePage() {
                 <dt className="text-sm font-medium text-muted-foreground">
                   Credits
                 </dt>
-                <dd className="text-sm">{userDetails.credit}</dd>
+                <dd className="text-sm font-bold text-green-500">
+                  {userDetails.credit}
+                </dd>
               </div>
             </dl>
           </div>
