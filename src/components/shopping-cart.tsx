@@ -36,7 +36,7 @@ export default function Cart() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg min-h-screen">
+      <SheetContent className="w-full sm:max-w-lg min-h-[100dvh]">
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
@@ -54,18 +54,30 @@ export default function Cart() {
                 className="rounded-md"
               />
               <div className="flex-1">
-                <h3 className="font-semibold">{item.title}</h3>
+                <h3 className="font-semibold max-sm:text-xs">{item.title}</h3>
                 <p className="text-sm text-gray-500">
                   ${item.salePrice.toFixed(2)}
                 </p>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="w-full h-full flex items-center justify-between sm:hidden">
+                <Minus
+                  className="h-4 w-4"
+                  onClick={() => updateQuantity(item.productId, "minus")}
+                />
+                <span className="w-8 text-center">{item.quantity}</span>
+                <Plus
+                  className="h-4 w-4"
+                  onClick={() => updateQuantity(item.productId, "plus")}
+                />
+                <NumberInputModal productId={item.productId} />
+              </div>
+              <div className="flex items-center space-x-2 max-sm:hidden">
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => updateQuantity(item.productId, "minus")}
                 >
-                  <Minus className="h-4 w-4" />
+                  <Minus className="h-4 w-4 max-sm:w-2 max-sm:h-2" />
                 </Button>
                 <div className="flex items-center">
                   <span className="w-8 text-center">{item.quantity}</span>
