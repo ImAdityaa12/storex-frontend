@@ -186,7 +186,7 @@ export default function ProductCard({
                 )}
               </div>
               <div className="flex gap-2 max-sm:hidden">
-                <Badge>{product.model.split(",")[0]}</Badge>
+                <Badge>{product.model.split(",")[0] || "NA"}</Badge>
               </div>
             </div>
             <div className="text-sm text-gray-600 mb-2 max-sm:mb-0">
