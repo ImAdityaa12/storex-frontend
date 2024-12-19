@@ -179,9 +179,12 @@ export default function ProductCard({
                 <span className="text-lg font-bold max-sm:text-xs">
                   ₹{product.salePrice}
                 </span>
+                <span className="text-sm ml-2 max-sm:text-xs line-through">
+                  ₹{product.price}
+                </span>
                 {product.salePrice < product.price && (
                   <span className="text-sm ml-2 max-sm:text-xs font-bold text-green-500">
-                    {discount?.toFixed(2)}% off
+                    {discount?.toFixed(0)}% off
                   </span>
                 )}
               </div>
