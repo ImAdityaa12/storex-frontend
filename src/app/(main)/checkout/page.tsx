@@ -100,8 +100,10 @@ export default function CheckoutPage() {
             credit: data.credit,
           });
         }
+        router.push("/shop");
+      } else if (data.success === false) {
+        toast.error(data.message);
       }
-      router.push("/shop");
     } catch (error) {
       console.log(error);
     }
