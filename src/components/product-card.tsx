@@ -177,7 +177,7 @@ export default function ProductCard({
             <div className="flex justify-between items-center mb-2 max-sm:mb-0 max-sm:justify-normal">
               <div>
                 <span className="text-lg font-bold max-sm:text-xs">
-                  ${product.salePrice}
+                  ₹{product.salePrice}
                 </span>
                 {product.salePrice < product.price && (
                   <span className="text-sm ml-2 max-sm:text-xs font-bold text-green-500">

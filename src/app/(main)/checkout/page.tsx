@@ -138,7 +138,7 @@ export default function CheckoutPage() {
                     Quantity: {product.quantity}
                   </p>
                   <p className="text-sm font-semibold">
-                    Price: $
+                    Price: ₹
                     {(
                       ((product.salePrice || product.price) / 100) *
                       100
@@ -148,7 +148,7 @@ export default function CheckoutPage() {
               </div>
             ))}
             <div className="text-xl font-bold mt-4">
-              Total: ${((totalPrice / 100) * 100).toFixed(2)}
+              Total: ₹{((totalPrice / 100) * 100).toFixed(2)}
             </div>
           </div>
           <Card>
