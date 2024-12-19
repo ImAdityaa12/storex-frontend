@@ -285,21 +285,22 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
-          <Carousel className="w-full mx-auto">
-            <CarouselContent>
-              {products.map((product) => (
-                <CarouselItem key={product.product._id} className="w-fit">
-                  <ProductCard product={product.product} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            {/* <CarouselPrevious />
-              <CarouselNext /> */}
-          </Carousel>
-        </section>
+        {products.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
+            <Carousel className="w-full mx-auto">
+              <CarouselContent>
+                {products.map((product) => (
+                  <CarouselItem key={product.product._id} className="w-fit">
+                    <ProductCard product={product.product} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {/* <CarouselPrevious />
+                      <CarouselNext /> */}
+            </Carousel>
+          </section>
+        )}
 
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
