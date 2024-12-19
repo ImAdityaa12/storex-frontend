@@ -137,13 +137,16 @@ export default function CheckoutPage() {
                   </p>
                   <p className="text-sm font-semibold">
                     Price: $
-                    {((product.salePrice || product.price) / 100).toFixed(2)}
+                    {(
+                      ((product.salePrice || product.price) / 100) *
+                      100
+                    ).toFixed(2)}
                   </p>
                 </div>
               </div>
             ))}
             <div className="text-xl font-bold mt-4">
-              Total: ${(totalPrice / 100).toFixed(2)}
+              Total: ${((totalPrice / 100) * 100).toFixed(2)}
             </div>
           </div>
           <Card>
