@@ -239,12 +239,12 @@ export default function ProductDetail() {
             <div className="flex items-center space -x-2">
               {currentProductDetail?.product.salePrice && (
                 <span className="text-2xl font-bold">
-                  ${(currentProductDetail?.product.salePrice / 100).toFixed(2)}
+                  ₹{(currentProductDetail?.product.salePrice).toFixed(2)}
                 </span>
               )}
 
               <span className="text-lg text-gray-500 line-through ml-4">
-                ${(currentProductDetail.product.price / 100).toFixed(2)}
+                ₹{currentProductDetail.product.price.toFixed(2)}
               </span>
               <span className="text-lg text-green-500 font-bold ml-4">
                 {currentProductDetail.discount.toFixed(2)}% off
@@ -339,7 +339,7 @@ function ProductCard({ product }: { product: product }) {
             {product.title}
           </h3>
           <p className="text-lg font-bold max-sm:text-sm">
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
           </p>
         </div>
       </CardContent>
