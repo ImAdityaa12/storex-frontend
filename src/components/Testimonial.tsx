@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from "next/image";
 
 export default function Testimonial() {
   return (
@@ -6,10 +6,17 @@ export default function Testimonial() {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xl italic text-gray-600 mb-4">
-            "Ajito transformed my shopping experience! The quality and service are unmatched."
+            &quot;Ajito transformed my shopping experience! The quality and
+            service are unmatched.&quot;
           </p>
           <div className="flex items-center justify-center">
-            <Image src="/placeholder.svg?height=64&width=64" alt="Emily Johnson" width={64} height={64} className="rounded-full mr-4" />
+            <Image
+              src="/placeholder.svg?height=64&width=64"
+              alt="Emily Johnson"
+              width={64}
+              height={64}
+              className="rounded-full mr-4"
+            />
             <div>
               <p className="font-semibold">Emily Johnson</p>
               <p className="text-gray-600">Homeowner, Customer</p>
@@ -18,6 +25,5 @@ export default function Testimonial() {
         </div>
       </div>
     </section>
-  )
+  );
 }
-
