@@ -21,7 +21,7 @@ export default function Hero() {
         </div>
         <div className="md:w-1/2">
           <Image
-            src="/landing-page-image.avif"
+            src="/landing-page-image.png"
             alt="Featured Electronic Product"
             width={600}
             height={400}
