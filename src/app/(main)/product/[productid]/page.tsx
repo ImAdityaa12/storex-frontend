@@ -239,12 +239,12 @@ export default function ProductDetail() {
             <div className="flex items-center space -x-2">
               {currentProductDetail?.product.salePrice && (
                 <span className="text-2xl font-bold">
-                  ${(currentProductDetail?.product.salePrice / 100).toFixed(2)}
+                  ₹{(currentProductDetail?.product.salePrice).toFixed(2)}
                 </span>
               )}
 
               <span className="text-lg text-gray-500 line-through ml-4">
-                ${(currentProductDetail.product.price / 100).toFixed(2)}
+                ₹{currentProductDetail.product.price.toFixed(2)}
               </span>
               <span className="text-lg text-green-500 font-bold ml-4">
                 {currentProductDetail.discount.toFixed(2)}% off
@@ -285,21 +285,22 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
-          <Carousel className="w-full mx-auto">
-            <CarouselContent>
-              {products.map((product) => (
-                <CarouselItem key={product.product._id} className="w-fit">
-                  <ProductCard product={product.product} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            {/* <CarouselPrevious />
-              <CarouselNext /> */}
-          </Carousel>
-        </section>
+        {products.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
+            <Carousel className="w-full mx-auto">
+              <CarouselContent>
+                {products.map((product) => (
+                  <CarouselItem key={product.product._id} className="w-fit">
+                    <ProductCard product={product.product} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {/* <CarouselPrevious />
+                      <CarouselNext /> */}
+            </Carousel>
+          </section>
+        )}
 
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
@@ -338,7 +339,7 @@ function ProductCard({ product }: { product: product }) {
             {product.title}
           </h3>
           <p className="text-lg font-bold max-sm:text-sm">
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
           </p>
         </div>
       </CardContent>

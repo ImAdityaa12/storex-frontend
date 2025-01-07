@@ -100,8 +100,10 @@ export default function CheckoutPage() {
             credit: data.credit,
           });
         }
+        router.push("/shop");
+      } else if (data.success === false) {
+        toast.error(data.message);
       }
-      router.push("/shop");
     } catch (error) {
       console.log(error);
     }
@@ -136,14 +138,17 @@ export default function CheckoutPage() {
                     Quantity: {product.quantity}
                   </p>
                   <p className="text-sm font-semibold">
-                    Price: $
-                    {((product.salePrice || product.price) / 100).toFixed(2)}
+                    Price: ₹
+                    {(
+                      ((product.salePrice || product.price) / 100) *
+                      100
+                    ).toFixed(2)}
                   </p>
                 </div>
               </div>
             ))}
             <div className="text-xl font-bold mt-4">
-              Total: ${(totalPrice / 100).toFixed(2)}
+              Total: ₹{((totalPrice / 100) * 100).toFixed(2)}
             </div>
           </div>
           <Card>
@@ -205,14 +210,16 @@ export default function CheckoutPage() {
                   className="flex items-center justify-center"
                 >
                   <QrCode className="h-4 w-4 mr-2" />
-                  QR Code
+                  <p className="block max-sm:hidden">QR Code</p>
+                  <p className="hidden max-sm:block">QR</p>
                 </TabsTrigger>
                 <TabsTrigger
                   value="bank"
                   className="flex items-center justify-center"
                 >
                   <CreditCard className="h-4 w-4 mr-2" />
-                  Bank Transfer
+                  <p className="block max-sm:hidden">Bank Transfer</p>
+                  <p className="hidden max-sm:block">Bank</p>
                 </TabsTrigger>
                 <TabsTrigger
                   value="upi"
@@ -223,7 +230,7 @@ export default function CheckoutPage() {
                 </TabsTrigger>
                 <TabsTrigger
                   value="credit"
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center max-sm:text-xs"
                 >
                   <CreditCard className="h-4 w-4 mr-2" />
                   Credit

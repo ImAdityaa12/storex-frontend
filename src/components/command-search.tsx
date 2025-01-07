@@ -97,13 +97,12 @@ export default function CommandSearch() {
                   <div className="flex-grow">
                     <h3 className="font-semibold">{product.title}</h3>
                     <p className="text-sm text-gray-500">
-                      ${product.price.toFixed(2)}
+                      ₹{product.price.toFixed(2)}
                     </p>
                   </div>
                   <Button
                     onClick={() => {
                       router.push(`/product/${product._id}`);
-                      console.log(`Redirecting to product: ${product._id}`);
                       setOpen(false);
                     }}
                   >

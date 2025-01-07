@@ -36,7 +36,7 @@ export default function Cart() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg min-h-[100dvh] overflow-y-scroll">
+      <SheetContent className="w-full sm:max-w-lg max-h-[100dvh]">
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
@@ -56,7 +56,7 @@ export default function Cart() {
               <div className="flex-1">
                 <h3 className="font-semibold max-sm:text-xs">{item.title}</h3>
                 <p className="text-sm text-gray-500">
-                  ${item.salePrice.toFixed(2)}
+                  ₹{item.salePrice.toFixed(2)}
                 </p>
               </div>
               <div className="w-full h-full flex items-center justify-between sm:hidden">
@@ -105,7 +105,7 @@ export default function Cart() {
           <div className="flex justify-between text-lg font-semibold">
             <span>Total:</span>
             <span>
-              $
+              ₹
               {cartItems.reduce(
                 (total, item) =>
                   total + (item.salePrice || item.price) * item.quantity,

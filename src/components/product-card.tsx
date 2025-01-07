@@ -15,12 +15,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import ProductEditModal from "./product-edit-modal";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "./ui/tooltip";
 import userDetailsStore from "@/store/userDetail";
 import { Dispatch, SetStateAction } from "react";
 
@@ -47,7 +47,7 @@ export default function ProductCard({
     >
   >;
 }) {
-  const categories = product.category.split(",");
+  // const categories = product.category.split(",");
   const { getCartItems } = useCartStore();
   const { userDetails } = userDetailsStore();
   const router = useRouter();
@@ -177,41 +177,26 @@ export default function ProductCard({
             <div className="flex justify-between items-center mb-2 max-sm:mb-0 max-sm:justify-normal">
               <div>
                 <span className="text-lg font-bold max-sm:text-xs">
-                  ${product.salePrice}
+                  ₹{product.salePrice}
+                </span>
+                <span className="text-sm ml-2 max-sm:text-xs line-through">
+                  ₹{product.price}
                 </span>
                 {product.salePrice < product.price && (
                   <span className="text-sm ml-2 max-sm:text-xs font-bold text-green-500">
-                    {discount?.toFixed(2)}% off
+                    {discount?.toFixed(0)}% off
                   </span>
                 )}
               </div>
               <div className="flex gap-2 max-sm:hidden">
-                <TooltipProvider disableHoverableContent>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        className="rounded-full bg-background text-xs"
-                        variant="outline"
-                      >
-                        Categories
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="w-64 flex gap-2">
-                      {categories.map((category, index) => (
-                        <Badge key={index} variant="secondary">
-                          {category}
-                        </Badge>
-                      ))}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Badge>{product.model.split(",")[0] || "NA"}</Badge>
               </div>
             </div>
             <div className="text-sm text-gray-600 mb-2 max-sm:mb-0">
               Brand: {product.brand}
             </div>
-            <div className="text-sm text-gray-600 max-sm:hidden">
-              In Stock: {product.totalStock}
+            <div className="text-sm text-gray-600 sm:hidden">
+              Model: {product.model.split(",")[0] || "NA"}
             </div>
           </>
         ) : (
