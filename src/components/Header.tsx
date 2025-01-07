@@ -21,7 +21,7 @@ export default function Header() {
           >
             <Menu size={24} />
           </button>
-          <nav className="hidden md:flex space-x-4">
+          {/* <nav className="hidden md:flex space-x-4">
             <Link
               href="#"
               className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
@@ -52,7 +52,7 @@ export default function Header() {
             >
               Contact
             </Link>
-          </nav>
+          </nav> */}
           <div className="hidden md:block relative">
             <input
               type="text"

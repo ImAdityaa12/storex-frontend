@@ -13,7 +13,7 @@ export default function Hero() {
             Discover the latest in electric and electronic innovations
           </p>
           <Link
-            href="#"
+            href="/shop"
             className="bg-white text-blue-600 dark:bg-gray-200 dark:text-blue-800 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 dark:hover:bg-gray-300 transition duration-300 inline-block"
           >
             Shop Now
