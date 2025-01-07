@@ -1,5 +1,5 @@
 "use client";
-import { ShoppingCart, Search, Menu } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -64,12 +64,6 @@ export default function Header() {
               size={18}
             />
           </div>
-          <Link
-            href="#"
-            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-          >
-            <ShoppingCart size={24} />
-          </Link>
         </div>
       </div>
       {mobileMenuOpen && (
