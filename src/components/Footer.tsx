@@ -1,58 +1,47 @@
 import Link from 'next/link'
-import { Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-white py-12">
+    <footer className="bg-gray-800 text-white py-8">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">About Ajito</h3>
+            <p className="text-sm">Ajito is your one-stop shop for all things electric and electronic. We offer the latest innovations at competitive prices.</p>
+          </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link href="/" className="hover:text-gray-300">Home</Link></li>
-              <li><Link href="/products" className="hover:text-gray-300">Products</Link></li>
-              <li><Link href="/about" className="hover:text-gray-300">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-gray-300">Contact</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Home</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Products</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Deals</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">About Us</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Contact</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4">Customer Care</h3>
+            <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
             <ul className="space-y-2">
-              <li><Link href="/faq" className="hover:text-gray-300">FAQ</Link></li>
-              <li><Link href="/returns" className="hover:text-gray-300">Returns</Link></li>
-              <li><Link href="/shipping" className="hover:text-gray-300">Shipping Info</Link></li>
-              <li><Link href="/warranty" className="hover:text-gray-300">Warranty</Link></li>
-              <li><Link href="/feedback" className="hover:text-gray-300">Feedback</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">FAQ</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Shipping</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Returns</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Track Order</Link></li>
+              <li><Link href="#" className="text-sm hover:text-blue-400">Privacy Policy</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4">Stay Connected</h3>
+            <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
             <div className="flex space-x-4">
-              <Link href="#" className="hover:text-gray-300"><Facebook /></Link>
-              <Link href="#" className="hover:text-gray-300"><Twitter /></Link>
-              <Link href="#" className="hover:text-gray-300"><Instagram /></Link>
-              <Link href="#" className="hover:text-gray-300"><Linkedin /></Link>
-              <Link href="#" className="hover:text-gray-300"><Youtube /></Link>
+              <Link href="#" className="hover:text-blue-400"><Facebook size={24} /></Link>
+              <Link href="#" className="hover:text-blue-400"><Twitter size={24} /></Link>
+              <Link href="#" className="hover:text-blue-400"><Instagram size={24} /></Link>
+              <Link href="#" className="hover:text-blue-400"><Linkedin size={24} /></Link>
             </div>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Subscribe</h3>
-            <p className="mb-4">Join our newsletter for the latest updates and offers.</p>
-            <form className="flex gap-2">
-              <Input type="email" placeholder="Enter your email" className="flex-grow" />
-              <Button type="submit">Subscribe</Button>
-            </form>
-          </div>
         </div>
-        <div className="border-t border-gray-700 pt-8 text-center">
-          <p>&copy; 2024 Ajito. All rights reserved.</p>
-          <div className="mt-4 space-x-4">
-            <Link href="/privacy" className="hover:text-gray-300">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-gray-300">Terms of Service</Link>
-            <Link href="/cookies" className="hover:text-gray-300">Cookie Settings</Link>
-          </div>
+        <div className="mt-8 pt-8 border-t border-gray-700 text-center">
+          <p className="text-sm">&copy; {new Date().getFullYear()} Ajito. All rights reserved.</p>
         </div>
       </div>
     </footer>

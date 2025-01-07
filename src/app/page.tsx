@@ -1,13 +1,12 @@
-import Achievements from "@/components/Achievements";
-import Categories from "@/components/Categories";
-import Features from "@/components/Features";
+import Contact from "@/components/Contact";
+import CustomerReviews from "@/components/CustomerReviews";
+import FeaturedProducts from "@/components/FeaturedProducts";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Newsletter from "@/components/Newsletter";
-import Offers from "@/components/Offers";
-import ProductShowcase from "@/components/ProductShowcase";
-import Testimonial from "@/components/Testimonial";
+import ProductCategories from "@/components/ProductCategories";
+import SpecialDeals from "@/components/SpecialDeals";
+import ValuePropositions from "@/components/ValuePropositions";
 
 export default function Home() {
   return (
@@ -15,13 +14,12 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Features />
-        <Categories />
-        <Offers />
-        <Achievements />
-        <Testimonial />
-        <Newsletter />
-        <ProductShowcase />
+        <ProductCategories />
+        <SpecialDeals />
+        <FeaturedProducts />
+        <ValuePropositions />
+        <CustomerReviews />
+        <Contact />
       </main>
       <Footer />
     </div>

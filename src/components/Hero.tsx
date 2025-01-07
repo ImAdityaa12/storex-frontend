@@ -1,24 +1,28 @@
-import { Button } from "@/components/ui/button";
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Hero() {
   return (
-    <section className="bg-gray-100 py-20">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Unbeatable Deals on Electronics Await You!
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Discover the latest in electrical and electronic products at Ajito.
-            Shop now to take advantage of our exclusive offers and elevate your
-            home experience.
-          </p>
-          <div className="space-x-4">
-            <Button>Shop</Button>
-            <Button variant="outline">Learn More</Button>
-          </div>
+    <section className="bg-blue-600 text-white">
+      <div className="container mx-auto px-4 py-12 md:py-16 flex flex-col md:flex-row items-center">
+        <div className="md:w-1/2 mb-8 md:mb-0 text-center md:text-left">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Welcome to Ajito</h1>
+          <p className="text-lg md:text-xl mb-6">Discover the latest in electric and electronic innovations</p>
+          <Link href="#" className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300 inline-block">
+            Shop Now
+          </Link>
+        </div>
+        <div className="md:w-1/2">
+          <Image
+            src="/placeholder.svg?height=400&width=600"
+            alt="Featured Electronic Product"
+            width={600}
+            height={400}
+            className="rounded-lg shadow-lg w-full h-auto"
+          />
         </div>
       </div>
     </section>
-  );
+  )
 }
+
