@@ -50,11 +50,11 @@ export default function LoginPage() {
     );
     const data = await response.json();
     if (response.status === 200) {
-      console.log(data?.token);
       setCookie("token", data?.token);
       toast.success(data?.message);
       setIsLoading(false);
       router.push("/shop");
+      router.refresh();
     } else {
       setIsLoading(false);
       toast.error(data?.message);
