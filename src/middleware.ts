@@ -1,6 +1,7 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getCookie } from "./lib/utils";
 
 // Define public routes that don't require authentication
 const publicRoutes = ["/", "/login", "/register"];
@@ -26,6 +27,13 @@ export function middleware(request: NextRequest) {
   // Redirect logic for login page when user is already authenticated
   if (isPublicPath && token && path !== "/") {
     return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (path === "/login") {
+    const token = getCookie("token");
+    if (token) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
   }
 
   return NextResponse.next();

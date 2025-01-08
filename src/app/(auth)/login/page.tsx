@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,6 @@ import {
 import { Eye, EyeOff, Loader } from "lucide-react";
 import { toast } from "sonner";
 import { setCookie } from "@/lib/cookieFunction";
-import { getCookie } from "@/lib/utils";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -51,21 +50,14 @@ export default function LoginPage() {
     const data = await response.json();
     if (response.status === 200) {
       setCookie("token", data?.token);
+      router.push("/shop");
       toast.success(data?.message);
       setIsLoading(false);
-      router.push("/shop");
-      router.refresh();
     } else {
       setIsLoading(false);
       toast.error(data?.message);
     }
   }
-  useEffect(() => {
-    const token = getCookie("token");
-    if (token) {
-      router.push("/shop");
-    }
-  });
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="sm:min-w-[500px] max-sm:w-full">
