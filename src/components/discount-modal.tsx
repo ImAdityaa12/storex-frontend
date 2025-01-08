@@ -10,6 +10,9 @@ import {
   ResponsiveModalTrigger,
 } from "./ui/responsive-dialog";
 import { ShoppingCart } from "lucide-react";
+import { getCookie } from "@/lib/utils";
+import { toast } from "sonner";
+import useCartStore from "@/store/cartStore";
 
 interface DiscountItem {
   minQuantity: number;
@@ -19,17 +22,39 @@ interface DiscountItem {
 
 interface DiscountModalProps {
   discountData: DiscountItem[];
+  productId: string;
 }
 
-export function DiscountModal({ discountData }: DiscountModalProps) {
+export function DiscountModal({ discountData, productId }: DiscountModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleAddToCart = (quantity: number, price: number) => {
-    // Placeholder function for adding to cart
-    console.log(`Added ${quantity} items at ${price} to cart`);
-    setIsOpen(false);
+  const { getCartItems } = useCartStore();
+  const addToCart = async (quantity: number) => {
+    const token = getCookie("token");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}user/cart/addToCart`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            productId,
+            quantity,
+            minQuantityFlag: true,
+          }),
+        }
+      );
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Item added to cart");
+        getCartItems();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error adding item to cart");
+    }
   };
-
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
       <ResponsiveModalTrigger asChild>
@@ -48,11 +73,7 @@ export function DiscountModal({ discountData }: DiscountModalProps) {
               <span className="text-sm font-medium">
                 {item.minQuantity} pieces - ₹{item.discountedPrice}
               </span>
-              <Button
-                onClick={() =>
-                  handleAddToCart(item.minQuantity, item.discountedPrice)
-                }
-              >
+              <Button onClick={() => addToCart(item.minQuantity)}>
                 Add to Cart
               </Button>
             </div>
