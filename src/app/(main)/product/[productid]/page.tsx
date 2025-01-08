@@ -84,6 +84,7 @@ export default function ProductDetail() {
       category: "",
       salePrice: 0,
       totalStock: 0,
+      quantityDiscounts: [],
       model: "",
       createdAt: new Date(),
       updatedAt: new Date(),
