@@ -1,3 +1,8 @@
+export type DiscountItem = {
+  minQuantity: number;
+  discountedPrice: number;
+  _id: string;
+};
 export type product = {
   _id: string;
   image: string;
@@ -11,4 +16,5 @@ export type product = {
   totalStock: number;
   createdAt: Date;
   updatedAt: Date;
+  quantityDiscounts: DiscountItem[];
 };

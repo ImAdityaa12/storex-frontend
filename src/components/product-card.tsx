@@ -23,6 +23,7 @@ import ProductEditModal from "./product-edit-modal";
 // } from "./ui/tooltip";
 import userDetailsStore from "@/store/userDetail";
 import { Dispatch, SetStateAction } from "react";
+import { DiscountModal } from "./discount-modal";
 
 export default function ProductCard({
   product,
@@ -208,6 +209,8 @@ export default function ProductCard({
       <CardFooter className="p-4 pt-0">
         {isEdit ? (
           <ProductEditModal product={product} />
+        ) : product.quantityDiscounts?.length > 0 ? (
+          <DiscountModal discountData={product.quantityDiscounts} />
         ) : (
           <Button
             className="w-full"
