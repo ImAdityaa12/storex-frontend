@@ -20,46 +20,6 @@ import { useEffect, useState } from "react";
 import { product } from "@/product";
 import useCartStore from "@/store/cartStore";
 
-// Mock data for similar and latest products
-// const mockProducts = [
-//   {
-//     id: 1,
-//     title: "Similar Product 1",
-//     price: 79.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 2,
-//     title: "Similar Product 2",
-//     price: 89.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 3,
-//     title: "Similar Product 3",
-//     price: 99.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 4,
-//     title: "Latest Product 1",
-//     price: 109.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 5,
-//     title: "Latest Product 2",
-//     price: 119.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 6,
-//     title: "Latest Product 3",
-//     price: 129.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-// ];
-
 export default function ProductDetail() {
   const { getCartItems } = useCartStore();
   const [products, setProducts] = useState<
