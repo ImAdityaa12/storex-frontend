@@ -9,6 +9,7 @@ interface CartItem {
   image: string;
   salePrice: number;
   quantity: number;
+  originalPrice: number;
 }
 
 interface CartStore {
@@ -18,7 +19,7 @@ interface CartStore {
   setCartItems: (cartItems: CartItem[]) => void;
   isLoading: boolean;
   error: string | null;
-
+  total: number;
   // Actions
   getCartItems: () => Promise<void>;
   updateQuantity: (productId: string, quantity: string) => Promise<void>;
@@ -31,6 +32,7 @@ const useCartStore = create<CartStore>((set, get) => ({
   isLoading: false,
   error: null,
   cartId: "",
+  total: 0,
   // Setters
   setCartItems: (cartItems) => set({ cartItems }),
   // Actions
@@ -54,7 +56,12 @@ const useCartStore = create<CartStore>((set, get) => ({
       }
 
       const data = await response.json();
-      set({ cartId: data._id, cartItems: data.items, isLoading: false });
+      set({
+        cartId: data._id,
+        cartItems: data.items,
+        isLoading: false,
+        total: data.total,
+      });
     } catch (error) {
       console.error(error);
       set({
