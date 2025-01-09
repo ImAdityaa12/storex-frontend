@@ -58,9 +58,13 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
       <ResponsiveModalTrigger asChild>
-        <Button className="w-full" onClick={() => setIsOpen(true)}>
+        <Button
+          className="w-full"
+          variant={"outline"}
+          onClick={() => setIsOpen(true)}
+        >
           <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
-          Add to Cart
+          Add options
         </Button>
       </ResponsiveModalTrigger>
       <ResponsiveModalContent className="sm:max-w-[425px]">
