@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { product } from "@/product";
-import { EditIcon, X } from "lucide-react";
+import { EditIcon, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
@@ -27,10 +27,16 @@ import {
   ResponsiveModalTitle,
   ResponsiveModalTrigger,
 } from "./ui/responsive-dialog";
+import { QuantityDiscount } from "./add-product-main";
 
 export default function ProductEditModal({ product }: { product: product }) {
   const { getProducts, modelOptions, brands, categoryOption } =
     useProductStore();
+  const [discounts, setDiscounts] = useState<QuantityDiscount[]>(
+    product.quantityDiscounts
+  );
+  const [newMinQuantity, setNewMinQuantity] = useState("");
+  const [newDiscountedPrice, setNewDiscountedPrice] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [image, setImage] = useState<string | null>(product.image);
   const [formData, setFormData] = useState<{
@@ -92,6 +98,7 @@ export default function ProductEditModal({ product }: { product: product }) {
             model: formData.model.map((model) => model.value).join(", "),
             totalStock: formData.totalStock,
             image,
+            quantityDiscounts: discounts,
           }),
         }
       );
@@ -148,6 +155,22 @@ export default function ProductEditModal({ product }: { product: product }) {
         toast.error("Error uploading image", { id: message, duration: 3000 });
       }
     }
+  };
+  const addDiscount = () => {
+    const minQuantity = parseInt(newMinQuantity);
+    const discountedPrice = parseFloat(newDiscountedPrice);
+
+    if (isNaN(minQuantity) || isNaN(discountedPrice)) {
+      alert("Please enter valid numbers for both fields.");
+      return;
+    }
+
+    setDiscounts([...discounts, { minQuantity, discountedPrice }]);
+    setNewMinQuantity("");
+    setNewDiscountedPrice("");
+  };
+  const removeDiscount = (index: number) => {
+    setDiscounts(discounts.filter((_, i) => i !== index));
   };
   return (
     <ResponsiveModal>
@@ -311,6 +334,7 @@ export default function ProductEditModal({ product }: { product: product }) {
               className="min-w-52 col-span-3"
             />
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="totalStock" className="text-right">
               Total Stock
@@ -323,6 +347,73 @@ export default function ProductEditModal({ product }: { product: product }) {
               onChange={handleInputChange}
               className="min-w-52 col-span-3"
             />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4 w-full">
+            <Label htmlFor="stock" className="text-right">
+              Edit Quanity
+            </Label>
+            <div className="col-span-3">
+              {discounts.map((discount, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <Input
+                    type="number"
+                    value={discount.minQuantity}
+                    onChange={(e) => {
+                      const newDiscounts = [...discounts];
+                      newDiscounts[index].minQuantity = parseInt(
+                        e.target.value
+                      );
+                      setDiscounts(newDiscounts);
+                    }}
+                    placeholder="Min Quantity"
+                  />
+                  <Input
+                    type="number"
+                    value={discount.discountedPrice}
+                    onChange={(e) => {
+                      const newDiscounts = [...discounts];
+                      newDiscounts[index].discountedPrice = parseFloat(
+                        e.target.value
+                      );
+                      setDiscounts(newDiscounts);
+                    }}
+                    placeholder="Discounted Price"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => removeDiscount(index)}
+                    className="px-3"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <div className="col-span-4 flex items-end space-x-2 min-w-full ml-auto">
+              <Input
+                id="newMinQuantity"
+                type="number"
+                value={newMinQuantity}
+                onChange={(e) => setNewMinQuantity(e.target.value)}
+                placeholder="Min Quantity"
+                className="min-w-24"
+              />
+
+              <Input
+                id="newDiscountedPrice"
+                type="number"
+                value={newDiscountedPrice}
+                onChange={(e) => setNewDiscountedPrice(e.target.value)}
+                placeholder="Discounted Price"
+                className="min-w-24"
+              />
+
+              <Button type="button" onClick={addDiscount}>
+                <Plus className="" />
+              </Button>
+            </div>
           </div>
           <ResponsiveModalClose
             type="submit"
