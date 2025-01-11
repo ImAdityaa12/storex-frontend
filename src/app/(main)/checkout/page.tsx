@@ -20,8 +20,12 @@ import useCartStore from "@/store/cartStore";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 export default function CheckoutPage() {
-  const [products, setProducts] = useState<CartProduct[]>([]);
+  const [products, setProducts] = useState<{
+    items: CartProduct[];
+    total: number;
+  }>({ items: [], total: 0 });
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<
     "credit" | "upi" | "bank" | "qr"
@@ -50,16 +54,14 @@ export default function CheckoutPage() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setProducts(data.items);
+      setProducts({
+        items: data.items,
+        total: data.total,
+      });
     } catch (error) {
       console.log(error);
     }
   };
-  const totalPrice = products.reduce(
-    (total, product) =>
-      total + (product.salePrice || product.price) * product.quantity,
-    0
-  );
   const createOrder = async () => {
     try {
       const address = addresses.find(
@@ -86,7 +88,7 @@ export default function CheckoutPage() {
             orderStatus: "In Process",
             paymentMethod,
             paymentStatus: "In Process",
-            totalAmount: totalPrice,
+            totalAmount: products.total,
             cartItems: products,
           }),
         }
@@ -120,7 +122,7 @@ export default function CheckoutPage() {
         <div className="grid md:grid-cols-2 gap-8">
           <div>
             <h2 className="text-xl font-semibold mb-4">Your Items</h2>
-            {products.map((product) => (
+            {products?.items?.map((product) => (
               <div
                 key={product.productId}
                 className="flex items-center space-x-4 mb-4 border-b pb-4"
@@ -138,17 +140,13 @@ export default function CheckoutPage() {
                     Quantity: {product.quantity}
                   </p>
                   <p className="text-sm font-semibold">
-                    Price: ₹
-                    {(
-                      ((product.salePrice || product.price) / 100) *
-                      100
-                    ).toFixed(2)}
+                    Price: ₹{product.price}
                   </p>
                 </div>
               </div>
             ))}
             <div className="text-xl font-bold mt-4">
-              Total: ₹{((totalPrice / 100) * 100).toFixed(2)}
+              Total: ₹{products.total}
             </div>
           </div>
           <Card>
