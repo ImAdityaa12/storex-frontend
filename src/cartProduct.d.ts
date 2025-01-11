@@ -5,4 +5,5 @@ export type CartProduct = {
   price: number;
   salePrice: number;
   quantity: number;
+  originalPrice: number;
 };

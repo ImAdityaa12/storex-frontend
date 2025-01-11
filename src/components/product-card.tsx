@@ -15,14 +15,9 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import ProductEditModal from "./product-edit-modal";
-// import {
-//   Tooltip,
-//   TooltipContent,
-//   TooltipProvider,
-//   TooltipTrigger,
-// } from "./ui/tooltip";
 import userDetailsStore from "@/store/userDetail";
 import { Dispatch, SetStateAction } from "react";
+import { DiscountModal } from "./discount-modal";
 
 export default function ProductCard({
   product,
@@ -208,6 +203,11 @@ export default function ProductCard({
       <CardFooter className="p-4 pt-0">
         {isEdit ? (
           <ProductEditModal product={product} />
+        ) : product.quantityDiscounts?.length > 0 ? (
+          <DiscountModal
+            discountData={product.quantityDiscounts}
+            productId={product._id}
+          />
         ) : (
           <Button
             className="w-full"

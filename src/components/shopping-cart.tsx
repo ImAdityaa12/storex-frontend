@@ -18,7 +18,7 @@ import NumberInputModal from "./add-custom-item-quantity";
 
 export default function Cart() {
   const router = useRouter();
-  const { cartItems, getCartItems, updateQuantity, removeItem } =
+  const { cartItems, getCartItems, updateQuantity, removeItem, total } =
     useCartStore();
   useEffect(() => {
     getCartItems();
@@ -56,8 +56,11 @@ export default function Cart() {
               <div className="flex-1">
                 <h3 className="font-semibold max-sm:text-xs">{item.title}</h3>
                 <p className="text-sm text-gray-500">
-                  ₹{item.salePrice.toFixed(2)}
+                  ₹{item.price.toFixed(2)}
                 </p>
+                {/* <span className="text-sm text-gray-500 line-through">
+                  ₹{item.originalPrice}
+                </span> */}
               </div>
               <div className="w-full h-full flex items-center justify-between sm:hidden">
                 <Minus
@@ -104,14 +107,7 @@ export default function Cart() {
         <div className="mt-4 space-y-4 max-sm:mt-0 max-sm:mb-4 max-sm:space-y-0">
           <div className="flex justify-between text-lg font-semibold">
             <span>Total:</span>
-            <span>
-              ₹
-              {cartItems.reduce(
-                (total, item) =>
-                  total + (item.salePrice || item.price) * item.quantity,
-                0
-              )}
-            </span>
+            <span>₹{total}</span>
           </div>
           <Button className="w-full" onClick={() => router.push("/checkout")}>
             Checkout

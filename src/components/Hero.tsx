@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
@@ -19,7 +19,7 @@ export default function Hero() {
             Shop Now
           </Link>
         </div>
-        <div className="md:w-1/2">
+        {/* <div className="md:w-1/2">
           <Image
             src="/landing-page-image.png"
             alt="Featured Electronic Product"
@@ -27,7 +27,7 @@ export default function Hero() {
             height={400}
             className="rounded-lg shadow-lg w-full h-auto"
           />
-        </div>
+        </div> */}
       </div>
     </section>
   );
