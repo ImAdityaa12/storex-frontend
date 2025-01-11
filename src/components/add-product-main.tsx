@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Plus, Trash2 } from "lucide-react";
-interface QuantityDiscount {
+export interface QuantityDiscount {
   minQuantity: number;
   discountedPrice: number;
 }
@@ -124,6 +124,7 @@ export default function AddProductMain() {
         productName: "",
         model: [],
       });
+      setDiscounts([]);
       setImage(null);
       setImagePreview(null);
       return;
