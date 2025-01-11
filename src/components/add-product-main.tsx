@@ -17,6 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { Plus, Trash2 } from "lucide-react";
+interface QuantityDiscount {
+  minQuantity: number;
+  discountedPrice: number;
+}
 
 export default function AddProductMain() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -101,6 +106,7 @@ export default function AddProductMain() {
           model: formData.model.map((model) => model.value).join(", "),
           salePrice: formData.salePrice,
           totalStock: formData.totalStock,
+          discounts,
         }),
       }
     );
@@ -125,7 +131,27 @@ export default function AddProductMain() {
       toast.error(data?.message);
     }
   }
+  const [discounts, setDiscounts] = useState<QuantityDiscount[]>([]);
+  const [newMinQuantity, setNewMinQuantity] = useState("");
+  const [newDiscountedPrice, setNewDiscountedPrice] = useState("");
 
+  const addDiscount = () => {
+    const minQuantity = parseInt(newMinQuantity);
+    const discountedPrice = parseFloat(newDiscountedPrice);
+
+    if (isNaN(minQuantity) || isNaN(discountedPrice)) {
+      alert("Please enter valid numbers for both fields.");
+      return;
+    }
+
+    setDiscounts([...discounts, { minQuantity, discountedPrice }]);
+    setNewMinQuantity("");
+    setNewDiscountedPrice("");
+  };
+
+  const removeDiscount = (index: number) => {
+    setDiscounts(discounts.filter((_, i) => i !== index));
+  };
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -310,6 +336,72 @@ export default function AddProductMain() {
               onChange={handleInputChange}
               required
             />
+          </div>
+          <div>
+            <Label htmlFor="salePrice">Manage Quantity Discounts</Label>
+            <div className="space-y-4">
+              {discounts.map((discount, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <Input
+                    type="number"
+                    value={discount.minQuantity}
+                    onChange={(e) => {
+                      const newDiscounts = [...discounts];
+                      newDiscounts[index].minQuantity = parseInt(
+                        e.target.value
+                      );
+                      setDiscounts(newDiscounts);
+                    }}
+                    placeholder="Min Quantity"
+                    className="w-1/3"
+                  />
+                  <Input
+                    type="number"
+                    value={discount.discountedPrice}
+                    onChange={(e) => {
+                      const newDiscounts = [...discounts];
+                      newDiscounts[index].discountedPrice = parseFloat(
+                        e.target.value
+                      );
+                      setDiscounts(newDiscounts);
+                    }}
+                    placeholder="Discounted Price"
+                    className="w-1/3"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => removeDiscount(index)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <div className="flex items-end space-x-2">
+                <div className="w-1/3">
+                  <Input
+                    id="newMinQuantity"
+                    type="number"
+                    value={newMinQuantity}
+                    onChange={(e) => setNewMinQuantity(e.target.value)}
+                    placeholder="Min Quantity"
+                  />
+                </div>
+                <div className="w-1/3">
+                  <Input
+                    id="newDiscountedPrice"
+                    type="number"
+                    value={newDiscountedPrice}
+                    onChange={(e) => setNewDiscountedPrice(e.target.value)}
+                    placeholder="Discounted Price"
+                  />
+                </div>
+                <Button type="button" onClick={addDiscount}>
+                  <Plus className="" />
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div>
