@@ -50,15 +50,14 @@ export default function LoginPage() {
     const data = await response.json();
     if (response.status === 200) {
       setCookie("token", data?.token);
+      router.push("/shop");
       toast.success(data?.message);
       setIsLoading(false);
-      router.push("/shop");
     } else {
       setIsLoading(false);
       toast.error(data?.message);
     }
   }
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="sm:min-w-[500px] max-sm:w-full">
