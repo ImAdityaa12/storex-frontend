@@ -48,6 +48,7 @@ export default function ProductDetail() {
       model: "",
       createdAt: new Date(),
       updatedAt: new Date(),
+      limitedStock: 0,
     },
     discount: 0,
     isLiked: false,
