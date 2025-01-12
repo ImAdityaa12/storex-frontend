@@ -59,7 +59,6 @@ type CartItem = {
 type Order = {
   address?: Address;
   _id: string;
-  userId: string;
   cartItems: CartItem[];
   orderStatus: string;
   paymentMethod: string;
@@ -67,6 +66,11 @@ type Order = {
   totalAmount: number;
   orderDate: string;
   cartId: string;
+  userId: {
+    name: string;
+    userName: string;
+    _id: string;
+  };
 };
 export default function Component() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -161,7 +165,12 @@ export default function Component() {
               onClick={() => handleOrderClick(order)}
             >
               <CardHeader>
-                <CardTitle>Order #{order._id.slice(-6)}</CardTitle>
+                <CardTitle className="flex justify-between items-end">
+                  <div>Order #{order._id.slice(-6)}</div>
+                  <span className="text-sm text-muted-foreground">
+                    by {order.userId.name}
+                  </span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p>Total: ₹{order.totalAmount.toFixed(2)}</p>
