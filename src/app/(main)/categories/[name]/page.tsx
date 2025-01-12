@@ -87,7 +87,9 @@ export default function CategoryProduct() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <ContentLayout title={Array.isArray(name) ? name[0] : name || ""}>
+    <ContentLayout
+      title={`${name?.toString().split("%20").join(" ").toUpperCase()}`}
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 max-sm:grid-cols-2">
         {products.map((product) => (
           <ProductCard
