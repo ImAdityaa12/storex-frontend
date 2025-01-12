@@ -68,110 +68,12 @@ type Order = {
   orderDate: string;
   cartId: string;
 };
-
-// Sample data
-// const sampleOrders: Order[] = [
-//   {
-//     address: {
-//       address: "Delhi2",
-//       city: "Delhi2",
-//       pincode: "274001",
-//       phone: "9517111597",
-//       notes: "Real",
-//     },
-//     _id: "673379657df4507279333786",
-//     userId: "6727a38632657c5e7651d8ab",
-//     cartItems: [
-//       {
-//         productId: "6719db8a8f55aad7bcc065a9",
-//         title: "SADdsfasd",
-//         price: "400",
-//         image: "asdfadsf",
-//         salePrice: 200,
-//         quantity: 2,
-//         _id: "673379657df4507279333787",
-//       },
-//     ],
-//     orderStatus: "In Process",
-//     paymentMethod: "upi",
-//     paymentStatus: "In Process",
-//     totalAmount: 500,
-//     orderDate: "2024-11-12T15:51:01.691Z",
-//     cartId: "6732437d90df61d621d537a9",
-//   },
-//   {
-//     _id: "67337bc17df45072793337a1",
-//     userId: "6727a38632657c5e7651d8ab",
-//     cartItems: [
-//       {
-//         productId: "6727a4bd32657c5e7651d8c4",
-//         title: "Urban Blaze: Latte",
-//         price: "35",
-//         image:
-//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651304/adjq96vtquydv1zpicvi.png",
-//         salePrice: 43124312,
-//         quantity: 4,
-//         _id: "67337bc17df45072793337a2",
-//       },
-//       {
-//         productId: "6719dd088f55aad7bcc065ac",
-//         title: "Inside Out: Boredom",
-//         price: "799",
-//         image:
-//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1729748008/l4maljoebrc477lap76t.webp",
-//         salePrice: 1000,
-//         quantity: 1,
-//         _id: "67337bc17df45072793337a3",
-//       },
-//     ],
-//     orderStatus: "In Process",
-//     paymentMethod: "upi",
-//     paymentStatus: "In Process",
-//     totalAmount: 172498248,
-//     orderDate: "2024-11-12T16:01:05.288Z",
-//     cartId: "6732437d90df61d621d537a9",
-//   },
-//   {
-//     _id: "67337bfc7df45072793337a5",
-//     userId: "6727a38632657c5e7651d8ab",
-//     cartItems: [
-//       {
-//         productId: "6727a4bd32657c5e7651d8c4",
-//         title: "Urban Blaze: Latte",
-//         price: "35",
-//         image:
-//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1730651304/adjq96vtquydv1zpicvi.png",
-//         salePrice: 43124312,
-//         quantity: 4,
-//         _id: "67337bfc7df45072793337a6",
-//       },
-//       {
-//         productId: "6719dd088f55aad7bcc065ac",
-//         title: "Inside Out: Boredom",
-//         price: "799",
-//         image:
-//           "http://res.cloudinary.com/dx1kkvs4z/image/upload/v1729748008/l4maljoebrc477lap76t.webp",
-//         salePrice: 1000,
-//         quantity: 1,
-//         _id: "67337bfc7df45072793337a7",
-//       },
-//     ],
-//     orderStatus: "In Process",
-//     paymentMethod: "bank",
-//     paymentStatus: "In Process",
-//     totalAmount: 172498248,
-//     orderDate: "2024-11-12T16:02:04.726Z",
-//     cartId: "6732437d90df61d621d537a9",
-//   },
-// ];
-
 export default function Component() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editedOrder, setEditedOrder] = useState<Order | null>(null);
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
-  //   const [orders, setOrders] = useState<Order[]>([]);
   const handleOrderClick = (order: Order) => {
     setSelectedOrder(order);
     setEditedOrder(order);
@@ -262,7 +164,7 @@ export default function Component() {
                 <CardTitle>Order #{order._id.slice(-6)}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Total: ${order.totalAmount.toFixed(2)}</p>
+                <p>Total: ₹{order.totalAmount.toFixed(2)}</p>
                 <p>Status: {order.orderStatus}</p>
                 <p>Payment: {order.paymentStatus}</p>
               </CardContent>
@@ -338,14 +240,14 @@ export default function Component() {
                             <TableCell>{item.title}</TableCell>
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell>
-                              ${Number(item.price).toFixed(2)}
+                              ₹{Number(item.price).toFixed(2)}
                             </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
                     </Table>
                     <p className="text-lg font-semibold mt-4">
-                      Total Amount: ${selectedOrder.totalAmount.toFixed(2)}
+                      Total Amount: ₹{selectedOrder.totalAmount.toFixed(2)}
                     </p>
                   </div>
                   {selectedOrder.address && (
