@@ -110,7 +110,7 @@ export default function Cart() {
             <span>₹{total}</span>
           </div>
           <Button className="w-full" onClick={() => router.push("/checkout")}>
-            Checkout
+            Place Order
           </Button>
         </div>
       </SheetContent>
