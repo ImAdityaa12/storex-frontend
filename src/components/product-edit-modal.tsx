@@ -49,6 +49,7 @@ export default function ProductEditModal({ product }: { product: product }) {
     category: Option[];
     model: Option[];
     totalStock: string;
+    limitedStock: number;
   }>({
     image: image || "",
     brand: product.brand,
@@ -64,6 +65,8 @@ export default function ProductEditModal({ product }: { product: product }) {
     salePrice: product.salePrice.toString(),
     totalStock: product.totalStock.toString(),
     title: product.title,
+    limitedStock:
+      product.limitedStock === undefined ? -1 : product.limitedStock,
   });
   const handleInputChange = (
     e:
@@ -99,6 +102,7 @@ export default function ProductEditModal({ product }: { product: product }) {
             totalStock: formData.totalStock,
             image,
             quantityDiscounts: discounts,
+            limitedStock: formData.limitedStock,
           }),
         }
       );
@@ -348,13 +352,26 @@ export default function ProductEditModal({ product }: { product: product }) {
               className="min-w-52 col-span-3"
             />
           </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="totalStock" className="text-right">
+              Add Limited Stock
+            </Label>
+            <Input
+              id="limitedStock"
+              name="limitedStock"
+              type="number"
+              value={formData.limitedStock}
+              onChange={handleInputChange}
+              className="min-w-52 col-span-3"
+            />
+          </div>
           <div className="grid grid-cols-4 items-center gap-4 w-full">
             <Label htmlFor="stock" className="text-right">
               Edit Quanity
             </Label>
             <div className="col-span-3">
               {discounts.map((discount, index) => (
-                <div key={index} className="flex items-center space-x-2">
+                <div key={index} className="flex items-center space-x-2 mt-2">
                   <Input
                     type="number"
                     value={discount.minQuantity}
@@ -391,7 +408,8 @@ export default function ProductEditModal({ product }: { product: product }) {
                 </div>
               ))}
             </div>
-            <div className="col-span-4 flex items-end space-x-2 min-w-full ml-auto">
+            <Label className="text-right">Add Discount</Label>
+            <div className="col-span-3 flex items-end space-x-2 min-w-full ml-auto">
               <Input
                 id="newMinQuantity"
                 type="number"

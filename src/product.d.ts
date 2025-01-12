@@ -17,4 +17,5 @@ export type product = {
   createdAt: Date;
   updatedAt: Date;
   quantityDiscounts: DiscountItem[];
+  limitedStock: number;
 };

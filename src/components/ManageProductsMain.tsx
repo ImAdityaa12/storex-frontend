@@ -45,7 +45,6 @@ const ManageProduct = () => {
           console.log(data.products.length);
           setHasMore(false);
         }
-        console.log(products, hasMore, page, data);
         setLoading(false);
       }, 800);
     } catch (error) {

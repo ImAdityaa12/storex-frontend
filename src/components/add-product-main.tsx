@@ -39,6 +39,7 @@ export default function AddProductMain() {
     category: Option[];
     model: Option[];
     totalStock: string;
+    limitedStock: number;
   }>({
     image: "",
     brand: "",
@@ -49,6 +50,7 @@ export default function AddProductMain() {
     salePrice: "",
     totalStock: "",
     productName: "",
+    limitedStock: 0,
   });
   const getTags = async () => {
     try {
@@ -107,6 +109,7 @@ export default function AddProductMain() {
           salePrice: formData.salePrice,
           totalStock: formData.totalStock,
           discounts,
+          limitedStock: formData.limitedStock,
         }),
       }
     );
@@ -123,6 +126,7 @@ export default function AddProductMain() {
         totalStock: "",
         productName: "",
         model: [],
+        limitedStock: 0,
       });
       setDiscounts([]);
       setImage(null);
@@ -407,6 +411,17 @@ export default function AddProductMain() {
 
           <div>
             <Label htmlFor="totalStock">Total Stock</Label>
+            <Input
+              id="limitedStock"
+              name="limitedStock"
+              type="number"
+              value={formData.limitedStock}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="totalStock">Add Limited Stock</Label>
             <Input
               id="totalStock"
               name="totalStock"
