@@ -236,7 +236,7 @@ export default function UserDataTable() {
               <TableHead>Role</TableHead>
               <TableHead>Phone Number</TableHead>
               <TableHead>Username</TableHead>
-              <TableHead className="pl-14">Credit</TableHead>
+              <TableHead className="pl-20">Credit</TableHead>
               <TableHead>Approved</TableHead>
             </TableRow>
           </TableHeader>
@@ -288,7 +288,7 @@ export default function UserDataTable() {
                     onChange={(e) =>
                       handleCreditInput(user._id, Number(e.target.value))
                     }
-                    className="w-[50px] px-0 pl-2"
+                    className="w-[100px] px-0 pl-2"
                   />
                   <CreditChangeModal
                     id={user._id}
