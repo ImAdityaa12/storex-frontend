@@ -150,7 +150,7 @@ export default function ProfilePage() {
               </div>
               <div>
                 <dt className="text-sm font-medium text-muted-foreground">
-                  Credits
+                  Credit Limit (Balance)
                 </dt>
                 <dd className="text-sm font-bold text-green-500">
                   {userDetails.credit}
