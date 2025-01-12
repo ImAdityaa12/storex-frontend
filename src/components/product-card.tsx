@@ -130,6 +130,14 @@ export default function ProductCard({
     <Card className="flex flex-col max-w-[350px] max-sm:w-full max-h-[570px] max-sm:min-h-[335px] overflow-hidden">
       <CardHeader className="p-0">
         <div className="relative aspect-square">
+          {product.totalStock < product.limitedStock && (
+            <Badge
+              className="absolute top-2 left-2 z-10"
+              variant={"destructive"}
+            >
+              Limited
+            </Badge>
+          )}
           <Image
             src={product.image}
             alt={product.title}
