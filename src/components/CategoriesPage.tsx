@@ -5,8 +5,10 @@ import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { getCookie } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function CategoriesPageMain() {
+  const router = useRouter();
   const [category, setCategory] = useState<
     {
       name: string;
@@ -40,7 +42,12 @@ export default function CategoriesPageMain() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {category.map((category, index) => (
           <Card key={index} className="overflow-hidden">
-            <CardContent className="p-0">
+            <CardContent
+              className="p-0 cursor-pointer"
+              onClick={() => {
+                router.push(`/categories/${category.name.toLowerCase()}`);
+              }}
+            >
               <Image
                 src={category.image}
                 alt={category.name}
