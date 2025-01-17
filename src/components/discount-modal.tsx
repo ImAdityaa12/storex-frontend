@@ -28,7 +28,10 @@ interface DiscountModalProps {
 export function DiscountModal({ discountData, productId }: DiscountModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { getCartItems } = useCartStore();
-  const addToCart = async (quantity: number) => {
+  const addToCart = async (
+    quantity: number,
+    minQuantityFlag: boolean = true
+  ) => {
     const token = getCookie("token");
     try {
       const response = await fetch(
@@ -42,7 +45,7 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
           body: JSON.stringify({
             productId,
             quantity,
-            minQuantityFlag: true,
+            minQuantityFlag,
           }),
         }
       );
@@ -75,7 +78,8 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
           {discountData.map((item) => (
             <div key={item._id} className="flex items-center justify-between">
               <span className="text-sm font-medium">
-                {item.minQuantity} pieces - ₹{item.discountedPrice}
+                {item.minQuantity} pieces - ₹{item.discountedPrice} each (₹
+                {item.discountedPrice / item.minQuantity} per piece)
               </span>
               <Button onClick={() => addToCart(item.minQuantity)}>
                 Add to Cart
