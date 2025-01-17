@@ -92,7 +92,9 @@ const useCartStore = create<CartStore>((set, get) => ({
       }
 
       await get().getCartItems();
-      toast.success("Item quantity updated");
+      toast.success("Item quantity updated", {
+        position: "top-left",
+      });
     } catch (error) {
       console.error(error);
       set({
