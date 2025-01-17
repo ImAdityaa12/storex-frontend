@@ -78,8 +78,9 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
           {discountData.map((item) => (
             <div key={item._id} className="flex items-center justify-between">
               <span className="text-sm font-medium">
-                {item.minQuantity} pieces - ₹{item.discountedPrice} each (₹
-                {item.discountedPrice / item.minQuantity} per piece)
+                {item.minQuantity}
+                {` piece${item.minQuantity > 1 ? "s" : ""}`} or above- ₹
+                {item.discountedPrice / item.minQuantity} per piece
               </span>
               <Button onClick={() => addToCart(item.minQuantity)}>
                 Add to Cart
