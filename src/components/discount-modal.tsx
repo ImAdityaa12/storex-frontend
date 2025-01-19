@@ -63,7 +63,7 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
       <ResponsiveModalTrigger asChild>
         <Button
           className="w-full"
-          variant={"outline"}
+          // variant={"outline"}
           onClick={() => setIsOpen(true)}
         >
           <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
@@ -82,7 +82,12 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
                 {` piece${item.minQuantity > 1 ? "s" : ""}`} or above- ₹
                 {item.discountedPrice / item.minQuantity} per piece
               </span>
-              <Button onClick={() => addToCart(item.minQuantity)}>
+              <Button
+                onClick={() => {
+                  addToCart(item.minQuantity);
+                  setIsOpen(false);
+                }}
+              >
                 Add to Cart
               </Button>
             </div>
