@@ -10,6 +10,7 @@ interface AnimatedGridPatternProps {
   height?: number;
   x?: number;
   y?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   strokeDasharray?: any;
   numSquares?: number;
   className?: string;
@@ -28,6 +29,7 @@ export function AnimatedGridPattern({
   className,
   maxOpacity = 0.5,
   duration = 4,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   repeatDelay = 0.5,
   ...props
 }: AnimatedGridPatternProps) {
@@ -60,8 +62,8 @@ export function AnimatedGridPattern({
               ...sq,
               pos: getPos(),
             }
-          : sq,
-      ),
+          : sq
+      )
     );
   };
 
@@ -70,11 +72,13 @@ export function AnimatedGridPattern({
     if (dimensions.width && dimensions.height) {
       setSquares(generateSquares(numSquares));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dimensions, numSquares]);
 
   // Resize observer to update container dimensions
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
+      // eslint-disable-next-line prefer-const
       for (let entry of entries) {
         setDimensions({
           width: entry.contentRect.width,
@@ -89,6 +93,7 @@ export function AnimatedGridPattern({
 
     return () => {
       if (containerRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         resizeObserver.unobserve(containerRef.current);
       }
     };
@@ -100,7 +105,7 @@ export function AnimatedGridPattern({
       aria-hidden="true"
       className={cn(
         "pointer-events-none absolute inset-0 h-full w-full fill-gray-400/30 stroke-gray-400/30",
-        className,
+        className
       )}
       {...props}
     >
