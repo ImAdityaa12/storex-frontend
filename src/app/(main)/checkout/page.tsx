@@ -235,34 +235,72 @@ export default function CheckoutPage() {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="qr" className="mt-4">
-                <div className="bg-gray-100 p-4 rounded-md text-center">
+                <div className="p-4 rounded-md text-center">
                   <p className="mb-2">Scan the QR code to pay</p>
-                  <div className="w-48 h-48 mx-auto bg-white flex items-center justify-center">
-                    <QrCode className="w-32 h-32 text-gray-400" />
+                  <div className="relative min-h-[20rem] mx-autoflex items-center justify-center">
+                    <Image
+                      src={"/qr-scan.png"}
+                      alt="QR Code"
+                      fill
+                      className="object-contain"
+                      quality={100}
+                    />
+                    {/* <QrCode className="w-32 h-32 text-gray-400" /> */}
                   </div>
                 </div>
               </TabsContent>
               <TabsContent value="bank" className="mt-4 space-y-4">
                 <div>
                   <Label htmlFor="accountName">Account Name</Label>
-                  <Input id="accountName" placeholder="Enter account name" />
+                  <Input
+                    id="accountName"
+                    placeholder="Enter account name"
+                    value={"AJIT AGENCIES"}
+                    disabled
+                    className="disabled:text-white disabled:opacity-100"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="accountNumber">Account Number</Label>
                   <Input
                     id="accountNumber"
                     placeholder="Enter account number"
+                    value={"39726111095"}
+                    disabled
+                    className="disabled:text-white disabled:opacity-100"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="accountNumber">IFSC Code</Label>
+                  <Input
+                    id="accountNumber"
+                    placeholder="Enter account number"
+                    value={"SBIN0012476"}
+                    disabled
+                    className="disabled:text-white disabled:opacity-100"
                   />
                 </div>
                 <div>
                   <Label htmlFor="bankName">Bank Name</Label>
-                  <Input id="bankName" placeholder="Enter bank name" />
+                  <Input
+                    id="bankName"
+                    placeholder="Enter bank name"
+                    value={"State Bank of India"}
+                    disabled
+                    className="disabled:text-white disabled:opacity-100"
+                  />
                 </div>
               </TabsContent>
               <TabsContent value="upi" className="mt-4">
                 <div>
                   <Label htmlFor="upiId">UPI ID</Label>
-                  <Input id="upiId" placeholder="Enter your UPI ID" />
+                  <Input
+                    id="upiId"
+                    placeholder="Enter your UPI ID"
+                    value={"manojgupta129@upi"}
+                    disabled
+                    className="disabled:text-white disabled:opacity-100"
+                  />
                 </div>
               </TabsContent>
               <TabsContent value="credit" className="mt-4">
