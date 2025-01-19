@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import Image from "next/image";
 import {
   Table,
@@ -26,13 +26,45 @@ interface InventoryItem {
 export default function InventoryTableWithSearch() {
   const [inventoryData, setInventoryData] = useState<InventoryItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [, setLoading] = useState<{ [key: string]: boolean }>({});
+
+  const updateStock = useCallback(async (id: string, newValue: number) => {
+    setLoading((prev) => ({ ...prev, [id]: true }));
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/updateStock`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+          body: JSON.stringify({
+            productId: id,
+            quantity: newValue,
+          }),
+        }
+      );
+      if (response.status === 200) {
+        setInventoryData((prevData) =>
+          prevData.map((item) =>
+            item._id === id ? { ...item, totalStock: newValue } : item
+          )
+        );
+        // getProuctStock();
+      } else {
+        throw new Error("Failed to update stock");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading((prev) => ({ ...prev, [id]: false }));
+    }
+  }, []);
 
   const handleStockChange = (id: string, newValue: number) => {
-    setInventoryData((prevData) =>
-      prevData.map((item) =>
-        item._id === id ? { ...item, totalStock: newValue } : item
-      )
-    );
+    updateStock(id, newValue);
   };
 
   const filteredInventory = useMemo(() => {
@@ -43,7 +75,7 @@ export default function InventoryTableWithSearch() {
   const getProuctStock = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/getProductStock?page=0`,
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/getProductStock`,
         {
           method: "GET",
           credentials: "include",
@@ -64,20 +96,17 @@ export default function InventoryTableWithSearch() {
   useEffect(() => {
     getProuctStock();
   }, []);
-
   return (
-    <div>
-      <div className="mb-4">
-        <div className="relative flex justify-end items-center">
-          <Search className=" text-gray-400 absolute right-2" />
-          <Input
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-1/3 pr-10"
-          />
-        </div>
+    <div className="container mx-auto py-10">
+      <div className="mb-4 relative">
+        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <Input
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10 w-full md:w-1/3"
+        />
       </div>
       <Table>
         <TableHeader>
