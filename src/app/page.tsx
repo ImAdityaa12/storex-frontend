@@ -7,13 +7,6 @@ export default function Home() {
   return (
     <div className="relative">
       <div className="absolute h-screen w-full rounded-lg overflow-hidden bg-[#060606]">
-        {/* <Squares
-          direction="diagonal"
-          speed={0.5}
-          squareSize={40}
-          borderColor="#f5f0f0"
-          hoverFillColor="#222"
-        /> */}
         <AnimatedGridPattern
           numSquares={30}
           maxOpacity={1}
