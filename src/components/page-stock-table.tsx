@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import {
   Table,
@@ -12,72 +12,61 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { getCookie } from "@/lib/utils";
 
 interface InventoryItem {
-  itemName: string;
-  id: string;
+  title: string;
+  _id: string;
   totalStock: number;
   category: string;
   model: string;
   image: string;
 }
 
-const initialMockData: InventoryItem[] = [
-  {
-    itemName: "Laptop",
-    id: "1",
-    totalStock: 50,
-    category: "Electronics",
-    model: "XPS 15",
-    image: "/placeholder.svg?height=50&width=50",
-  },
-  {
-    itemName: "Smartphone",
-    id: "2",
-    totalStock: 100,
-    category: "Electronics",
-    model: "iPhone 12",
-    image: "/placeholder.svg?height=50&width=50",
-  },
-  {
-    itemName: "Desk Chair",
-    id: "3",
-    totalStock: 30,
-    category: "Furniture",
-    model: "Ergonomic Pro",
-    image: "/placeholder.svg?height=50&width=50",
-  },
-  {
-    itemName: "Headphones",
-    id: "4",
-    totalStock: 75,
-    category: "Electronics",
-    model: "WH-1000XM4",
-    image: "/placeholder.svg?height=50&width=50",
-  },
-];
-
 export default function InventoryTableWithSearch() {
-  const [inventoryData, setInventoryData] =
-    useState<InventoryItem[]>(initialMockData);
+  const [inventoryData, setInventoryData] = useState<InventoryItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleStockChange = (id: string, newValue: number) => {
     setInventoryData((prevData) =>
       prevData.map((item) =>
-        item.id === id ? { ...item, totalStock: newValue } : item
+        item._id === id ? { ...item, totalStock: newValue } : item
       )
     );
   };
 
   const filteredInventory = useMemo(() => {
     return inventoryData.filter((item) =>
-      item.itemName.toLowerCase().includes(searchTerm.toLowerCase())
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [inventoryData, searchTerm]);
+  const getProuctStock = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}admin/products/getProductStock?page=0`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        setInventoryData(data.products);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getProuctStock();
+  }, []);
 
   return (
-    <div className="">
+    <div>
       <div className="mb-4">
         <div className="relative flex justify-end items-center">
           <Search className=" text-gray-400 absolute right-2" />
@@ -103,24 +92,24 @@ export default function InventoryTableWithSearch() {
         </TableHeader>
         <TableBody>
           {filteredInventory.map((item) => (
-            <TableRow key={item.id}>
+            <TableRow key={item._id}>
               <TableCell>
                 <Image
                   src={item.image || "/placeholder.svg"}
-                  alt={item.itemName}
+                  alt={item.title}
                   width={50}
                   height={50}
                   className="rounded-md"
                 />
               </TableCell>
-              <TableCell>{item.itemName}</TableCell>
-              <TableCell>{item.id}</TableCell>
+              <TableCell>{item.title}</TableCell>
+              <TableCell>{item._id}</TableCell>
               <TableCell>
                 <Input
                   type="number"
                   value={item.totalStock}
                   onChange={(e) =>
-                    handleStockChange(item.id, parseInt(e.target.value) || 0)
+                    handleStockChange(item._id, parseInt(e.target.value) || 0)
                   }
                   className="w-20"
                 />
