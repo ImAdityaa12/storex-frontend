@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { ShoppingCart, Plus, Minus, X } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import {
   Sheet,
@@ -101,7 +101,7 @@ export default function Cart() {
                   size="icon"
                   onClick={() => removeItem(item.productId)}
                 >
-                  <X className="h-4 w-4" />
+                  <Trash2 className="h-4 w-4 text-red-400" />
                 </Button>
               </div>
             ))
