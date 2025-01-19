@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +27,6 @@ export default function LoginPage() {
     phoneOremail: "",
     password: "",
   });
-  const router = useRouter();
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -50,7 +48,7 @@ export default function LoginPage() {
     const data = await response.json();
     if (response.status === 200) {
       setCookie("token", data?.token);
-      router.push("/shop");
+      window.location.href = "/shop";
       toast.success(data?.message);
       setIsLoading(false);
     } else {
