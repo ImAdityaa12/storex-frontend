@@ -20,11 +20,12 @@ function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <Store className="h-16 w-16 text-white mx-auto mb-6" />
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Welcome to Ajit Agencies Deoria
+            Welcome to <br />
+            Ajit Agencies Deoria
             <br />
             <span className="text-3xl sm:text-4xl md:text-5xl text-yellow-400">
               Order Portal
