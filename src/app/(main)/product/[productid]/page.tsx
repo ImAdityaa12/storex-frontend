@@ -222,9 +222,9 @@ export default function ProductDetail() {
                   </Badge>
                 ))}
             </div>
-            <p className="text-sm text-gray-600">
+            {/* <p className="text-sm text-gray-600">
               In stock: {currentProductDetail.product.totalStock}
-            </p>
+            </p> */}
             <div className="flex space-x-4">
               <Button
                 className="flex-1"
