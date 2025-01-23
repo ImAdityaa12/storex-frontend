@@ -109,7 +109,10 @@ export default function LoginPage() {
         <CardFooter>
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="underline hover:text-primary">
+            <Link
+              href="/register"
+              className="bg-blue-500 px-3 py-1 text-black rounded-xl hover:bg-blue-600 transition duration-300 inline-block"
+            >
               Create New Account
             </Link>
           </p>
