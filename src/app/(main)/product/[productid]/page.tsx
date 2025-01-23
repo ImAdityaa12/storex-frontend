@@ -19,9 +19,12 @@ import { getCookie } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { product } from "@/product";
 import useCartStore from "@/store/cartStore";
+import userDetailsStore from "@/store/userDetail";
 
 export default function ProductDetail() {
   const { getCartItems } = useCartStore();
+  const { userDetails } = userDetailsStore();
+  const router = useRouter();
   const [products, setProducts] = useState<
     { isLiked: boolean; product: product }[]
   >([]);
@@ -171,6 +174,9 @@ export default function ProductDetail() {
     }
   };
   useEffect(() => {
+    if (!userDetails.approved) {
+      router.push("/shop");
+    }
     getItems();
     getSimilarProducts();
     getLatestProducts();
@@ -178,107 +184,111 @@ export default function ProductDetail() {
   }, []);
   return (
     <ContentLayout title="Products">
-      <div className="mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8 mb-10">
-          {currentProductDetail.product.image && (
-            <div className="w-full">
-              <Image
-                src={currentProductDetail.product.image}
-                alt={currentProductDetail.product.title}
-                width={500}
-                height={500}
-                className="rounded-lg object-cover w-full h-full object-center"
-              />
-            </div>
-          )}
-          <div className="space-y-4">
-            <h1 className="text-3xl font-bold">
-              {currentProductDetail?.product.title}
-            </h1>
-            <p className="text-gray-600">
-              {currentProductDetail?.product.description}
-            </p>
-            <div className="flex items-center space -x-2">
-              {currentProductDetail?.product.salePrice && (
-                <span className="text-2xl font-bold">
-                  ₹{(currentProductDetail?.product.salePrice).toFixed(2)}
-                </span>
-              )}
+      {userDetails.approved && (
+        <div className="mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-8 mb-10">
+            {currentProductDetail.product.image && (
+              <div className="w-full">
+                <Image
+                  src={currentProductDetail.product.image}
+                  alt={currentProductDetail.product.title}
+                  width={500}
+                  height={500}
+                  className="rounded-lg object-cover w-full h-full object-center"
+                />
+              </div>
+            )}
+            <div className="space-y-4">
+              <h1 className="text-3xl font-bold">
+                {currentProductDetail?.product.title}
+              </h1>
+              <p className="text-gray-600">
+                {currentProductDetail?.product.description}
+              </p>
+              <div className="flex items-center space -x-2">
+                {currentProductDetail?.product.salePrice && (
+                  <span className="text-2xl font-bold">
+                    ₹{(currentProductDetail?.product.salePrice).toFixed(2)}
+                  </span>
+                )}
 
-              <span className="text-lg text-gray-500 line-through ml-4">
-                ₹{currentProductDetail.product.price.toFixed(2)}
-              </span>
-              <span className="text-lg text-green-500 font-bold ml-4">
-                {currentProductDetail.discount.toFixed(2)}% off
-              </span>
-            </div>
-            <div>
-              <Badge>{currentProductDetail?.product.brand}</Badge>
-              {currentProductDetail?.product.category
-                .split(",")
-                .map((cat, index) => (
-                  <Badge key={index} variant="secondary" className="ml-2">
-                    {cat.trim()}
-                  </Badge>
-                ))}
-            </div>
-            {/* <p className="text-sm text-gray-600">
+                <span className="text-lg text-gray-500 line-through ml-4">
+                  ₹{currentProductDetail.product.price.toFixed(2)}
+                </span>
+                <span className="text-lg text-green-500 font-bold ml-4">
+                  {currentProductDetail.discount.toFixed(2)}% off
+                </span>
+              </div>
+              <div>
+                <Badge>{currentProductDetail?.product.brand}</Badge>
+                {currentProductDetail?.product.category
+                  .split(",")
+                  .map((cat, index) => (
+                    <Badge key={index} variant="secondary" className="ml-2">
+                      {cat.trim()}
+                    </Badge>
+                  ))}
+              </div>
+              {/* <p className="text-sm text-gray-600">
               In stock: {currentProductDetail.product.totalStock}
             </p> */}
-            <div className="flex space-x-4">
-              <Button
-                className="flex-1"
-                onClick={() => addToCart(currentProductDetail.product)}
-              >
-                <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-              </Button>
-              <div onClick={() => toggleLike(currentProductDetail.product._id)}>
-                {currentProductDetail.isLiked ? (
-                  <Button variant="outline">
-                    <Heart className="mr-2 h-4 w-4 text-red-500" fill="red" />{" "}
-                    Saved
-                  </Button>
-                ) : (
-                  <Button variant="outline">
-                    <Heart className="mr-2 h-4 w-4" /> Add to Wishlist
-                  </Button>
-                )}
+              <div className="flex space-x-4">
+                <Button
+                  className="flex-1"
+                  onClick={() => addToCart(currentProductDetail.product)}
+                >
+                  <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
+                </Button>
+                <div
+                  onClick={() => toggleLike(currentProductDetail.product._id)}
+                >
+                  {currentProductDetail.isLiked ? (
+                    <Button variant="outline">
+                      <Heart className="mr-2 h-4 w-4 text-red-500" fill="red" />{" "}
+                      Saved
+                    </Button>
+                  ) : (
+                    <Button variant="outline">
+                      <Heart className="mr-2 h-4 w-4" /> Add to Wishlist
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {products.length > 0 && (
+          {products.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
+              <Carousel className="w-full mx-auto">
+                <CarouselContent>
+                  {products.map((product) => (
+                    <CarouselItem key={product.product._id} className="w-fit">
+                      <ProductCard product={product.product} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {/* <CarouselPrevious />
+                      <CarouselNext /> */}
+              </Carousel>
+            </section>
+          )}
+
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
+            <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
             <Carousel className="w-full mx-auto">
               <CarouselContent>
-                {products.map((product) => (
-                  <CarouselItem key={product.product._id} className="w-fit">
+                {latestProducts.map((product) => (
+                  <CarouselItem key={product.product._id} className="">
                     <ProductCard product={product.product} />
                   </CarouselItem>
                 ))}
               </CarouselContent>
               {/* <CarouselPrevious />
-                      <CarouselNext /> */}
+            <CarouselNext /> */}
             </Carousel>
           </section>
-        )}
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Latest Products</h2>
-          <Carousel className="w-full mx-auto">
-            <CarouselContent>
-              {latestProducts.map((product) => (
-                <CarouselItem key={product.product._id} className="">
-                  <ProductCard product={product.product} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            {/* <CarouselPrevious />
-            <CarouselNext /> */}
-          </Carousel>
-        </section>
-      </div>
+        </div>
+      )}
     </ContentLayout>
   );
 }

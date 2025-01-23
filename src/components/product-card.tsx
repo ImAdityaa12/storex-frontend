@@ -215,6 +215,7 @@ export default function ProductCard({
           <DiscountModal
             discountData={product.quantityDiscounts}
             productId={product._id}
+            stock={product.totalStock}
           />
         ) : (
           <Button
@@ -223,7 +224,7 @@ export default function ProductCard({
             disabled={product.totalStock === 0 || !userDetails.approved}
           >
             <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
-            Add to Cart
+            {product.totalStock === 0 ? "Out of Stock" : "Add to Cart"}
           </Button>
         )}
       </CardFooter>

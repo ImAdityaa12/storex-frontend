@@ -5,8 +5,9 @@ import InfiniteScroll from "@/components/infinite-scroll";
 import ProductCard from "@/components/product-card";
 import { getCookie } from "@/lib/utils";
 import { product } from "@/product";
+import userDetailsStore from "@/store/userDetail";
 import { Loader2 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,28 +23,8 @@ export default function CategoryProduct() {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-
-  // const getCategoryProducts = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/${name}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${getCookie("token")}`,
-  //         },
-  //       }
-  //     );
-  //     const data = await response.json();
-  //     if (response.status === 200) {
-  //       setProducts(data.products);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Error getting products");
-  //   }
-  // };
+  const { userDetails } = userDetailsStore();
+  const router = useRouter();
   const next = async () => {
     setLoading(true);
     try {
@@ -82,7 +63,11 @@ export default function CategoryProduct() {
     }
   };
   useEffect(() => {
-    next();
+    if (!userDetails.approved) {
+      router.push("/shop");
+    } else {
+      next();
+    }
     // getCategoryProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -90,7 +75,7 @@ export default function CategoryProduct() {
     <ContentLayout
       title={`${name?.toString().split("%20").join(" ").toUpperCase()}`}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 max-sm:grid-cols-2">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(257px,1fr))] gap-4 max-sm:grid-cols-2 max-sm:gap-2">
         {products.map((product) => (
           <ProductCard
             key={product.product._id}

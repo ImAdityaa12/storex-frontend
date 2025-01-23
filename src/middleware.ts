@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Define public routes that don't require authentication
-const publicRoutes = ["/", "/login", "/register"];
+const publicRoutes = ["/", "/login", "/register", "/forget-password"];
 
 export function middleware(request: NextRequest) {
   // Get the pathname of the request (e.g. /, /protected)
