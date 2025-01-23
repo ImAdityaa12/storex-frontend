@@ -32,6 +32,7 @@ export default function CheckoutPage() {
   >("qr");
   const { userDetails, setUserDetails, addresses, getUserAddress } =
     userDetailsStore();
+  const [loading, setLoading] = useState(false);
   const { cartId } = useCartStore();
   const router = useRouter();
   const handleAddressSelect = (addressId: string) => {
@@ -63,7 +64,9 @@ export default function CheckoutPage() {
     }
   };
   const createOrder = async () => {
+    const toastId = toast.loading("Placing order...");
     try {
+      setLoading(true);
       const address = addresses.find(
         (address) => address._id === selectedAddress
       );
@@ -95,7 +98,11 @@ export default function CheckoutPage() {
       );
       const data = await response.json();
       if (response.status === 200) {
-        toast.success("Order Placed Successfully");
+        setLoading(false);
+        toast.success(
+          "Order Placed Successfully, Check Your Orders on Account Page",
+          { id: toastId }
+        );
         if (paymentMethod === "credit") {
           setUserDetails({
             ...userDetails,
@@ -104,7 +111,8 @@ export default function CheckoutPage() {
         }
         router.push("/shop");
       } else if (data.success === false) {
-        toast.error(data.message);
+        toast.error(data.message, { id: toastId });
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -318,7 +326,7 @@ export default function CheckoutPage() {
             </Tabs>
             <Button
               className="w-full mt-6"
-              disabled={!selectedAddress}
+              disabled={!selectedAddress || loading}
               onClick={createOrder}
             >
               Complete Purchase
