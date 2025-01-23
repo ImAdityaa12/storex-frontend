@@ -39,11 +39,12 @@ export default function NumberInputModal({ productId }: { productId: string }) {
           }),
         }
       );
+      const data = await response.json();
       if (response.status === 200) {
         toast.success("Item quantity updated successfully");
         getCartItems();
       } else {
-        toast.error("Error updating item quantity");
+        toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
