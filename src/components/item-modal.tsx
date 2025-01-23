@@ -66,8 +66,8 @@ export function ItemsModal({
                   />
                 </TableCell>
                 <TableCell>{item.title}</TableCell>
-                <TableCell>${item.price}</TableCell>
-                <TableCell>${item.salePrice.toFixed(2)}</TableCell>
+                <TableCell>₹{item.price}</TableCell>
+                <TableCell>₹{item.salePrice.toFixed(2)}</TableCell>
                 <TableCell>{item.quantity}</TableCell>
               </TableRow>
             ))}
