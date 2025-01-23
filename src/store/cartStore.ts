@@ -86,11 +86,13 @@ const useCartStore = create<CartStore>((set, get) => ({
           body: JSON.stringify({ productId, quantity }),
         }
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to update quantity");
+      const data = await response.json();
+      if (data.message === "Product out of stock") {
+        toast.error("Product out of stock", {
+          position: "top-left",
+        });
+        return;
       }
-
       await get().getCartItems();
       toast.success("Item quantity updated", {
         position: "top-left",

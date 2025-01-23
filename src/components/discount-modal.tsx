@@ -24,9 +24,14 @@ interface DiscountItem {
 interface DiscountModalProps {
   discountData: DiscountItem[];
   productId: string;
+  stock: number;
 }
 
-export function DiscountModal({ discountData, productId }: DiscountModalProps) {
+export function DiscountModal({
+  discountData,
+  productId,
+  stock,
+}: DiscountModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { getCartItems } = useCartStore();
   const { userDetails } = userDetailsStore();
@@ -84,14 +89,19 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
                 {` piece${item.minQuantity > 1 ? "s" : ""}`} or above- ₹
                 {item.discountedPrice / item.minQuantity} per piece
               </span>
-              <Button
-                onClick={() => {
-                  addToCart(item.minQuantity);
-                  setIsOpen(false);
-                }}
-              >
-                Add to Cart
-              </Button>
+              {stock < item.minQuantity ? (
+                <Button disabled>Out of stock</Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    addToCart(item.minQuantity);
+                    setIsOpen(false);
+                  }}
+                  disabled={!userDetails.approved}
+                >
+                  Add to Cart
+                </Button>
+              )}
             </div>
           ))}
         </div>

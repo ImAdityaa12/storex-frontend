@@ -90,7 +90,7 @@ export default function CheckoutPage() {
             },
             orderStatus: "In Process",
             paymentMethod,
-            paymentStatus: "In Process",
+            paymentStatus: paymentMethod === "credit" ? "Paid" : "In Process",
             totalAmount: products.total,
             cartItems: products.items,
           }),
