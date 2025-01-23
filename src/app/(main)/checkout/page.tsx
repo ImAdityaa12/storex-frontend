@@ -111,8 +111,12 @@ export default function CheckoutPage() {
     }
   };
   useEffect(() => {
-    getProducts();
-    getUserAddress();
+    if (!userDetails.approved) {
+      router.push("/shop");
+    } else {
+      getProducts();
+      getUserAddress();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

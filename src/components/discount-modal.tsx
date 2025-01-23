@@ -13,6 +13,7 @@ import { ShoppingCart } from "lucide-react";
 import { getCookie } from "@/lib/utils";
 import { toast } from "sonner";
 import useCartStore from "@/store/cartStore";
+import userDetailsStore from "@/store/userDetail";
 
 interface DiscountItem {
   minQuantity: number;
@@ -28,6 +29,7 @@ interface DiscountModalProps {
 export function DiscountModal({ discountData, productId }: DiscountModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { getCartItems } = useCartStore();
+  const { userDetails } = userDetailsStore();
   const addToCart = async (
     quantity: number,
     minQuantityFlag: boolean = true
@@ -63,8 +65,8 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
       <ResponsiveModalTrigger asChild>
         <Button
           className="w-full"
-          // variant={"outline"}
           onClick={() => setIsOpen(true)}
+          disabled={!userDetails.approved}
         >
           <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
           Add options
