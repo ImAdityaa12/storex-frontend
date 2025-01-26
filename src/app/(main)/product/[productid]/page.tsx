@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { product } from "@/product";
 import useCartStore from "@/store/cartStore";
 import userDetailsStore from "@/store/userDetail";
+import { DiscountModal } from "@/components/discount-modal";
 
 export default function ProductDetail() {
   const { getCartItems } = useCartStore();
@@ -233,12 +234,35 @@ export default function ProductDetail() {
               In stock: {currentProductDetail.product.totalStock}
             </p> */}
               <div className="flex space-x-4">
-                <Button
+                {currentProductDetail.product.quantityDiscounts?.length > 0 ? (
+                  <DiscountModal
+                    discountData={
+                      currentProductDetail.product.quantityDiscounts
+                    }
+                    productId={currentProductDetail.product._id}
+                    stock={currentProductDetail.product.totalStock}
+                  />
+                ) : (
+                  <Button
+                    className="w-full"
+                    onClick={() => addToCart(currentProductDetail.product)}
+                    disabled={
+                      currentProductDetail.product.totalStock === 0 ||
+                      !userDetails.approved
+                    }
+                  >
+                    <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
+                    {currentProductDetail.product.totalStock === 0
+                      ? "Out of Stock"
+                      : "Add to Cart"}
+                  </Button>
+                )}
+                {/* <Button
                   className="flex-1"
                   onClick={() => addToCart(currentProductDetail.product)}
                 >
                   <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-                </Button>
+                </Button> */}
                 <div
                   onClick={() => toggleLike(currentProductDetail.product._id)}
                 >

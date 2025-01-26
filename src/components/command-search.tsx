@@ -24,7 +24,8 @@ export default function CommandSearch() {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [searchData, setSearchData] = React.useState<product[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+  const [noProducts, setNoProducts] = React.useState(false);
   const { userDetails } = userDetailsStore();
   const { getCartItems } = useCartStore();
   const addToCart = async (product: product) => {
@@ -79,6 +80,11 @@ export default function CommandSearch() {
             const data: product[] = await response.json();
             setLoading(false);
             setSearchData(data);
+            if (data.length === 0) {
+              setNoProducts(true);
+            } else {
+              setNoProducts(false);
+            }
           }
         } catch (error) {
           setLoading(false);
@@ -159,7 +165,7 @@ export default function CommandSearch() {
                   </p>
                 </div>
               )}
-              {!loading && searchData.length === 0 && query.length > 0 && (
+              {!loading && noProducts && query.length > 0 && (
                 <div className="flex items-center space-x-4 py-2 px-4 cursor-pointer max-sm:px-1">
                   <p className="text-sm text-gray-500 max-sm:text-xs">
                     No products found
