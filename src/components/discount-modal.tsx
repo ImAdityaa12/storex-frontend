@@ -10,7 +10,7 @@ import {
   ResponsiveModalTrigger,
 } from "./ui/responsive-dialog";
 import { ShoppingCart } from "lucide-react";
-import { getCookie } from "@/lib/utils";
+import { cn, getCookie } from "@/lib/utils";
 import { toast } from "sonner";
 import useCartStore from "@/store/cartStore";
 import userDetailsStore from "@/store/userDetail";
@@ -25,12 +25,14 @@ interface DiscountModalProps {
   discountData: DiscountItem[];
   productId: string;
   stock: number;
+  buttonStyles?: string;
 }
 
 export function DiscountModal({
   discountData,
   productId,
   stock,
+  buttonStyles,
 }: DiscountModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { getCartItems } = useCartStore();
@@ -69,7 +71,7 @@ export function DiscountModal({
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
       <ResponsiveModalTrigger asChild>
         <Button
-          className="w-full"
+          className={cn("w-full", buttonStyles)}
           onClick={() => setIsOpen(true)}
           disabled={!userDetails.approved}
         >

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -14,13 +14,44 @@ import { toast } from "sonner";
 import { product } from "@/product";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { DiscountModal } from "./discount-modal";
+import { getCookie } from "@/lib/utils";
+import userDetailsStore from "@/store/userDetail";
+import useCartStore from "@/store/cartStore";
 
 export default function CommandSearch() {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [searchData, setSearchData] = React.useState<product[]>([]);
-
+  const { userDetails } = userDetailsStore();
+  const { getCartItems } = useCartStore();
+  const addToCart = async (product: product) => {
+    const token = getCookie("token");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}user/cart/addToCart`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            productId: product._id,
+            quantity: 1,
+          }),
+        }
+      );
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Item added to cart");
+        getCartItems();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error adding item to cart");
+    }
+  };
   // Debounce function
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const debounce = <F extends (...args: any[]) => any>(
@@ -115,7 +146,11 @@ export default function CommandSearch() {
               {searchData.map((product) => (
                 <div
                   key={product._id}
-                  className="flex items-center space-x-4 py-2 border-b px-4"
+                  className="flex items-center space-x-4 py-2 border-b px-4 cursor-pointer"
+                  onClick={() => {
+                    router.push(`/product/${product._id}`);
+                    setOpen(false);
+                  }}
                 >
                   <Image
                     src={product.image}
@@ -130,14 +165,36 @@ export default function CommandSearch() {
                       ₹{product.price.toFixed(2)}
                     </p>
                   </div>
-                  <Button
+                  {/* <Button
                     onClick={() => {
                       router.push(`/product/${product._id}`);
                       setOpen(false);
                     }}
                   >
                     View
-                  </Button>
+                  </Button> */}
+                  {product.quantityDiscounts.length > 0 ? (
+                    <DiscountModal
+                      discountData={product.quantityDiscounts}
+                      productId={product._id}
+                      stock={product.totalStock}
+                      key={product._id}
+                      buttonStyles="w-fit"
+                    />
+                  ) : (
+                    <Button
+                      className="w-fit"
+                      onClick={() => addToCart(product)}
+                      disabled={
+                        product.totalStock === 0 || !userDetails.approved
+                      }
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
+                      {product.totalStock === 0
+                        ? "Out of Stock"
+                        : "Add to Cart"}
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>
