@@ -437,10 +437,10 @@ export default function AddProductMain() {
             onClick={onSubmit}
             disabled={
               formData.category.length === 0 ||
-              formData.model.length === 0 ||
+              // formData.model.length === 0 ||
               !image ||
               !formData.productName ||
-              !formData.description ||
+              // !formData.description ||
               !formData.price ||
               !formData.brand ||
               !formData.salePrice ||
