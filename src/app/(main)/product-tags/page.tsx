@@ -211,7 +211,75 @@ const ProductTagsPage = () => {
                 : ""}
             </ResponsiveModalTitle>
           </ResponsiveModalHeader>
-          {selectedCategory === "models" ||
+          {selectedCategory === "brands" && (
+            <MultipleSelector
+              selectFirstItem={false}
+              value={brands}
+              creatable
+              onChange={(values) => {
+                setBrands(values);
+              }}
+              placeholder="Select frameworks you like..."
+              emptyIndicator={
+                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                  no results found.
+                </p>
+              }
+            />
+          )}
+          {selectedCategory === "models" && (
+            <div className="flex flex-col gap-5">
+              <Label htmlFor="image">Product Image</Label>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                required
+              />
+              {imagePreview && (
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  width={200}
+                  height={200}
+                  className="mt-2 max-w-xs h-auto"
+                />
+              )}
+              <Input
+                onChange={(e) => {
+                  setValue(e.target.value);
+                }}
+              />
+            </div>
+          )}
+          {selectedCategory === "categories" && (
+            <div className="flex flex-col gap-5">
+              <Label htmlFor="image">Product Image</Label>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                required
+              />
+              {imagePreview && (
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  width={200}
+                  height={200}
+                  className="mt-2 max-w-xs h-auto"
+                />
+              )}
+              <Input
+                onChange={(e) => {
+                  setValue(e.target.value);
+                }}
+              />
+            </div>
+          )}
+          {/* {selectedCategory === "models" ||
           selectedCategory === "categories" ? (
             <div className="flex flex-col gap-5">
               <Label htmlFor="image">Product Image</Label>
@@ -252,12 +320,16 @@ const ProductTagsPage = () => {
                 </p>
               }
             />
-          )}
+          )} */}
           <ResponsiveModalFooter className="mt-4">
             <Button
               className="btn btn-primary"
               onClick={handleSendRequest}
-              disabled={!image && selectedCategory !== "brands"}
+              disabled={
+                (selectedCategory === "categories" && !image) ||
+                (selectedCategory === "models" && !value) ||
+                (selectedCategory === "brands" && !brands.length)
+              }
             >
               Save
             </Button>
