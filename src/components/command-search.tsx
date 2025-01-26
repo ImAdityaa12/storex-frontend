@@ -3,12 +3,6 @@
 import * as React from "react";
 import { Search, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { product } from "@/product";
@@ -18,6 +12,12 @@ import { DiscountModal } from "./discount-modal";
 import { getCookie } from "@/lib/utils";
 import userDetailsStore from "@/store/userDetail";
 import useCartStore from "@/store/cartStore";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "./ui/responsive-dialog";
 
 export default function CommandSearch() {
   const router = useRouter();
@@ -131,11 +131,11 @@ export default function CommandSearch() {
           size={10}
         />
       </Button>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]">
-          <DialogHeader>
-            <DialogTitle>Search Products</DialogTitle>
-          </DialogHeader>
+      <ResponsiveModal open={open} onOpenChange={setOpen}>
+        <ResponsiveModalContent className="sm:max-w-[425px] md:max-w-[600px] lg:max-w-[800px]">
+          <ResponsiveModalHeader>
+            <ResponsiveModalTitle>Search Products</ResponsiveModalTitle>
+          </ResponsiveModalHeader>
           <div className="grid gap-4 py-4">
             <Input
               placeholder="Search products..."
@@ -146,7 +146,7 @@ export default function CommandSearch() {
               {searchData.map((product) => (
                 <div
                   key={product._id}
-                  className="flex items-center space-x-4 py-2 border-b px-4 cursor-pointer"
+                  className="flex items-center space-x-4 py-2 border-b px-4 cursor-pointer max-sm:px-1"
                   onClick={() => {
                     router.push(`/product/${product._id}`);
                     setOpen(false);
@@ -160,8 +160,10 @@ export default function CommandSearch() {
                     className="rounded-md object-cover"
                   />
                   <div className="flex-grow">
-                    <h3 className="font-semibold">{product.title}</h3>
-                    <p className="text-sm text-gray-500">
+                    <h3 className="font-semibold max-sm:text-xs">
+                      {product.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 max-sm:text-xs">
                       ₹{product.price.toFixed(2)}
                     </p>
                   </div>
@@ -179,11 +181,11 @@ export default function CommandSearch() {
                       productId={product._id}
                       stock={product.totalStock}
                       key={product._id}
-                      buttonStyles="w-fit"
+                      buttonStyles="w-fit max-sm:text-xs"
                     />
                   ) : (
                     <Button
-                      className="w-fit"
+                      className="w-fit max-sm:text-xs"
                       onClick={() => addToCart(product)}
                       disabled={
                         product.totalStock === 0 || !userDetails.approved
@@ -199,8 +201,8 @@ export default function CommandSearch() {
               ))}
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </ResponsiveModalContent>
+      </ResponsiveModal>
     </div>
   );
 }
