@@ -29,6 +29,7 @@ export default function AddProductMain() {
   const [modelOption, setModelOption] = useState<Option[]>([]);
   const [categoryOption, setCategoryOption] = useState<Option[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<{
     image: string;
     productName: string;
@@ -85,6 +86,7 @@ export default function AddProductMain() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
     if (!image) {
       toast.error("Please upload an image");
       return;
@@ -131,8 +133,10 @@ export default function AddProductMain() {
       setDiscounts([]);
       setImage(null);
       setImagePreview(null);
+      setLoading(false);
       return;
     } else {
+      setLoading(false);
       toast.error(data?.message);
     }
   }
@@ -444,7 +448,8 @@ export default function AddProductMain() {
               !formData.price ||
               !formData.brand ||
               !formData.salePrice ||
-              !formData.totalStock
+              !formData.totalStock ||
+              loading
             }
             className="w-full"
           >
