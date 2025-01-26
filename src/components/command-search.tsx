@@ -20,6 +20,41 @@ export default function CommandSearch() {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [searchData, setSearchData] = React.useState<product[]>([]);
+
+  // Debounce function
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const debounce = <F extends (...args: any[]) => any>(
+    func: F,
+    delay: number
+  ) => {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: Parameters<F>) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  // Memoized search function with debounce
+  const debouncedSearchProducts = React.useMemo(
+    () =>
+      debounce(async (value: string) => {
+        try {
+          if (value !== "") {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/search?q=${value}`
+            );
+            const data: product[] = await response.json();
+            setSearchData(data);
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error("Error searching products");
+        }
+      }, 300), // 300ms delay
+    []
+  );
+
+  // Keyboard shortcut effect
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -31,31 +66,20 @@ export default function CommandSearch() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
-  async function searchProducts(value: string) {
-    try {
-      if (query !== "") {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/search?q=${value}`
-        );
-        const data: product[] = await response.json();
-        setSearchData(data);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error searching products");
-    }
-  }
+
+  // Search effect with debounced search
   React.useEffect(() => {
-    searchProducts(query);
+    debouncedSearchProducts(query);
     if (query === "") {
       setSearchData([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
+  }, [query, debouncedSearchProducts]);
+
+  // Initial search on component mount
   React.useEffect(() => {
-    searchProducts("");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    debouncedSearchProducts("");
+  }, [debouncedSearchProducts]);
+
   return (
     <div className="md:w-full">
       <Button
