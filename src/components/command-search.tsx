@@ -176,10 +176,6 @@ export default function CommandSearch() {
                 <div
                   key={product._id}
                   className="flex items-center space-x-4 py-2 border-b px-4 cursor-pointer max-sm:px-1"
-                  onClick={() => {
-                    router.push(`/product/${product._id}`);
-                    setOpen(false);
-                  }}
                 >
                   <Image
                     src={product.image}
@@ -187,6 +183,10 @@ export default function CommandSearch() {
                     width={50}
                     height={50}
                     className="rounded-md object-cover"
+                    onClick={() => {
+                      router.push(`/product/${product._id}`);
+                      setOpen(false);
+                    }}
                   />
                   <div className="flex-grow">
                     <h3 className="font-semibold max-sm:text-xs">
