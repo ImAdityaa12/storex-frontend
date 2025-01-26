@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { getCookie } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import userDetailsStore from "@/store/userDetail";
 
 export default function CategoriesPageMain() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function CategoriesPageMain() {
       image: string;
     }[]
   >([]);
+  const { userDetails } = userDetailsStore();
   const getCategory = async () => {
     try {
       const response = await fetch(
@@ -34,7 +36,12 @@ export default function CategoriesPageMain() {
     }
   };
   useEffect(() => {
-    getCategory();
+    if (!userDetails.approved) {
+      router.push("/shop");
+    } else {
+      getCategory();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="container mx-auto px-4 py-8">

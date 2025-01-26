@@ -106,10 +106,22 @@ export default function LoginPage() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex flex-col gap-2 items-start">
+          <p className="text-sm text-muted-foreground">
+            Forget Password?
+            <Link
+              href="/forget-password"
+              className="bg-blue-500 px-3 py-1 text-black rounded-xl hover:bg-blue-600 transition duration-300 inline-block ml-2 underline"
+            >
+              Forget Password
+            </Link>
+          </p>
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="underline hover:text-primary">
+            <Link
+              href="/register"
+              className="bg-blue-500 px-3 py-1 text-black rounded-xl hover:bg-blue-600 transition duration-300 inline-block ml-2 underline"
+            >
               Create New Account
             </Link>
           </p>

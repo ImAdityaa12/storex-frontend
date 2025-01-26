@@ -13,6 +13,7 @@ import { ShoppingCart } from "lucide-react";
 import { getCookie } from "@/lib/utils";
 import { toast } from "sonner";
 import useCartStore from "@/store/cartStore";
+import userDetailsStore from "@/store/userDetail";
 
 interface DiscountItem {
   minQuantity: number;
@@ -23,11 +24,17 @@ interface DiscountItem {
 interface DiscountModalProps {
   discountData: DiscountItem[];
   productId: string;
+  stock: number;
 }
 
-export function DiscountModal({ discountData, productId }: DiscountModalProps) {
+export function DiscountModal({
+  discountData,
+  productId,
+  stock,
+}: DiscountModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { getCartItems } = useCartStore();
+  const { userDetails } = userDetailsStore();
   const addToCart = async (
     quantity: number,
     minQuantityFlag: boolean = true
@@ -63,8 +70,8 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
       <ResponsiveModalTrigger asChild>
         <Button
           className="w-full"
-          // variant={"outline"}
           onClick={() => setIsOpen(true)}
+          disabled={!userDetails.approved}
         >
           <ShoppingCart className="w-4 h-4 mr-2 max-sm:mr-0" />
           Add options
@@ -82,14 +89,19 @@ export function DiscountModal({ discountData, productId }: DiscountModalProps) {
                 {` piece${item.minQuantity > 1 ? "s" : ""}`} or above- ₹
                 {item.discountedPrice / item.minQuantity} per piece
               </span>
-              <Button
-                onClick={() => {
-                  addToCart(item.minQuantity);
-                  setIsOpen(false);
-                }}
-              >
-                Add to Cart
-              </Button>
+              {stock < item.minQuantity ? (
+                <Button disabled>Out of stock</Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    addToCart(item.minQuantity);
+                    setIsOpen(false);
+                  }}
+                  disabled={!userDetails.approved}
+                >
+                  Add to Cart
+                </Button>
+              )}
             </div>
           ))}
         </div>

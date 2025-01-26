@@ -38,56 +38,81 @@ export default function RegisterForm() {
   const [step, setStep] = useState(1);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [image, setImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, touchedFields },
     trigger,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    mode: "onChange",
+    mode: "onTouched",
   });
 
   const onSubmit = async (data: FormData) => {
-    // console.log(data, image);
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}users/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userName: data.userName,
-          email: data.email,
-          password: data.password,
-          image: image || null,
-          role: "user",
-          name: data.name,
-          phoneNumber: data.phoneNumber,
-        }),
-        credentials: "include",
+    const isValid = await trigger();
+    const toastId = toast.loading("Registering...");
+    if (isValid) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}users/register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userName: data.userName,
+              email: data.email,
+              password: data.password,
+              image: image || null,
+              role: "user",
+              name: data.name,
+              phoneNumber: data.phoneNumber,
+            }),
+            credentials: "include",
+          }
+        );
+        const responseJson = await response.json();
+        if (response.ok) {
+          setCookie("token", responseJson?.token);
+          toast.success(responseJson?.message, { id: toastId });
+          router.push("/shop");
+        } else {
+          toast.error(responseJson?.message, { id: toastId });
+        }
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "An error occurred during registration",
+          { id: toastId }
+        );
+      } finally {
+        setIsLoading(false);
       }
-    );
-    const responsejson = await response.json();
-    if (response.status === 201) {
-      setCookie("token", responsejson?.token);
-      toast.success(responsejson?.message);
-      router.push("/shop");
-    } else {
-      toast.error(responsejson?.message);
     }
   };
 
   const handleNext = async () => {
-    const isValid = await trigger(["userName", "email", "password"]);
+    const touchedFirstStepFields = Object.keys(touchedFields).filter((field) =>
+      ["userName", "email", "password"].includes(field)
+    );
+    const isValid = await trigger(
+      touchedFirstStepFields as Array<keyof FormData>,
+      {
+        shouldFocus: true,
+      }
+    );
     if (isValid) setStep(2);
   };
 
   const handleBack = () => {
     setStep(1);
   };
+
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -115,7 +140,6 @@ export default function RegisterForm() {
         );
 
         if (!response.ok) {
-          toast.error("Error uploading image", { id: message, duration: 3000 });
           throw new Error("Image upload failed");
         }
 
@@ -131,6 +155,7 @@ export default function RegisterForm() {
       }
     }
   };
+
   const fadeInOut = {
     initial: { opacity: 0, x: -20 },
     animate: { opacity: 1, x: 0 },
@@ -153,7 +178,7 @@ export default function RegisterForm() {
                     <div className="flex flex-col space-y-1.5">
                       <Label htmlFor="userName">Username</Label>
                       <Input id="userName" {...register("userName")} />
-                      {errors.userName && (
+                      {touchedFields.userName && errors.userName && (
                         <Alert variant="destructive">
                           <AlertDescription>
                             {errors.userName.message}
@@ -164,7 +189,7 @@ export default function RegisterForm() {
                     <div className="flex flex-col space-y-1.5">
                       <Label htmlFor="email">Email</Label>
                       <Input id="email" type="email" {...register("email")} />
-                      {errors.email && (
+                      {touchedFields.email && errors.email && (
                         <Alert variant="destructive">
                           <AlertDescription>
                             {errors.email.message}
@@ -179,7 +204,7 @@ export default function RegisterForm() {
                         type="password"
                         {...register("password")}
                       />
-                      {errors.password && (
+                      {touchedFields.password && errors.password && (
                         <Alert variant="destructive">
                           <AlertDescription>
                             {errors.password.message}
@@ -188,7 +213,11 @@ export default function RegisterForm() {
                       )}
                     </div>
                   </div>
-                  <Button className="mt-4 w-full" onClick={handleNext}>
+                  <Button
+                    className="mt-4 w-full"
+                    onClick={handleNext}
+                    type="button"
+                  >
                     Next
                   </Button>
                 </motion.div>
@@ -198,7 +227,7 @@ export default function RegisterForm() {
                     <div className="flex flex-col space-y-1.5">
                       <Label htmlFor="name">Name</Label>
                       <Input id="name" {...register("name")} />
-                      {errors.name && (
+                      {touchedFields.name && errors.name && (
                         <Alert variant="destructive">
                           <AlertDescription>
                             {errors.name.message}
@@ -209,7 +238,7 @@ export default function RegisterForm() {
                     <div className="flex flex-col space-y-1.5">
                       <Label htmlFor="phoneNumber">Phone Number</Label>
                       <Input id="phoneNumber" {...register("phoneNumber")} />
-                      {errors.phoneNumber && (
+                      {touchedFields.phoneNumber && errors.phoneNumber && (
                         <Alert variant="destructive">
                           <AlertDescription>
                             {errors.phoneNumber.message}
@@ -226,14 +255,14 @@ export default function RegisterForm() {
                       />
                       {imagePreview && (
                         <Image
-                          src={imagePreview}
+                          src={imagePreview || "/placeholder.svg"}
                           alt="Preview"
                           width={200}
                           height={200}
                           className="mt-2 max-w-full h-auto"
                         />
                       )}
-                      {errors.image && (
+                      {touchedFields.image && errors.image && (
                         <Alert variant="destructive">
                           <AlertDescription>
                             {errors.image.message}
@@ -243,10 +272,16 @@ export default function RegisterForm() {
                     </div>
                   </div>
                   <div className="flex justify-between mt-4">
-                    <Button variant="outline" onClick={handleBack}>
+                    <Button
+                      variant="outline"
+                      onClick={handleBack}
+                      type="button"
+                    >
                       Back
                     </Button>
-                    <Button type="submit">Register</Button>
+                    <Button type="submit" disabled={isLoading}>
+                      {isLoading ? "Registering..." : "Register"}
+                    </Button>
                   </div>
                 </motion.div>
               )}
