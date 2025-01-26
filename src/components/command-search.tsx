@@ -33,11 +33,13 @@ export default function CommandSearch() {
   }, []);
   async function searchProducts(value: string) {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/search?q=${value}`
-      );
-      const data: product[] = await response.json();
-      setSearchData(data);
+      if (query !== "") {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop/search?q=${value}`
+        );
+        const data: product[] = await response.json();
+        setSearchData(data);
+      }
     } catch (error) {
       console.log(error);
       toast.error("Error searching products");
@@ -45,6 +47,10 @@ export default function CommandSearch() {
   }
   React.useEffect(() => {
     searchProducts(query);
+    if (query === "") {
+      setSearchData([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
   React.useEffect(() => {
     searchProducts("");
