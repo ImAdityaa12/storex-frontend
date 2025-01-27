@@ -36,14 +36,14 @@ export function Sidebar() {
         >
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src={"/ajito-logo.png"}
+              src={"/logo-new.png"}
               alt="Ajito Logo"
-              width={40}
-              height={40}
+              width={20}
+              height={20}
             />
             <h1
               className={cn(
-                "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
+                "font-semibold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
                 !getOpenState()
                   ? "-translate-x-96 opacity-0 hidden"
                   : "translate-x-0 opacity-100"

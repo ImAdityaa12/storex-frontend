@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MenuIcon, PanelsTopLeft } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/admin-panel/menu";
@@ -10,6 +10,7 @@ import {
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet";
+import Image from "next/image";
 
 export function SheetMenu() {
   return (
@@ -27,8 +28,16 @@ export function SheetMenu() {
             asChild
           >
             <Link href="/shop" className="flex items-center gap-2">
-              <PanelsTopLeft className="w-6 h-6 mr-1" />
-              <SheetTitle className="font-bold text-lg">Ajit Agency</SheetTitle>
+              <Image
+                src="/logo-new.png"
+                alt="Ajito Logo"
+                width={18}
+                height={18}
+                className="rounded-full"
+              />
+              <SheetTitle className="font-bold text-lg">
+                Ajit Agencies
+              </SheetTitle>
             </Link>
           </Button>
         </SheetHeader>
