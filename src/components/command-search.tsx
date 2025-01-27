@@ -126,6 +126,7 @@ export default function CommandSearch() {
       <Button
         onClick={() => setOpen(true)}
         className="relative lg:min-w-[20rem] max-lg:hidden justify-start text-sm text-muted-foreground flex items-center text-white ml-auto dark:bg-gray-900 border-2 hover:bg-transparent hover:text-blue-400 border-blue-400 dark:border-gray-900 dark:hover:bg-gray-800 dark:focus:bg-gray-800 group"
+        disabled={!userDetails.approved}
       >
         Search
         <span className="w-full">
