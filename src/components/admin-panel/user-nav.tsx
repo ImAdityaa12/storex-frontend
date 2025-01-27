@@ -61,7 +61,11 @@ export function UserNav() {
                 className="relative h-8 w-8 rounded-full max-lg:hidden"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={userDetails.image} alt="Avatar" />
+                  <AvatarImage
+                    src={userDetails.image}
+                    alt="Avatar"
+                    className="object-cover"
+                  />
                   <AvatarFallback className="bg-transparent">
                     {userDetails.name.charAt(0)}
                   </AvatarFallback>

@@ -73,35 +73,6 @@ export default function ProfilePage() {
     }
   };
   useEffect(() => {
-    // Fetch orders from your API here
-    // For demonstration, we'll use a mock order
-    // const mockOrder: Order = {
-    //   _id: "12345",
-    //   items: [
-    //     {
-    //       productId: "prod1",
-    //       title: "Sample Product",
-    //       price: "19.99",
-    //       image: "/placeholder.svg?height=100&width=100",
-    //       salePrice: 15.99,
-    //       quantity: 2,
-    //     },
-    //   ],
-    //   total: 31.98,
-    //   status: "Processing",
-    //   date: "2023-05-01",
-    //   address: {
-    //     addressId: "12345",
-    //     address: "123 Main St",
-    //     city: "Anytown",
-    //     notes: "Special instructions",
-    //     phone: "555-1234",
-    //     pincode: "12345",
-    //   },
-    //   paymentMethod: "Credit Card",
-    //   paymentStatus: "Paid",
-    // };
-    // setOrders([mockOrder]);
     getUserOrders();
   }, []);
   useEffect(() => {
@@ -112,7 +83,11 @@ export default function ProfilePage() {
     <Card>
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="w-24 h-24 rounded-lg">
-          <AvatarImage src={userDetails.image} alt={userDetails.name} />
+          <AvatarImage
+            src={userDetails.image}
+            alt={userDetails.name}
+            className="object-cover"
+          />
           <AvatarFallback>
             {userDetails.name
               .split(" ")
