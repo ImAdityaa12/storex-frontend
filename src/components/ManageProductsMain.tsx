@@ -15,7 +15,7 @@ const ManageProduct = () => {
     getTags();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [products, setProducts] = useState<
@@ -24,29 +24,27 @@ const ManageProduct = () => {
   const next = async () => {
     setLoading(true);
     try {
-      setTimeout(async () => {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop?page=${page}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${getCookie("token")}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop?page=${page}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
         }
-        const data = await response.json();
-        setProducts(products.concat(data.products));
-        setPage((prev) => prev + 1);
-        if (data.products.length < 3) {
-          console.log(data.products.length);
-          setHasMore(false);
-        }
-        setLoading(false);
-      }, 800);
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setProducts(products.concat(data.products));
+      const cuurentPage = page + 1;
+      setPage(cuurentPage);
+      if (data.products.length < 10) {
+        setHasMore(false);
+      }
+      setLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to fetch products: ${error.message}`);
