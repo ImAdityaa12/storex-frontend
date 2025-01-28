@@ -195,7 +195,7 @@ export default function CommandSearch() {
                     </h3>
                     {userDetails.approved && (
                       <p className="text-sm text-gray-500 max-sm:text-xs">
-                        ₹{product.price.toFixed(2)}
+                        ₹{product.salePrice.toFixed(2)}
                       </p>
                     )}
                   </div>

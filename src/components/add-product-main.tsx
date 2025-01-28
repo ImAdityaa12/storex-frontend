@@ -414,7 +414,7 @@ export default function AddProductMain() {
           </div>
 
           <div>
-            <Label htmlFor="totalStock">Total Stock</Label>
+            <Label htmlFor="totalStock">Limited Stock</Label>
             <Input
               id="limitedStock"
               name="limitedStock"
@@ -425,7 +425,7 @@ export default function AddProductMain() {
             />
           </div>
           <div>
-            <Label htmlFor="totalStock">Add Limited Stock</Label>
+            <Label htmlFor="totalStock">Total Stock</Label>
             <Input
               id="totalStock"
               name="totalStock"
