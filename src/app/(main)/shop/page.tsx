@@ -34,7 +34,7 @@ export default function DashboardPage() {
       setProducts(products.concat(data.products));
       const nextPage = page + 1;
       setPage(nextPage);
-      if (data.products.length < 3) {
+      if (data.products.length < 10) {
         console.log(data.products.length);
         setHasMore(false);
       }
