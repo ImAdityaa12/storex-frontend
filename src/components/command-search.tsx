@@ -193,9 +193,11 @@ export default function CommandSearch() {
                     <h3 className="font-semibold max-sm:text-xs">
                       {product.title}
                     </h3>
-                    <p className="text-sm text-gray-500 max-sm:text-xs">
-                      ₹{product.price.toFixed(2)}
-                    </p>
+                    {userDetails.approved && (
+                      <p className="text-sm text-gray-500 max-sm:text-xs">
+                        ₹{product.price.toFixed(2)}
+                      </p>
+                    )}
                   </div>
                   {product.quantityDiscounts.length > 0 ? (
                     <DiscountModal
