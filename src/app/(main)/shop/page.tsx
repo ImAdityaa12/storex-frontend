@@ -50,9 +50,6 @@ export default function DashboardPage() {
     next();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    console.log(page);
-  }, [page]);
   return (
     <ContentLayout title="Products">
       <div className="grid grid-cols-[repeat(auto-fill,minmax(257px,1fr))] gap-4 max-sm:grid-cols-2 max-sm:gap-2">
