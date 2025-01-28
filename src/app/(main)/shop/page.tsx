@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 export default function DashboardPage() {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [products, setProducts] = useState<
@@ -17,29 +17,28 @@ export default function DashboardPage() {
   const next = async () => {
     setLoading(true);
     try {
-      setTimeout(async () => {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop?page=${page}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${getCookie("token")}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}products/shop?page=${page}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
         }
-        const data = await response.json();
-        setProducts(products.concat(data.products));
-        setPage((prev) => prev + 1);
-        if (data.products.length < 3) {
-          console.log(data.products.length);
-          setHasMore(false);
-        }
-        setLoading(false);
-      }, 800);
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setProducts(products.concat(data.products));
+      const nextPage = page + 1;
+      setPage(nextPage);
+      if (data.products.length < 3) {
+        console.log(data.products.length);
+        setHasMore(false);
+      }
+      setLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to fetch products: ${error.message}`);
@@ -51,6 +50,9 @@ export default function DashboardPage() {
     next();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    console.log(page);
+  }, [page]);
   return (
     <ContentLayout title="Products">
       <div className="grid grid-cols-[repeat(auto-fill,minmax(257px,1fr))] gap-4 max-sm:grid-cols-2 max-sm:gap-2">
