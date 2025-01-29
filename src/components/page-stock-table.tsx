@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { getCookie } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface InventoryItem {
   title: string;
@@ -52,6 +53,7 @@ export default function InventoryTableWithSearch() {
             item._id === id ? { ...item, totalStock: newValue } : item
           )
         );
+        toast.success("Stock updated successfully");
         // getProuctStock();
       } else {
         throw new Error("Failed to update stock");
