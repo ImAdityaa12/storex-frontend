@@ -56,12 +56,14 @@ export default function Cart() {
                   className="rounded-md"
                 />
                 <div className="flex-1">
-                  <h3 className="font-semibold max-sm:text-xs">{item.title}</h3>
+                  <h3 className="font-semibold max-sm:text-xs line-clamp-2 max-sm:min-w-[80px]">
+                    {item.title}
+                  </h3>
                   <p className="text-sm text-gray-500">
                     ₹{item.price.toFixed(1)}
                   </p>
                 </div>
-                <div className="w-full h-full flex items-center justify-between sm:hidden gap-1">
+                <div className="w-full h-full flex items-center justify-center sm:hidden">
                   <Minus
                     className="h-4 w-4"
                     onClick={() => updateQuantity(item.productId, "minus")}
