@@ -111,6 +111,7 @@ export default function CommandSearch() {
     }
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Search effect with debounced search
