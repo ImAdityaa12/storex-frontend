@@ -10,7 +10,7 @@ import { EditIcon, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
-import { getCookie } from "@/lib/utils";
+import { cn, getCookie } from "@/lib/utils";
 import useProductStore from "@/store/productsStore";
 import {
   Select,
@@ -29,7 +29,13 @@ import {
 } from "./ui/responsive-dialog";
 import { QuantityDiscount } from "./add-product-main";
 
-export default function ProductEditModal({ product }: { product: product }) {
+export default function ProductEditModal({
+  product,
+  style,
+}: {
+  product: product;
+  style?: string;
+}) {
   const { getProducts, modelOptions, brands, categoryOption } =
     useProductStore();
   const [discounts, setDiscounts] = useState<QuantityDiscount[]>(
@@ -179,7 +185,7 @@ export default function ProductEditModal({ product }: { product: product }) {
   return (
     <ResponsiveModal>
       <ResponsiveModalTrigger asChild>
-        <Button className="w-full">
+        <Button className={cn("w-full", style)}>
           Edit <EditIcon className="w-5 h-5 text-black" />
         </Button>
       </ResponsiveModalTrigger>

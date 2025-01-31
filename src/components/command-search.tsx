@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { product } from "@/product";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { DiscountModal } from "./discount-modal";
 import { getCookie } from "@/lib/utils";
@@ -18,6 +18,7 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "./ui/responsive-dialog";
+import ProductEditModal from "./product-edit-modal";
 
 export default function CommandSearch() {
   const router = useRouter();
@@ -26,8 +27,10 @@ export default function CommandSearch() {
   const [searchData, setSearchData] = React.useState<product[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [noProducts, setNoProducts] = React.useState(false);
+  const [edit, setEdit] = React.useState(false);
   const { userDetails } = userDetailsStore();
   const { getCartItems } = useCartStore();
+  const pathname = usePathname();
   const addToCart = async (product: product) => {
     const token = getCookie("token");
     try {
@@ -103,7 +106,9 @@ export default function CommandSearch() {
         setOpen((open) => !open);
       }
     };
-
+    if (pathname === "/manage-product") {
+      setEdit(true);
+    }
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
@@ -199,7 +204,13 @@ export default function CommandSearch() {
                       </p>
                     )}
                   </div>
-                  {product.quantityDiscounts.length > 0 ? (
+                  {edit && userDetails.role === "admin" ? (
+                    <ProductEditModal
+                      product={product}
+                      style="w-fit"
+                      key={product._id}
+                    />
+                  ) : product.quantityDiscounts.length > 0 ? (
                     <DiscountModal
                       discountData={product.quantityDiscounts}
                       productId={product._id}
