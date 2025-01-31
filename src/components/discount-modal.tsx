@@ -71,7 +71,7 @@ export function DiscountModal({
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
       <ResponsiveModalTrigger asChild>
         <Button
-          className={cn("w-full", buttonStyles)}
+          className={cn("w-full max-sm:text-xs", buttonStyles)}
           onClick={() => setIsOpen(true)}
           disabled={!userDetails.approved}
         >

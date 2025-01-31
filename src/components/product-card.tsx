@@ -219,7 +219,7 @@ export default function ProductCard({
           />
         ) : (
           <Button
-            className="w-full"
+            className="w-full max-sm:text-xs"
             onClick={() => addToCart(product)}
             disabled={product.totalStock === 0 || !userDetails.approved}
           >
