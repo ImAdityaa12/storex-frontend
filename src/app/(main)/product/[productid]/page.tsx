@@ -335,7 +335,7 @@ function ProductCard({ product }: { product: product }) {
             {product.title}
           </h3>
           <p className="text-lg font-bold max-sm:text-sm">
-            ₹{product.price.toFixed(2)}
+            ₹{product.salePrice.toFixed(2)}
           </p>
         </div>
       </CardContent>
