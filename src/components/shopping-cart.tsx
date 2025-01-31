@@ -37,7 +37,7 @@ export default function Cart() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg max-h-[100dvh]">
+      <SheetContent className="w-full sm:max-w-lg max-h-[100dvh] max-sm:px-2">
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
         </SheetHeader>
@@ -46,7 +46,7 @@ export default function Cart() {
             cartItems.map((item) => (
               <div
                 key={item.productId}
-                className="flex items-center space-x-4 py-4 border-b"
+                className="flex items-center space-x-4 py-4 border-b max-sm:space-x-2"
               >
                 <Image
                   src={item.image}
@@ -58,13 +58,10 @@ export default function Cart() {
                 <div className="flex-1">
                   <h3 className="font-semibold max-sm:text-xs">{item.title}</h3>
                   <p className="text-sm text-gray-500">
-                    ₹{item.price.toFixed(2)}
+                    ₹{item.price.toFixed(1)}
                   </p>
-                  {/* <span className="text-sm text-gray-500 line-through">
-                  ₹{item.originalPrice}
-                </span> */}
                 </div>
-                <div className="w-full h-full flex items-center justify-between sm:hidden">
+                <div className="w-full h-full flex items-center justify-between sm:hidden gap-1">
                   <Minus
                     className="h-4 w-4"
                     onClick={() => updateQuantity(item.productId, "minus")}

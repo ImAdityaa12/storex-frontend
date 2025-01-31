@@ -56,8 +56,8 @@ export default function NumberInputModal({ productId }: { productId: string }) {
   return (
     <ResponsiveModal open={open} onOpenChange={setOpen}>
       <ResponsiveModalTrigger asChild>
-        <Button variant="outline">
-          <Edit />
+        <Button variant="outline" className="max-sm:w-4">
+          <Edit className="max-sm:h-2 max-sm:w-2" size={2} />
         </Button>
       </ResponsiveModalTrigger>
       <ResponsiveModalContent className="sm:max-w-[425px] pb-10">
