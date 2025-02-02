@@ -46,7 +46,7 @@ export default function Cart() {
             cartItems.map((item) => (
               <div
                 key={item.productId}
-                className="flex items-center space-x-4 py-4 border-b max-sm:space-x-2"
+                className="flex items-center justify-between space-x-4 py-4 border-b max-sm:space-x-2"
               >
                 <Image
                   src={item.image}
@@ -55,7 +55,7 @@ export default function Cart() {
                   height={64}
                   className="rounded-md"
                 />
-                <div className="flex-1">
+                <div className="sm:flex-1">
                   <h3 className="font-semibold max-sm:text-xs line-clamp-2 max-sm:min-w-[80px]">
                     {item.title}
                   </h3>
@@ -63,7 +63,7 @@ export default function Cart() {
                     ₹{item.price.toFixed(1)}
                   </p>
                 </div>
-                <div className="w-full h-full flex items-center justify-center sm:hidden">
+                <div className="w-full max-sm:max-w-[40%] h-full flex items-center justify-between sm:hidden">
                   <Minus
                     className="h-4 w-4"
                     onClick={() => updateQuantity(item.productId, "minus")}
@@ -99,6 +99,7 @@ export default function Cart() {
                   variant="ghost"
                   size="icon"
                   onClick={() => removeItem(item.productId)}
+                  className="ml-auto"
                 >
                   <Trash2 className="h-4 w-4 text-red-400" />
                 </Button>
