@@ -36,6 +36,7 @@ export default function ProductEditModal({
   product: product;
   style?: string;
 }) {
+  console.log(product);
   const { getProducts, modelOptions, brands, categoryOption } =
     useProductStore();
   const [discounts, setDiscounts] = useState<QuantityDiscount[]>(
@@ -69,7 +70,7 @@ export default function ProductEditModal({
     description: product.description,
     price: product.price.toString(),
     salePrice: product.salePrice.toString(),
-    totalStock: product.totalStock.toString(),
+    totalStock: product.totalStock !== null ? product.totalStock.toString() : "0",
     title: product.title,
     limitedStock:
       product.limitedStock === undefined ? -1 : product.limitedStock,
