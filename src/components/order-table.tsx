@@ -37,7 +37,7 @@ export function OrderTable({ orders }: OrderTableProps) {
             <TableRow key={order._id}>
               <TableCell>{order._id}</TableCell>
               <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
-              <TableCell>${order.total.toFixed(2)}</TableCell>
+              <TableCell>₹{order.total.toFixed(2)}</TableCell>
               <TableCell>{order.status}</TableCell>
               <TableCell>{order.paymentMethod}</TableCell>
               <TableCell>{order.paymentStatus}</TableCell>
