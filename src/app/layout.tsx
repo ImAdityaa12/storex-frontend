@@ -11,8 +11,13 @@ export const metadata: Metadata = {
   description:
     "Your trusted partner for quality products and exceptional service",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/logo-new.png",
+    other: {
+      rel: "apple-touch-icon-precomposed",
+      url: "/logo-new.png",
+    },
   },
 };
 
