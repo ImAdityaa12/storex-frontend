@@ -10,6 +10,10 @@ export const metadata: Metadata = {
   title: "Ajit Agencies",
   description:
     "Your trusted partner for quality products and exceptional service",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
