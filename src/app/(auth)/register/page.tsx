@@ -225,7 +225,7 @@ export default function RegisterForm() {
                 <motion.div key="step2" {...fadeInOut}>
                   <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-1.5">
-                      <Label htmlFor="name">Name</Label>
+                      <Label htmlFor="name">Firm Name</Label>
                       <Input id="name" {...register("name")} />
                       {touchedFields.name && errors.name && (
                         <Alert variant="destructive">
