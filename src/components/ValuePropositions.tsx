@@ -17,7 +17,7 @@ const propositions = [
     color: "from-blue-500 to-blue-600",
   },
   {
-    title: "Secure Payments",
+    title: "Payments Options",
     description: "Multiple payment options available",
     icon: CreditCard,
     color: "from-green-500 to-green-600",
@@ -27,12 +27,6 @@ const propositions = [
     description: "Genuine products with warranty",
     icon: Shield,
     color: "from-purple-500 to-purple-600",
-  },
-  {
-    title: "24/7 Support",
-    description: "Always here to help you",
-    icon: HeadphonesIcon,
-    color: "from-orange-500 to-orange-600",
   },
 ];
 

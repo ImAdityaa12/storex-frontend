@@ -20,13 +20,6 @@ export default function Features() {
       color: "from-green-400 to-green-600",
     },
     {
-      icon: HeadphonesIcon,
-      title: "24/7 Support",
-      description:
-        "Dedicated customer support team available round the clock for seamless experience.",
-      color: "from-blue-400 to-blue-600",
-    },
-    {
       icon: Compass,
       title: "Wide Range",
       description:
