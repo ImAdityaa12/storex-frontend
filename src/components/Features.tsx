@@ -17,7 +17,7 @@ export default function Features() {
       title: "Best Value",
       description:
         "Competitive prices on all our electrical and electronic products with no hidden costs.",
-      color: "from-green-400 to-green-600",
+      color: "from-theme-yellow to-yellow-600",
     },
     {
       icon: HeadphonesIcon,
@@ -38,7 +38,7 @@ export default function Features() {
       title: "Fast Delivery",
       description:
         "Quick and reliable delivery across Deoria and surrounding areas.",
-      color: "from-orange-400 to-orange-600",
+      color: "from-theme-orange to-orange-600",
     },
     {
       icon: Shield,
@@ -68,7 +68,7 @@ export default function Features() {
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-200 mb-6">
             Why Choose{" "}
-            <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-theme-yellow to-theme-orange bg-clip-text text-transparent">
               Ajit Agencies?
             </span>
           </h2>

@@ -25,7 +25,7 @@ function Hero() {
             className="mb-8"
           >
             <div className="relative mx-auto w-20 h-20 mb-6">
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-theme-yellow to-theme-orange rounded-full animate-pulse"></div>
               <Store className="h-16 w-16 text-white absolute top-2 left-2" />
             </div>
           </motion.div>
@@ -38,7 +38,7 @@ function Hero() {
             className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
           >
             Welcome to{" "}
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent whitespace-nowrap">
+            <span className="bg-gradient-to-r from-theme-yellow to-theme-orange bg-clip-text text-transparent whitespace-nowrap">
               Ajit Agencies
             </span>
             <br />
@@ -66,15 +66,15 @@ function Hero() {
             className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 max-w-2xl mx-auto"
           >
             <div className="flex items-center justify-center space-x-2 text-white/80">
-              <Zap className="h-5 w-5 text-yellow-400" />
+              <Zap className="h-5 w-5 text-theme-yellow" />
               <span className="text-sm">Fast Delivery</span>
             </div>
             <div className="flex items-center justify-center space-x-2 text-white/80">
-              <Award className="h-5 w-5 text-yellow-400" />
+              <Award className="h-5 w-5 text-theme-yellow" />
               <span className="text-sm">Quality Products</span>
             </div>
             <div className="flex items-center justify-center space-x-2 text-white/80">
-              <ShoppingCart className="h-5 w-5 text-yellow-400" />
+              <ShoppingCart className="h-5 w-5 text-theme-yellow" />
               <span className="text-sm">Easy Ordering</span>
             </div>
           </motion.div>
@@ -88,14 +88,14 @@ function Hero() {
           >
             <Link
               href="/shop"
-              className="group bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-gray-900 font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center space-x-2"
+              className="group bg-gradient-to-r from-theme-yellow to-theme-orange hover:from-yellow-600 hover:to-orange-600 text-gray-900 font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center space-x-2"
             >
               <ShoppingCart className="h-5 w-5" />
               <span>Start Ordering</span>
             </Link>
             <Link
               href="/categories"
-              className="group border-2 border-white/30 hover:border-yellow-400 text-white hover:text-yellow-400 font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
+              className="group border-2 border-white/30 hover:border-theme-yellow text-white hover:text-theme-yellow font-semibold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
             >
               Browse Categories
             </Link>
@@ -109,25 +109,25 @@ function Hero() {
             className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto"
           >
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-yellow-400">
+              <div className="text-2xl md:text-3xl font-bold text-theme-yellow">
                 500+
               </div>
               <div className="text-sm text-gray-300">Products</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-yellow-400">
+              <div className="text-2xl md:text-3xl font-bold text-theme-yellow">
                 1000+
               </div>
               <div className="text-sm text-gray-300">Happy Customers</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-yellow-400">
+              <div className="text-2xl md:text-3xl font-bold text-theme-yellow">
                 5+
               </div>
               <div className="text-sm text-gray-300">Years Experience</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-yellow-400">
+              <div className="text-2xl md:text-3xl font-bold text-theme-yellow">
                 24/7
               </div>
               <div className="text-sm text-gray-300">Support</div>

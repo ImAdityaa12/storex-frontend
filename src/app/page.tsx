@@ -13,7 +13,7 @@ export default function Home() {
     <div className="relative">
       {/* Hero Section with Animated Background */}
       <div className="relative">
-        <div className="absolute h-screen w-full rounded-lg overflow-hidden bg-[#060606]">
+        <div className="absolute h-screen w-full rounded-lg overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black">
           <AnimatedGridPattern
             numSquares={30}
             maxOpacity={1}
@@ -21,7 +21,8 @@ export default function Home() {
             repeatDelay={1}
             className={cn(
               "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
-              "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12"
+              "inset-x-0 inset-y-[-30%] h-[200%] skew-y-12",
+              "text-theme-orange"
             )}
           />
         </div>

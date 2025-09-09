@@ -54,6 +54,9 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        // Custom theme colors
+        'theme-orange': '#f97316',
+        'theme-yellow': '#eab308',
       },
       borderRadius: {
         lg: "var(--radius)",
