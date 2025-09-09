@@ -79,8 +79,8 @@ export default function CustomerReviews() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Don't just take our word for it - hear from our satisfied customers
-            across Deoria and beyond
+            Don&apos;t just take our word for it - hear from our satisfied
+            customers across Deoria and beyond
           </p>
         </motion.div>
 
@@ -116,7 +116,7 @@ export default function CustomerReviews() {
 
                 {/* Review Text */}
                 <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed italic">
-                  "{review.comment}"
+                  &apos;{review.comment}&apos;
                 </p>
 
                 {/* Customer Info */}

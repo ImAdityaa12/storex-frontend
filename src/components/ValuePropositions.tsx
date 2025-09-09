@@ -3,7 +3,6 @@
 import {
   Truck,
   Shield,
-  RotateCcw,
   HeadphonesIcon,
   MapPin,
   CreditCard,
@@ -62,8 +61,8 @@ export default function ValuePropositions() {
             to You
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            We're committed to providing the best shopping experience with
-            unmatched service quality
+            We&apos;re committed to providing the best shopping experience with
+            un&apos;matched service quality
           </p>
         </motion.div>
 

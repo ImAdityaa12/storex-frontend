@@ -4,7 +4,6 @@ import React from "react";
 import { Store, ShoppingCart, Zap, Award } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 function Hero() {
   return (

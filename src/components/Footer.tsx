@@ -27,7 +27,7 @@ export default function Footer() {
               </div>
               <p className="text-gray-400 mb-6 leading-relaxed">
                 Your trusted partner for quality electrical and electronic
-                products in Deoria. We've been serving the community with
+                products in Deoria. We&apos;ve been serving the community with
                 excellence for over 5 years.
               </p>
               <div className="space-y-3">
