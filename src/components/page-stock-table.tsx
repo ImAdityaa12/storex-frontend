@@ -164,6 +164,7 @@ export default function InventoryTableWithSearch() {
     }
   }, []);
 
+  // Combined effect for search and pagination
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchTerm) {
@@ -175,12 +176,6 @@ export default function InventoryTableWithSearch() {
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, currentPage, itemsPerPage, searchProducts, getProductStock]);
-
-  useEffect(() => {
-    if (!searchTerm) {
-      getProductStock(currentPage, itemsPerPage);
-    }
-  }, [currentPage, itemsPerPage, searchTerm, getProductStock]);
 
 
 
