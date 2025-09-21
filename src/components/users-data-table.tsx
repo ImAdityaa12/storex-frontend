@@ -263,7 +263,7 @@ export default function UserDataTable() {
       } else {
         getAllUsers(currentPage, itemsPerPage);
       }
-    }, 500); // 500ms delay for search
+    }, 1000); // 500ms delay for search
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, currentPage, itemsPerPage, searchUsers, getAllUsers]);
