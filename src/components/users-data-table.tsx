@@ -255,7 +255,6 @@ export default function UserDataTable() {
     return debounce(handleCreditChange, 1000);
   }, [handleCreditChange]);
 
-  // Debounced search effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchTerm) {
@@ -267,13 +266,6 @@ export default function UserDataTable() {
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm, currentPage, itemsPerPage, searchUsers, getAllUsers]);
-
-  // Pagination effect (separate from search)
-  useEffect(() => {
-    if (!searchTerm) {
-      getAllUsers(currentPage, itemsPerPage);
-    }
-  }, [currentPage, itemsPerPage, searchTerm, getAllUsers]);
 
   const handleCreditInput = useCallback(
     (id: string, value: number) => {
